@@ -9,9 +9,11 @@ import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
 function SinglePage() {
 
-  const post = useLoaderData();
+  const singlePageLoader = useLoaderData();
+  const post = singlePageLoader.postResponse
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
+  const [chatData,setChatData] = useState(singlePageLoader.chatResponse)
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
   
@@ -31,18 +33,16 @@ function SinglePage() {
 
   const  openChatBox = async () =>{
     const receiverId = post?.userId;
-    const chatsInfo = await apiRequest.get('/chats')
-    let receiverDetails = chatsInfo.data.find((chat)=>{
-      chat.userIDs.includes(receiverId)
-    })
-    if(receiverDetails){
-      let chatID = receiverDetails.id
-      chatRef.current?.openChat(chatID,receiverId);
+    if(chatData.length>0){
+      console.log('chat already exists !',chatData)
+      let chatID = chatData.id
+      chatRef.current?.openChat(chatID,singlePageLoader.chatResponse);
     }else{
          try{
           const res = await apiRequest.post('/chats',{receiverId})
-          let receiverData = res.data
+          console.log('after creating a new chat session',res)
           let chatID = res.data?.id;
+          setChatData(res.data)
        //  updateChatsInfo((prev)=>({...prev,receiverData}));
         if(chatID){
             chatRef.current?.openChat(chatID,receiverId);
@@ -150,7 +150,7 @@ function SinglePage() {
               </div>
             </div>
           </div>
-          <p className="title">Location</p>
+          <p className="title">Location</p> 
           <div className="mapContainer">
             <Map items={[post]} />
           </div>
@@ -158,10 +158,10 @@ function SinglePage() {
             <div className="wrapper">
               <Suspense fallback={<p>Loading ...</p>}>
                 <Await
-                  resolve={post.chatResponse}
+                  resolve={singlePageLoader.chatResponse}
                   errorElement={<p>Error loading chats !</p>}
                 >
-                  {(chatResponse) => <Chat chats={chatResponse} ref={chatRef} />}
+                {(chatResponse) => <Chat chats={chatResponse.length > 0 ? chatResponse : chatData } ref={chatRef} showLastMsgs={false} />}
                 </Await>
               </Suspense>
             </div>

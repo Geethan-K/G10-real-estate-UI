@@ -11,8 +11,8 @@ const Chat = forwardRef((props,chatRef) =>
     const {currentUser} = useContext(AuthContext);
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
-    const {chats} = props
-   useEffect(()=>{
+    const {chats,showLastMsgs} = props
+    useEffect(()=>{
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
@@ -46,11 +46,16 @@ const Chat = forwardRef((props,chatRef) =>
     const openChat = async (id,receiver) =>{
       try{
           const res = await apiRequest.get('/chats/'+id)
+          console.log('from chat api req',res)
+          console.log('chat state',chat)
+          console.log('receiver data',receiver)
           setChat({...res.data,receiver})
+        console.log('After updating state',chat)
       }catch(err){
         console.log(err)
       }
     }
+    
   
     const handleSubmit =async (e) =>{
       e.preventDefault()
@@ -75,7 +80,7 @@ const Chat = forwardRef((props,chatRef) =>
         <div className="messages">
           <h1>Messages</h1>
           {
-            chats?.map((c)=>(
+           showLastMsgs && chats?.map((c)=>(
               <div className="message"
                key={c.id}
                style={{backgroundColor:c.seenBy.includes(currentUser.id) || chat?.id==c.id? "green" : "#fecd514e"      }}
@@ -105,7 +110,7 @@ const Chat = forwardRef((props,chatRef) =>
             </div>
             <div className="center">
               {
-                chat.messages.map((message)=>(
+                chat.messages?.map((message)=>(
                   <div 
                     className="chatMessage"
                     key={message.id}

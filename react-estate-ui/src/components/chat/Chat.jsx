@@ -44,11 +44,13 @@ const Chat = forwardRef((props,chatRef) =>
       }
     })
     const openChat = async (id,receiver) =>{
+      console.log('chat id :_'+id,'receiver :_'+receiver)
+     
       try{
           const res = await apiRequest.get('/chats/'+id)
-          console.log('from chat api req',res)
-          console.log('chat state',chat)
-          console.log('receiver data',receiver)
+          // console.log('from chat api req',res)
+          // console.log('chat state',chat)
+          // console.log('receiver data',receiver)
           setChat({...res.data,receiver})
         console.log('After updating state',chat)
       }catch(err){
@@ -62,11 +64,11 @@ const Chat = forwardRef((props,chatRef) =>
       const formData = new FormData(e.target)
       const text = formData.get("text")
       if(!text) return 
-      console.log('chat id info',chat.id)
       try{
         const res = await apiRequest.post("/message/"+chat.id,{text})
         setChat((prev)=>({...prev,messages:[...prev.messages,res.data]}))
         e.target.reset()
+        console.log('from chat jsx chat state---->',chat)
         socket.emit("sendMessage",{
           receiverId:chat.receiver.id,
           data:res.data

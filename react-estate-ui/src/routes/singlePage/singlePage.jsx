@@ -32,20 +32,20 @@ function SinglePage() {
   }
 
   const  openChatBox = async () =>{
-    const receiverId = post?.userId;
-    if(chatData.length>0){
-      console.log('chat already exists !',chatData)
+    const receiver = post?.user;
+    const receiverId = post?.userId
+    console.log('chatData state',chatData)
+    if(chatData.id){
       let chatID = chatData.id
-      chatRef.current?.openChat(chatID,singlePageLoader.chatResponse);
+      receiver.id = receiverId
+      chatRef.current?.openChat(chatID,receiver);
     }else{
          try{
           const res = await apiRequest.post('/chats',{receiverId})
-          console.log('after creating a new chat session',res)
-          let chatID = res.data?.id;
+         let chatID = res.data?.id;
           setChatData(res.data)
-       //  updateChatsInfo((prev)=>({...prev,receiverData}));
         if(chatID){
-            chatRef.current?.openChat(chatID,receiverId);
+            chatRef.current?.openChat(chatID,receiver);
           }
         }catch(err){
           console.log(err)  

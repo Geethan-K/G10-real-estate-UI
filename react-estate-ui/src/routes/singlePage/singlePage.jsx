@@ -35,11 +35,13 @@ function SinglePage() {
     const receiver = post?.user;
     const receiverId = post?.userId
     console.log('chatData state',chatData)
-    if(chatData.id){
-      let chatID = chatData.id
+    receiver.id = receiverId
+    if(chatData.id!==null || chatData.id!==undefined){
+      console.log('user exists')
       receiver.id = receiverId
-      chatRef.current?.openChat(chatID,receiver);
+      chatRef.current?.openChat(chatData[0].id,receiver);
     }else{
+      console.log('new user has to be created')
          try{
           const res = await apiRequest.post('/chats',{receiverId})
          let chatID = res.data?.id;

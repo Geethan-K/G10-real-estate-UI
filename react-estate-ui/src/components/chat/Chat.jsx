@@ -12,7 +12,10 @@ const Chat = forwardRef((props,chatRef) =>
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
     const {chats,showLastMsgs} = props
+    console.log(chats)
     useEffect(()=>{
+      if (!socket) return;
+      console.log(chat)
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
@@ -23,6 +26,7 @@ const Chat = forwardRef((props,chatRef) =>
     }
     if((chat && socket)){
       socket.on("getMessage", (data)=>{
+        console.log('getMessage invoked with data',data)
         if(chat.id==data.chatId){
           setChat((prev)=>({...prev,messages:[...prev.messages,data]}));
           read()
@@ -43,8 +47,10 @@ const Chat = forwardRef((props,chatRef) =>
         openChat
       }
     })
+
+
     const openChat = async (id,receiver) =>{
-      console.log('chat id :_'+id,'receiver :_'+receiver)
+      console.log('chat id :_'+id,'receiver :_',receiver)
      
       try{
           const res = await apiRequest.get('/chats/'+id)
@@ -83,9 +89,10 @@ const Chat = forwardRef((props,chatRef) =>
           <h1>Messages</h1>
           {
            showLastMsgs && chats?.map((c)=>(
+          
               <div className="message"
                key={c.id}
-               style={{backgroundColor:c.seenBy.includes(currentUser.id) || chat?.id==c.id? "green" : "#fecd514e"      }}
+               style={{backgroundColor:c.seenBy.includes(currentUser.id) || chat?.id==c.id? "green" : "#fecd514e"}}
                onClick={()=>openChat(c.id,c.receiver)}
                >
                 <img

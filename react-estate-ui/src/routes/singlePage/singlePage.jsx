@@ -34,10 +34,12 @@ function SinglePage() {
   const  openChatBox = async () =>{
     const receiver = post?.user;
     const receiverId = post?.userId
+    receiver["id"] = receiverId
     console.log('chatData state',chatData)
     if(chatData.id){
       let chatID = chatData.id
-      receiver.id = receiverId
+   
+      console.log(receiver)
       chatRef.current?.openChat(chatID,receiver);
     }else{
          try{

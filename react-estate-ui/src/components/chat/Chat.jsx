@@ -26,6 +26,7 @@ const Chat = forwardRef((props,chatRef) =>
         if(chat.id==data.chatId){
           setChat((prev)=>({...prev,messages:[...prev.messages,data]}));
           read()
+          console.log('new msg receved , chat state changed',chat);
         }
       })
     }

@@ -12,7 +12,11 @@ const Chat = forwardRef((props,chatRef) =>
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
     const {chats,showLastMsgs} = props
+    console.log(currentUser)
+    console.log(chats)
     useEffect(()=>{
+      if (!socket) return;
+      console.log(chat)
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
@@ -23,6 +27,7 @@ const Chat = forwardRef((props,chatRef) =>
     }
     if((chat && socket)){
       socket.on("getMessage", (data)=>{
+        console.log('getMessage invoked with data',data)
         if(chat.id==data.chatId){
           setChat((prev)=>({...prev,messages:[...prev.messages,data]}));
           read()
@@ -44,8 +49,10 @@ const Chat = forwardRef((props,chatRef) =>
         openChat
       }
     })
+
+
     const openChat = async (id,receiver) =>{
-      console.log('chat id :_'+id,'receiver :_'+receiver)
+      console.log('chat id :_'+id,'receiver :_',receiver)
      
       try{
           const res = await apiRequest.get('/chats/'+id)
@@ -66,7 +73,7 @@ const Chat = forwardRef((props,chatRef) =>
       const text = formData.get("text")
       if(!text) return 
       try{
-        const res = await apiRequest.post("/message/"+chat.id,{text})
+        const res = await apiRequest.post("/message/"+chat.id,{text,receiverId:chat.receiver.id})
         setChat((prev)=>({...prev,messages:[...prev.messages,res.data]}))
         e.target.reset()
         console.log('from chat jsx chat state---->',chat)
@@ -83,20 +90,28 @@ const Chat = forwardRef((props,chatRef) =>
         <div className="messages">
           <h1>Messages</h1>
           {
-           showLastMsgs && chats?.map((c)=>(
-              <div className="message"
-               key={c.id}
-               style={{backgroundColor:c.seenBy.includes(currentUser.id) || chat?.id==c.id? "green" : "#fecd514e"      }}
-               onClick={()=>openChat(c.id,c.receiver)}
-               >
-                <img
-                  src={c.receiver.avatar || "/noavatar.jpg"}
-                  alt=""
-                />
-                <span>{c.receiver.username}</span>
-                <p>{c.lastMessage}</p>
-              </div>
-            ))
+           showLastMsgs && chats?.map((c)=>{
+            if(c.senderID!==currentUser.id){
+               return (
+                 <div className="message"
+                   key={c.id}
+                   style={{ backgroundColor: c.seenBy.includes(currentUser.id) || chat?.id == c.id ? "green" : "#fecd514e" }}
+                   onClick={() => openChat(c.id, c.receiver)}
+                 >
+                   <img
+                     src={c.receiver.avatar || "/noavatar.jpg"}
+                     alt=""
+                   />
+                   <span>{c.receiver.username}</span>
+                   <p>{c.lastMessage}</p>
+                 </div>
+               )
+
+             }
+           }
+
+              
+            )
           }
         </div>
         {chat && (

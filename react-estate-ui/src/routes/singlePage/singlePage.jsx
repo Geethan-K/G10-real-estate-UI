@@ -1,10 +1,10 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
-import { useLoaderData, useNavigate,Await } from "react-router-dom";
+import { useLoaderData, useNavigate, Await } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { AuthContext } from '../../context/AuthContext'
-import { useContext, useState,Suspense, useRef } from "react";
+import { useContext, useState, Suspense, useRef, useEffect } from "react";
 import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
 function SinglePage() {
@@ -13,10 +13,27 @@ function SinglePage() {
   const post = singlePageLoader.postResponse
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
-  const [chatData,setChatData] = useState(singlePageLoader.chatResponse)
+  const [chatData, setChatData] = useState(null)
+  const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
-  
+
+  useEffect( () => {
+    console.log(postedUserData)
+    async function fetchData(){
+      try{
+        const postedUserId = postedUserData.id
+        const res = await apiRequest.get('/chats/get/'+postedUserId)
+        if(res!==null){
+          setChatData(res.data)
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
+    fetchData()
+  }, [postedUserData])
+
   const handleSave = async () => {
 
     setSaved((prev) => !prev)
@@ -31,33 +48,29 @@ function SinglePage() {
     }
   }
 
-  const  openChatBox = async () =>{
+  const openChatBox = async () => {
     const receiver = post?.user;
     const receiverId = post?.userId
     receiver["id"] = receiverId
-    console.log('chatData state',chatData)
-    if(chatData.length>0){
-      console.log('user exists')
-      chatRef.current?.openChat(chatData[0]?.id,receiver);
-    }else{
+    console.log('chatData state', chatData)
+    if (chatData!==null) {
+      console.log('user & chat already exists',chatData)
+      chatRef.current?.openChat(chatData.id, receiver);
+    } else {
       console.log('new user has to be created')
-         try{
-          const res = await apiRequest.post('/chats',{receiverId})
-         let chatID = res.data?.id;
-          setChatData(res.data)
-        if(chatID!==undefined){
-            chatRef.current?.openChat(chatID,receiver);
-          }
-        }catch(err){
-          console.log(err)  
+      try {
+        const res = await apiRequest.post('/chats', { receiverId })
+        let chatID = res.data?.id;
+        setChatData(res.data)
+        if (chatID !== undefined) {
+          chatRef.current?.openChat(chatID, receiver);
         }
-      
-     
-      
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
- 
   return (
     <div className="singlePage">
       <div className="details">
@@ -151,20 +164,23 @@ function SinglePage() {
               </div>
             </div>
           </div>
-          <p className="title">Location</p> 
+          <p className="title">Location</p>
           <div className="mapContainer">
             <Map items={[post]} />
           </div>
           <div className="chatContainer">
             <div className="wrapper">
-              <Suspense fallback={<p>Loading ...</p>}>
+              {/* <Suspense fallback={<p>Loading ...</p>}>
                 <Await
                   resolve={singlePageLoader.chatResponse}
                   errorElement={<p>Error loading chats !</p>}
                 >
-                {(chatResponse) => <Chat chats={chatResponse.length > 0 ? chatResponse : chatData } ref={chatRef} showLastMsgs={false} />}
+                  {(chatResponse) => <Chat chats={chatResponse.length > 0 ? chatResponse : chatData} ref={chatRef} showLastMsgs={false} />}
                 </Await>
-              </Suspense>
+              </Suspense> */}
+              {
+                <Chat chats={chatData} ref={chatRef} showLastMsgs={false}/>
+              }
             </div>
           </div>
           <div className="buttons">

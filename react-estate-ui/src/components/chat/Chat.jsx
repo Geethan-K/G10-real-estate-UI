@@ -52,8 +52,7 @@ const Chat = forwardRef((props,chatRef) =>
 
 
     const openChat = async (id,receiver) =>{
-      console.log('chat id :_'+id,'receiver :_',receiver)
-     
+        
       try{
           const res = await apiRequest.get('/chats/'+id)
           // console.log('from chat api req',res)
@@ -116,7 +115,7 @@ const Chat = forwardRef((props,chatRef) =>
         </div>
         {chat && (
           <div className="chatBox">
-            <div className="top">
+            <div className="top" >
               <div className="user">
                 <img
                   src={chat.receiver.avatar || "/noavatar.jpg"}

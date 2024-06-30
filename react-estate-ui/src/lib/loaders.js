@@ -3,10 +3,10 @@ import apiRequest from "./apiRequest"
 
 export const singlePageLoader = async ({request,params}) =>{
     const postPromise = await apiRequest.get("/posts/"+params.id)
-    const chatPromise = await apiRequest.get("/chats")
+  //  const chatPromise = await apiRequest.get("/chats/",{userId:params.id})
     return defer({
         postResponse:postPromise.data,
-        chatResponse:chatPromise.data
+ //       chatResponse:chatPromise.data
     })
 }
 export const listPageLoader = async ({request,params}) => {

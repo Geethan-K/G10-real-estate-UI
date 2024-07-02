@@ -7,6 +7,8 @@ import { AuthContext } from '../../context/AuthContext'
 import { useContext, useState, Suspense, useRef, useEffect } from "react";
 import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
+import ReactStars from 'react-rating-stars-component';
+import TextareaAutosize from 'react-textarea-autosize';
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
@@ -15,11 +17,14 @@ function SinglePage() {
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
   const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
+  const [rating,setRating] = useState(0)
+  const [editRating,setEditRating] = useState(true)
+  const [comment,setcomment] = useState([])
+  const [sent,updateSent] = useState(false)
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
-
+  const textarea = "Write some of the best experience of yours from this place ...."
   useEffect( () => {
-    console.log(postedUserData)
     async function fetchData(){
       try{
         const postedUserId = postedUserData.id
@@ -35,7 +40,6 @@ function SinglePage() {
   }, [postedUserData])
 
   const handleSave = async () => {
-
     setSaved((prev) => !prev)
     if (!currentUser) {
       navigate("/login")
@@ -71,6 +75,31 @@ function SinglePage() {
     }
   }
 
+  const changeRating = async (newRating) => {
+    setRating(newRating);
+    try{
+      const res = await apiRequest.post('/commentsAndRatings/ratings/add',{postId:post.id,stars:newRating})
+      if(res)  setEditRating(false)
+      console.log(res)
+    }catch(err){
+      setEditRating(true)
+      console.log(err)
+      
+    }
+  };
+
+  const saveComment = async () => {
+    try{
+        const res = await apiRequest.post('/commentsAndRatings/comments/add',{postId:post.id,content:comment})
+        console.log(res)
+        if(res) updateSent(true)
+    } catch(err){
+      updateSent(false)
+      console.log(err)
+    } 
+   
+  }
+
   return (
     <div className="singlePage">
       <div className="details">
@@ -97,6 +126,43 @@ function SinglePage() {
       </div>
       <div className="features">
         <div className="wrapper">
+          <div className="Ratings">
+            <p className="title">Rate this place :</p>
+            <span style={{display:'flex',marginRight:'10px'}}>
+              <ReactStars
+                count={5}
+                isHalf={true}
+                size={40}
+                edit={editRating}
+                value={rating}
+                activeColor="#ffd700"
+                onChange={changeRating}
+              />
+            <span className="title" style={{display:'flex',alignContent:'center',justifyContent:'center',padding:'20px'}}>{rating } out of 5</span>
+            </span>
+          </div>
+          <div className="comments">
+            {
+              sent == true ? (<p className="title">Comment Added Successfully !</p>) : (<p className="title">Comment :</p>)
+            }
+            <TextareaAutosize 
+              style={{padding:'15px',width:'100%'}}
+              autoFocus={true} 
+              minRows={7}
+              maxRows={20}
+              disabled={sent}
+              defaultValue="Write some good / average experience you had from this place..."
+              onChange={ev => setcomment(ev.target.value)}
+              />
+              <span style={{display:'flex',justifyContent:'flex-end'}}>
+                  {
+                    sent == false ?  (<button onClick={saveComment}><i className="fa-solid fa-paper-plane" ></i></button>) : (<i className="fa-solid fa-check" style={{fontSize:'35px',color:'green'}}></i>)
+                
+                    //<i className="fa-solid fa-check" ></i> : <i className="fa-solid fa-paper-plane"></i> 
+                  }
+                
+              </span>
+          </div>
           <p className="title">General</p>
           <div className="listVertical">
             <div className="feature">

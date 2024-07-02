@@ -12,8 +12,6 @@ const Chat = forwardRef((props,chatRef) =>
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
     const {chats,showLastMsgs} = props
-    console.log(currentUser)
-    console.log(chats)
     useEffect(()=>{
       if (!socket) return;
       console.log(chat)

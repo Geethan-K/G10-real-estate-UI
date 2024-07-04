@@ -5,7 +5,10 @@ import "./card.scss";
 
 function Card({ item,ratings,comments }) {
   console.log(ratings,comments)
-  const averageRating = ratings.reduce((acc, rating) => acc + rating, 0) / ratings.length || 0;
+  var averageRating = 0.0
+  if(ratings !==undefined){
+     averageRating = ratings.reduce((acc, rating) => acc + rating.stars, 0) / ratings.length || 0;
+  }
   return (
     <div className="card">
       <Link to={`/${item.id}`} className="imageContainer">
@@ -27,11 +30,14 @@ function Card({ item,ratings,comments }) {
             edit={false}
             disable={true}
             size={24}
-            value={averageRating}
+            value={averageRating.toFixed(1)}
             activeColor="#ffd700"
           />
-          <h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px' }}>{averageRating.toFixed(1)}</h3>
-        </span>
+          {
+            averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px',marginLeft:'8px' }}>(No reviews yet)</p>
+          ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px',marginLeft:'8px' }}>{averageRating.toFixed(1)}</h3>)
+          }
+       </span>
         <div className="bottom">
           <div className="features">
             <div className="feature">

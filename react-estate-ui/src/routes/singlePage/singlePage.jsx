@@ -9,30 +9,57 @@ import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
 import ReactStars from 'react-rating-stars-component';
 import TextareaAutosize from 'react-textarea-autosize';
+import {format} from 'timeago.js'
+
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
   const post = singlePageLoader.postResponse
+  console.log(post)
+  let { comments, ratings } = post
+  const RatingMap = globalThis.Map; // Create an alias for the Map object
+
+  const mergeRatingsIntoComments = (comments, ratings) => {
+
+    const ratingsMap = new RatingMap();
+    ratings.forEach(rating => {
+      ratingsMap.set(rating.user.id, rating.stars)
+    })
+
+    return comments.map((comment) => {
+      const stars = ratingsMap.get(comment.user.id) || 0.0
+      return {
+        ...comment,
+        stars
+      }
+    })
+  }
+
+  comments = mergeRatingsIntoComments(comments, ratings)
+  console.log(comments)
+
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
+  const [alreadyCommented, setAlreadyCommented] = useState(post.alreadyCommented)
+  const [alreadyRated, setAlreadyRated] = useState(post.alreadyRated)
   const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
-  const [rating,setRating] = useState(0)
-  const [editRating,setEditRating] = useState(true)
-  const [comment,setcomment] = useState([])
-  const [sent,updateSent] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [editRating, setEditRating] = useState(true)
+  const [comment, setcomment] = useState([])
+  const [sent, updateSent] = useState(false)
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
   const textarea = "Write some of the best experience of yours from this place ...."
-  useEffect( () => {
-    async function fetchData(){
-      try{
+  useEffect(() => {
+    async function fetchData() {
+      try {
         const postedUserId = postedUserData.id
-        const res = await apiRequest.get('/chats/get/'+postedUserId)
-        if(res!==null){
+        const res = await apiRequest.get('/chats/get/' + postedUserId)
+        if (res !== null) {
           setChatData(res.data)
         }
-      }catch(err){
+      } catch (err) {
         console.log(err)
       }
     }
@@ -57,8 +84,8 @@ function SinglePage() {
     const receiverId = post?.userId
     receiver["id"] = receiverId
     console.log('chatData state', chatData)
-    if (chatData!==null) {
-      console.log('user & chat already exists',chatData)
+    if (chatData !== null) {
+      console.log('user & chat already exists', chatData)
       chatRef.current?.openChat(chatData.id, receiver);
     } else {
       console.log('new user has to be created')
@@ -77,27 +104,26 @@ function SinglePage() {
 
   const changeRating = async (newRating) => {
     setRating(newRating);
-    try{
-      const res = await apiRequest.post('/commentsAndRatings/ratings/add',{postId:post.id,stars:newRating})
-      if(res)  setEditRating(false)
-      console.log(res)
-    }catch(err){
+    try {
+      const res = await apiRequest.post('/commentsAndRatings/ratings/add', { postId: post.id, stars: newRating })
+      if (res) setEditRating(false)
+    } catch (err) {
       setEditRating(true)
       console.log(err)
-      
+
     }
   };
 
   const saveComment = async () => {
-    try{
-        const res = await apiRequest.post('/commentsAndRatings/comments/add',{postId:post.id,content:comment})
-        console.log(res)
-        if(res) updateSent(true)
-    } catch(err){
+    try {
+      const res = await apiRequest.post('/commentsAndRatings/comments/add', { postId: post.id, content: comment })
+      console.log(res)
+      if (res) updateSent(true)
+    } catch (err) {
       updateSent(false)
       console.log(err)
-    } 
-   
+    }
+
   }
 
   return (
@@ -126,43 +152,49 @@ function SinglePage() {
       </div>
       <div className="features">
         <div className="wrapper">
-          <div className="Ratings">
-            <p className="title">Rate this place :</p>
-            <span style={{display:'flex',marginRight:'10px'}}>
-              <ReactStars
-                count={5}
-                isHalf={true}
-                size={40}
-                edit={editRating}
-                value={rating}
-                activeColor="#ffd700"
-                onChange={changeRating}
-              />
-            <span className="title" style={{display:'flex',alignContent:'center',justifyContent:'center',padding:'20px'}}>{rating } out of 5</span>
-            </span>
-          </div>
-          <div className="comments">
-            {
-              sent == true ? (<p className="title">Comment Added Successfully !</p>) : (<p className="title">Comment :</p>)
-            }
-            <TextareaAutosize 
-              style={{padding:'15px',width:'100%'}}
-              autoFocus={true} 
-              minRows={7}
-              maxRows={20}
-              disabled={sent}
-              defaultValue="Write some good / average experience you had from this place..."
-              onChange={ev => setcomment(ev.target.value)}
-              />
-              <span style={{display:'flex',justifyContent:'flex-end'}}>
+          {
+            !alreadyRated && (
+              <div className="Ratings">
+                <p className="title">Rate this place :</p>
+                <span style={{ display: 'flex', marginRight: '10px' }}>
+                  <ReactStars
+                    count={5}
+                    isHalf={true}
+                    size={40}
+                    edit={editRating}
+                    value={rating}
+                    activeColor="#ffd700"
+                    onChange={changeRating}
+                  />
+                  <span className="title" style={{ display: 'flex', alignContent: 'center', justifyContent: 'center', padding: '20px' }}>{rating} out of 5</span>
+                </span>
+              </div>
+            )
+          }
+          {
+            !alreadyCommented && (
+              <div className="comments">
+                {
+                  sent == true ? (<p className="title">Comment Added Successfully !</p>) : (<p className="title">Comment :</p>)
+                }
+                <TextareaAutosize
+                  style={{ padding: '15px', width: '100%' }}
+                  autoFocus={true}
+                  minRows={7}
+                  maxRows={20}
+                  disabled={sent}
+                  defaultValue="Write some good / average experience you had from this place..."
+                  onChange={ev => setcomment(ev.target.value)}
+                />
+                <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {
-                    sent == false ?  (<button onClick={saveComment}><i className="fa-solid fa-paper-plane" ></i></button>) : (<i className="fa-solid fa-check" style={{fontSize:'35px',color:'green'}}></i>)
-                
-                    //<i className="fa-solid fa-check" ></i> : <i className="fa-solid fa-paper-plane"></i> 
+                    sent == false ? (<button onClick={saveComment}><i className="fa-solid fa-paper-plane" ></i></button>) : (<i className="fa-solid fa-check" style={{ fontSize: '35px', color: 'green' }}></i>)
                   }
-                
-              </span>
-          </div>
+                </span>
+              </div>
+            )
+          }
+
           <p className="title">General</p>
           <div className="listVertical">
             <div className="feature">
@@ -234,18 +266,53 @@ function SinglePage() {
           <div className="mapContainer">
             <Map items={[post]} />
           </div>
+          <div className="comments-ratings">
+            {
+              comments.map((comment) => (
+                <div className="user-comments" key={comment.id}>
+                  <div style={{ display: 'flex' }}>
+                    <div >
+                      <img className="avatar-img" src={comment.user.avatar} />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '1vh' }}>
+                      <span>{comment.user.username}</span>
+                      <span style={{display:'flex',width:'180%'}}>
+                        <div style={{display:'flex',alignItems:'flex-start'}}>
+                        <ReactStars
+                          count={5}
+                          isHalf={true}
+                          size={20}
+                          edit={false}
+                          value={comment.stars}
+                          activeColor="#ffd700"
+                        />
+                        </div>
+                        <div style={{display:'flex',alignItems:'center',marginLeft:'60%'}}>
+                          {format(comment.createdAt)}
+                        </div>
+                      </span>
+                      <div className="comment">
+                        <TextareaAutosize
+                          cols={20}
+                          style={{ padding: '15px', width: '180%' }}
+                          autoFocus={true}
+                          minRows={5}
+                          maxRows={7}
+                          disabled={true}
+                          defaultValue={comment.content}
+                          onChange={ev => setcomment(ev.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
           <div className="chatContainer">
             <div className="wrapper">
-              {/* <Suspense fallback={<p>Loading ...</p>}>
-                <Await
-                  resolve={singlePageLoader.chatResponse}
-                  errorElement={<p>Error loading chats !</p>}
-                >
-                  {(chatResponse) => <Chat chats={chatResponse.length > 0 ? chatResponse : chatData} ref={chatRef} showLastMsgs={false} />}
-                </Await>
-              </Suspense> */}
               {
-                <Chat chats={chatData} ref={chatRef} showLastMsgs={false}/>
+                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
               }
             </div>
           </div>

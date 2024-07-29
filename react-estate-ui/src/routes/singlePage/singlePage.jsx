@@ -276,7 +276,7 @@ function SinglePage() {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '1vh' }}>
                       <span>{comment.user.username}</span>
-                      <span style={{display:'flex',width:'180%'}}>
+                      <span style={{display:'flex',width:'200%'}}>
                         <div style={{display:'flex',alignItems:'flex-start'}}>
                         <ReactStars
                           count={5}
@@ -287,7 +287,7 @@ function SinglePage() {
                           activeColor="#ffd700"
                         />
                         </div>
-                        <div style={{display:'flex',alignItems:'center',marginLeft:'60%'}}>
+                        <div style={{display:'flex',alignItems:'center',marginLeft:'40%'}}>
                           {format(comment.createdAt)}
                         </div>
                       </span>
@@ -296,7 +296,7 @@ function SinglePage() {
                           cols={20}
                           style={{ padding: '15px', width: '180%' }}
                           autoFocus={true}
-                          minRows={5}
+                          minRows={1}
                           maxRows={7}
                           disabled={true}
                           defaultValue={comment.content}

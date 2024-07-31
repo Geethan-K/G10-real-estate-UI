@@ -7,10 +7,10 @@ import { AuthContext } from "../../context/AuthContext";
 function Layout() {
   return (
     <div className="layout">
-      <div className="navbar">
+      <div className="navbar" >
         <Navbar />
       </div>
-      <div className="content">
+      <div className="content" >
         <Outlet/>
       </div>
     </div>

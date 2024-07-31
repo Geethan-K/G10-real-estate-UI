@@ -1,8 +1,9 @@
 @import "../../responsive.scss";
 
 .searchBar {
+  width: auto;
   .type {
-
+      gap: 15px;
 
     button {
       padding: 16px 36px;
@@ -72,6 +73,54 @@
       }
     }
 
+    span{
+        gap: 8px;
+        display: flex;
+        margin-left: 5px;
+        position: relative;
+        .date{
+          position: absolute;
+          top:70px;
+        }
+        .icon{
+          position: absolute;
+          top: 42%;
+        }
+        
+      .input {
+        border: none;
+        padding: 10px 10px ;
+        width: 200px;
+        padding-left: 15%;
+        @include lg {
+          padding: 0px 5px;
+  
+          &:nth-child(2),
+          &:nth-child(3) {
+            width: 140px;
+          }
+        }
+        @include md {
+          width: 200px;
+          &:nth-child(2),
+          &:nth-child(3) {
+            width: 200px;
+          }
+        }
+  
+        @include sm{
+          width: auto;
+          &:nth-child(2),
+          &:nth-child(3) {
+            width: auto;
+          }
+          padding: 20px;
+          border: 1px solid #999;
+        }
+      }
+     
+    }
+
     a{
       flex: 1;
       background-color: #fece51;
@@ -94,6 +143,18 @@
         }
       }
     }
-   
+    .searchOpts{
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 10px 0px;
+    }
+    .headerIcon{
+      color: lightgray;
+    }
   }
 }
+
+
+

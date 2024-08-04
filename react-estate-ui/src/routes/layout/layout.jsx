@@ -10,6 +10,8 @@ import Section1 from "../../components/sections/section1/section";
 import Section from "../../components/scroll-components/section1/section1";
 import Section2 from "../../components/sections/section1/section2/section";
 import Section3 from "../../components/sections/section3/section";
+import PropertyList from "../../components/property-list/propertyList";
+import FeaturedProperties from "../../components/featured-properties/featuredProperties";
 
 function Layout() {
   useEffect(() => {
@@ -54,13 +56,13 @@ function Layout() {
         <Section2 />
         </div>
         <div className="body-content">
-        <Featured />
+        <PropertyList />
         </div>
         <div className="body-content">
         <Section3 />
         </div>
         <div className="body-content">
-        <Featured />
+        <FeaturedProperties />
         </div>  
     </div>
   );

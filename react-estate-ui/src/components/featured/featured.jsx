@@ -18,7 +18,7 @@ const Featured = () => {
                 <div className="featuredItem">
                     <img src="https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg" alt="" className="featuredImg" />
                     <div className="featuredTitles">
-                        <h1>Dublin</h1>
+                        <h1>Trichy</h1>
                         <h2>123 properties</h2>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ const Featured = () => {
                     <img src="https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg" alt="" className="featuredImg" />
                     <div className="featuredTitles">
                         <span className="title">
-                            <h1>Dublin</h1>
+                            <h1>Thanjavur</h1>
                             <h2>123 properties</h2>
                         </span>
 
@@ -35,7 +35,7 @@ const Featured = () => {
                 <div className="featuredItem">
                     <img src="https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg" alt="" className="featuredImg" />
                     <div className="featuredTitles">
-                        <h1>Dublin</h1>
+                        <h1>Kumbakonam</h1>
                         <h2>123 properties</h2>
                     </div>
                 </div>

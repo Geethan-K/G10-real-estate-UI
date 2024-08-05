@@ -2,6 +2,7 @@
 
 .searchBar {
   width: auto;
+  z-index: 2;
   .type {
       gap: 15px;
 
@@ -44,7 +45,7 @@
     input {
       border: none;
       padding: 0px 10px;
-      width: 200px;
+      width: 210px;
 
       @include lg {
         padding: 0px 5px;
@@ -81,6 +82,7 @@
         .date{
           position: absolute;
           top:70px;
+          z-index: 2;
         }
         .icon{
           position: absolute;
@@ -90,8 +92,9 @@
       .input {
         border: none;
         padding: 10px 10px ;
-        width: 200px;
+        width: 210px;
         padding-left: 15%;
+        color: #696767;
         @include lg {
           padding: 0px 5px;
   
@@ -118,7 +121,38 @@
           border: 1px solid #999;
         }
       }
-     
+      .options{
+        position: absolute;
+        top: 55px;
+        color: gray;
+        background-color: white;
+        border-radius: 5px;
+        border: 1px solid gray;
+          .option-item{
+            width: 200px;
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+            padding: 5px;
+              .option-counter{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 12px;
+                color: black;
+                  .option-counter-btn{
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
+                    border: 1px solid gray;
+                    background-color: #fece51;
+                    color: #999;
+                    display: flex;
+                    align-items: center;
+                  }
+              }
+          }
+      }
     }
 
     a{
@@ -134,7 +168,7 @@
         flex: 1;
   
         @include sm{
-          padding: 10px;
+      //    padding: 10px;
         }
   
         img {
@@ -143,16 +177,7 @@
         }
       }
     }
-    .searchOpts{
-      background-color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 10px 0px;
-    }
-    .headerIcon{
-      color: lightgray;
-    }
+   
   }
 }
 

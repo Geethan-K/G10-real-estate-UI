@@ -13,6 +13,7 @@ import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 function App() {
   const router = createBrowserRouter([
     {

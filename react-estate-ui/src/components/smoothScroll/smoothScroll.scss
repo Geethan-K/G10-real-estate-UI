@@ -1,0 +1,31 @@
+/* src/components/SmoothScroll.css */
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .section {
+ //   margin: 50px 0;
+    padding: 10px;
+    border: none;
+   // border-radius: 8px;
+   // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  //  background-color: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .section img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .section h2 {
+    margin: 10px 0;
+  }
+  
+  .section p {
+    margin: 10px 0;
+  }
+  

@@ -1,13 +1,29 @@
 import SearchBar from "../../components/searchBar/SearchBar";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import {motion} from 'framer-motion'
 import "./homePage.scss";
 
+
 function HomePage() {
-  const {currentUser} = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+  const [popupsVisibility, setPopupsVisibility] = useState(false)
+
+  const handleVisibStatus = (status) => {
+    setPopupsVisibility(status)
+  }
+
+  const imgVariants = {
+    visible:{opacity:1,x:80,transition:{type:"spring",stiffness:100,damping:10}},
+    hidden:{opacity:0}
+}
+  const contentVariants = {
+    visible:{opacity:1,y:70,transition:{type:"spring",stiffness:100,damping:10}},
+    hidden:{opacity:0}
+  }
   return (
-    <div className="homePage">
-      <div className="textContainer">
+    <div className="homePage" onClick={() => handleVisibStatus(false)}>
+      <motion.div variants={contentVariants} animate={"visible"} className="box textContainer">
         <div className="wrapper">
           <h1 className="title">Find Real Estate & Get Your Dream Place</h1>
           <p>
@@ -16,7 +32,7 @@ function HomePage() {
             facilis id pariatur fugit quos laudantium temporibus dolor ea
             repellat provident impedit!
           </p>
-          <SearchBar />
+          <SearchBar popupsVisibility={popupsVisibility} handleVisibStatus={handleVisibStatus} />
           <div className="boxes">
             <div className="box">
               <h1>16+</h1>
@@ -32,10 +48,15 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="imgContainer">
+      </motion.div>
+      <motion.div 
+        className="box imgContainer"
+        variants={imgVariants}  
+        animate={"visible"}
+      >
         <img src="/bg.png" alt="" />
-      </div>
+      </motion.div>
+      
     </div>
   );
 }

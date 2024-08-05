@@ -1,19 +1,18 @@
 @import "../../responsive.scss";
 
 .layout {
- // height: 100vh;
-  max-width: 1366px;
-
- //overflow-y: scroll;
- //width: auto;
-  height: auto;
+  height: 100vh;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 20px;
-  padding-right: 20px;
   display: flex;
+  padding-left: 4%;
+  padding-right: 4%;
   flex-direction: column;
+  overflow-y: scroll;
 
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
   @include lg {
     // background-color: rgb(247, 210, 196);
     max-width: 1280px;
@@ -31,10 +30,14 @@
 
   .content {
     // flex: 1;
-    height: calc(100vh - 100px);
-    overflow-y: scroll;
+    margin-top: 10%;
+    height: 100vh;
+    padding-left: 10%;
+    padding-right: 10%;
+    
   }
-  .content::-webkit-scrollbar {
-    display: none;
-}
+  .body-content{
+   height: 100vh;
+   margin-top: 10%;
+  }
 }

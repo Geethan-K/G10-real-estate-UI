@@ -10,13 +10,13 @@ const FeaturedProperties = () => {
     return (
         <div className="fp" >
             {
-                [...Array(5)].map((_, i) => {
-                    const opacity = useTransform(scrollYProgress, [i * 0.25, (i + 1) * 0.25], [0, 1]);
+                [...Array(6)].map((_, i) => {
+                 //   const opacity = useTransform(scrollYProgress, [i * 0.25, (i + 1) * 0.25], [0, 1]);
                     return (
                         <motion.div
                             className="fpItem" whileHover={{ scale: 1.2 }}
                             key={i}
-                            style={{ opacity }}
+                        //    style={{ opacity }}
                             initial="hidden"
                             animate="visible"
                             variants={itemVariants}

@@ -6,11 +6,10 @@
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  padding-left: 4%;
-  padding-right: 4%;
+   padding-left: 2%;
+   padding-right: 2%;
   flex-direction: column;
   overflow-y: scroll;
-
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   @include lg {
@@ -30,15 +29,21 @@
 
   .content {
     // flex: 1;
-    margin-top: 10%;
-    height: 100vh;
-    padding-left: 10%;
-    padding-right: 10%;
+  //  margin-top: 10%;
+   // height: 100vh;
+     padding-left: 10%;
+     padding-right: 10%;
     padding-bottom: 10%;
-    
+    .body-content{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+       height: 70vh;
+     //  margin-top: 5%;
+      }
   }
-  .body-content{
-   height: 100vh;
-   margin-top: 5%;
-  }
+  // .body-content{
+  //  height: 100vh;
+  //  margin-top: 5%;
+  // }
 }

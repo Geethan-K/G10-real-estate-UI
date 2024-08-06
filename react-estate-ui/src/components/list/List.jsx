@@ -2,11 +2,10 @@ import './list.scss'
 import Card from"../card/Card"
 
 function List({posts}){
-  console.log('form list component',posts)
   return (
     <div className='list'>
       {posts.map(item=>(
-        <Card key={item.id} item={item}/>
+        <Card key={item.id} item={item} />
       ))}
     </div>
   )

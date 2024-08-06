@@ -8,7 +8,6 @@ import { Suspense } from "react";
 
 function ListPage() {
  const data = useLoaderData()
-
   return <div className="listPage">
     <div className="listContainer">
       <div className="wrapper">
@@ -20,7 +19,7 @@ function ListPage() {
         >
           {
             (postResponse)=> postResponse.data.map(post=>(
-              <Card key={post.id} item={post} />
+              <Card key={post.id} item={post} ratings={post.ratings} comments={post.comments}/>
             ))
           }
         </Await>

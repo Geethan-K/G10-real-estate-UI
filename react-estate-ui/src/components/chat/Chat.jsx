@@ -11,8 +11,10 @@ const Chat = forwardRef((props,chatRef) =>
     const {currentUser} = useContext(AuthContext);
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
-    const {chats} = props
-   useEffect(()=>{
+    const {chats,showLastMsgs} = props
+    useEffect(()=>{
+      if (!socket) return;
+      console.log(chat)
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
@@ -23,9 +25,11 @@ const Chat = forwardRef((props,chatRef) =>
     }
     if((chat && socket)){
       socket.on("getMessage", (data)=>{
+        console.log('getMessage invoked with data',data)
         if(chat.id==data.chatId){
           setChat((prev)=>({...prev,messages:[...prev.messages,data]}));
           read()
+          console.log('new msg receved , chat state changed',chat);
         }
       })
     }
@@ -43,25 +47,33 @@ const Chat = forwardRef((props,chatRef) =>
         openChat
       }
     })
+
+
     const openChat = async (id,receiver) =>{
+        
       try{
           const res = await apiRequest.get('/chats/'+id)
+          // console.log('from chat api req',res)
+          // console.log('chat state',chat)
+          // console.log('receiver data',receiver)
           setChat({...res.data,receiver})
+        console.log('After updating state',chat)
       }catch(err){
         console.log(err)
       }
     }
+    
   
     const handleSubmit =async (e) =>{
       e.preventDefault()
       const formData = new FormData(e.target)
       const text = formData.get("text")
       if(!text) return 
-      console.log('chat id info',chat.id)
       try{
-        const res = await apiRequest.post("/message/"+chat.id,{text})
+        const res = await apiRequest.post("/message/"+chat.id,{text,receiverId:chat.receiver.id})
         setChat((prev)=>({...prev,messages:[...prev.messages,res.data]}))
         e.target.reset()
+        console.log('from chat jsx chat state---->',chat)
         socket.emit("sendMessage",{
           receiverId:chat.receiver.id,
           data:res.data
@@ -75,25 +87,33 @@ const Chat = forwardRef((props,chatRef) =>
         <div className="messages">
           <h1>Messages</h1>
           {
-            chats?.map((c)=>(
-              <div className="message"
-               key={c.id}
-               style={{backgroundColor:c.seenBy.includes(currentUser.id) || chat?.id==c.id? "green" : "#fecd514e"      }}
-               onClick={()=>openChat(c.id,c.receiver)}
-               >
-                <img
-                  src={c.receiver.avatar || "/noavatar.jpg"}
-                  alt=""
-                />
-                <span>{c.receiver.username}</span>
-                <p>{c.lastMessage}</p>
-              </div>
-            ))
+           showLastMsgs && chats?.map((c)=>{
+            if(c.senderID!==currentUser.id){
+               return (
+                 <div className="message"
+                   key={c.id}
+                   style={{ backgroundColor: c.seenBy.includes(currentUser.id) || chat?.id == c.id ? "green" : "#fecd514e" }}
+                   onClick={() => openChat(c.id, c.receiver)}
+                 >
+                   <img
+                     src={c.receiver.avatar || "/noavatar.jpg"}
+                     alt=""
+                   />
+                   <span>{c.receiver.username}</span>
+                   <p>{c.lastMessage}</p>
+                 </div>
+               )
+
+             }
+           }
+
+              
+            )
           }
         </div>
         {chat && (
           <div className="chatBox">
-            <div className="top">
+            <div className="top" >
               <div className="user">
                 <img
                   src={chat.receiver.avatar || "/noavatar.jpg"}
@@ -105,7 +125,7 @@ const Chat = forwardRef((props,chatRef) =>
             </div>
             <div className="center">
               {
-                chat.messages.map((message)=>(
+                chat.messages?.map((message)=>(
                   <div 
                     className="chatMessage"
                     key={message.id}

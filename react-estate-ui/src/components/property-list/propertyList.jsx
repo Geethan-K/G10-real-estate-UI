@@ -38,6 +38,20 @@ const PropertyList = () => {
                     </div>
                 </motion.div>
                 <motion.div className="pListItem"   whileHover={{ scale: 1.2 }}>
+                    <img src="/villa1.jpg" alt="" className="pListImg" />
+                    <div className="pListTitles">
+                        <h1>Paying Guest</h1>
+                        <h2>231 villas</h2>
+                    </div>
+                </motion.div>
+                <motion.div className="pListItem"   whileHover={{ scale: 1.2 }}>
+                    <img src="/villa1.jpg" alt="" className="pListImg" />
+                    <div className="pListTitles">
+                        <h1>Hostel</h1>
+                        <h2>231 villas</h2>
+                    </div>
+                </motion.div>
+                <motion.div className="pListItem"   whileHover={{ scale: 1.2 }}>
                     <img src="/office_space.jpg" alt="" className="pListImg" />
                     <div className="pListTitles">
                         <h1>Office space</h1>

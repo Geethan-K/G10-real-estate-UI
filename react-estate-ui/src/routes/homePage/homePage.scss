@@ -5,7 +5,7 @@
   height: 100%;
 
   .textContainer {
-    flex: 3;
+    flex: 2;
 
     .wrapper {
       padding-right: 100px;
@@ -60,21 +60,22 @@
   }
 
   .imgContainer {
-    flex: 2;
-    background-color: #fcf5f3;
+    flex: 3;
     position: relative;
     display: flex;
     align-items: center;
-
+    width: 50%;
+    z-index: 2;
     @include md {
       display: none;
     }
 
     img {
-      width: 115%;
+      width: 140%;
+      height: 120%;
       position: absolute;
       right: 0;
-
+      z-index: 0;
       @include lg {
         width: 105%;
       }

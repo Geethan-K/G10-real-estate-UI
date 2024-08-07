@@ -22,7 +22,7 @@ const Section2 = () => {
 
   return (
     <div className="section1" ref={ref}>
-         <animated.div className="image" style={imageProps}>
+         <animated.div className="image" style={imageProps} draggable="true">
         <img src="/apartment2.png" alt="Section 2" />
       </animated.div>
       <animated.div className="txt-content" style={contentProps}>

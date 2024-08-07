@@ -1,25 +1,44 @@
 import SearchBar from "../../components/searchBar/SearchBar";
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import {motion} from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 import "./homePage.scss";
 
 
 function HomePage() {
   const { currentUser } = useContext(AuthContext);
   const [popupsVisibility, setPopupsVisibility] = useState(false)
+  const images = ['/container1.png', '/container2.png', '/house.png', '/villa.webp']
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    controls.start({ opacity: 1, transition: { duration: 1 } }).then(() =>
+      controls.start({ opacity: 0, transition: { duration: 1, delay: 1 } })
+    );
+  }, [currentIndex, controls]);
+
 
   const handleVisibStatus = (status) => {
     setPopupsVisibility(status)
   }
 
   const imgVariants = {
-    visible:{opacity:1,x:80,transition:{type:"spring",stiffness:100,damping:10}},
-    hidden:{opacity:0}
-}
+    visible: { opacity: 1, x: 80, transition: { type: "spring", stiffness: 100, damping: 10 } },
+    hidden: { opacity: 0 }
+  }
   const contentVariants = {
-    visible:{opacity:1,y:70,transition:{type:"spring",stiffness:100,damping:10}},
-    hidden:{opacity:0}
+    visible: { opacity: 1, y: 70, transition: { type: "spring", stiffness: 100, damping: 10 } },
+    hidden: { opacity: 0 }
   }
   return (
     <div className="homePage" onClick={() => handleVisibStatus(false)}>
@@ -49,14 +68,26 @@ function HomePage() {
           </div>
         </div>
       </motion.div>
-      <motion.div 
+      <motion.div
         className="box imgContainer"
-        variants={imgVariants}  
+        variants={imgVariants}
         animate={"visible"}
       >
-        <img src="/bg.png" alt="" />
+        {/* <img src="/bg.png" alt="" /> */}
+        {
+          images.map((src, index) => (
+            <motion.img
+              key={index}
+              src={src}
+              alt={`Slide ${index}`}
+              
+              initial={{ opacity: 0 }}
+              animate={index === currentIndex ? controls : { opacity: 0 }}
+            />
+          ))
+        }
       </motion.div>
-      
+
     </div>
   );
 }

@@ -8,7 +8,7 @@ import Featured from "../../components/featured/featured";
 import SmoothScroll from "../../components/smoothScroll/smoothScroll";
 import Section1 from "../../components/sections/section1/section";
 import Section from "../../components/scroll-components/section1/section1";
-import Section2 from "../../components/sections/section1/section2/section";
+import Section2 from "../../components/sections/section2/section";
 import Section3 from "../../components/sections/section3/section";
 import PropertyList from "../../components/property-list/propertyList";
 import FeaturedProperties from "../../components/featured-properties/featuredProperties";

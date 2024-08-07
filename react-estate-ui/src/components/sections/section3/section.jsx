@@ -3,6 +3,7 @@
 import React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion"
 import '../section1/section.scss';
 
 const Section3 = () => {
@@ -33,9 +34,28 @@ const Section3 = () => {
 
         </p>
       </animated.div>
-      <animated.div className="image" style={contentProps}>
-        <img src="/office.jpg" alt="Section 3" />
-      </animated.div>
+      <motion.div className="image " style={contentProps} animate={{
+      scale: [1, 2, 2, 1, 1],
+      rotate: [0, 0, 270, 270, 0],
+      borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+    }}
+    transition={{
+      duration: 2,
+      ease: "easeInOut",
+      times: [0, 0.2, 0.5, 0.8, 1],
+      repeat: 5,
+     // repeat: Infinity,
+      repeatDelay: 1
+    }}
+    >
+        <div className='gallery'>
+          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
+          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
+          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
+          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
+        </div>
+
+      </motion.div>
     </div>
   );
 };

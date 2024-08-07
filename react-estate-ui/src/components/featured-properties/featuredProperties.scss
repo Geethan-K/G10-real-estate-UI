@@ -5,10 +5,11 @@
     gap: 20px;
 }
 .fpItem{
-    flex: 1;
+    width: 15%;
     gap: 10px;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 .fpImg{
     width: 100%;

@@ -23,10 +23,10 @@ const Section2 = () => {
   return (
     <div className="section1" ref={ref}>
          <animated.div className="image" style={imageProps} draggable="true">
-        <img src="/apartment2.png" alt="Section 2" />
+        <img src="/co-living.webp" alt="Section 2" />
       </animated.div>
       <animated.div className="txt-content" style={contentProps}>
-        <h2>Luxury Apartments</h2>
+        <h2>Budget friendly Co-living , shared rooms , Paying Guests and much more...</h2>
         <p>This is the first section content.</p>
         <p>
           To ensure that the .content div completely occupies the first screen and only shows the .body-content divs when the user starts scrolling down, you can adjust your CSS and JavaScript accordingly. Here's how you can achieve this:

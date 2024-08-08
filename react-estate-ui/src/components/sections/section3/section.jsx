@@ -24,8 +24,8 @@ const Section3 = () => {
   return (
     <div className="section1" ref={ref} >
       <animated.div className="txt-content" style={imageProps}>
-        <h2>Office Spaces</h2>
-        <p>This is the first section content.</p>
+        <h2>Share or rent your office spaces </h2>
+        <p>For creating a trustable network , Community with an effective way of cost cutting </p>
         <p>
           To ensure that the .content div completely occupies the first screen and only shows the .body-content divs when the user starts scrolling down, you can adjust your CSS and JavaScript accordingly. Here's how you can achieve this:
 
@@ -43,17 +43,23 @@ const Section3 = () => {
       duration: 2,
       ease: "easeInOut",
       times: [0, 0.2, 0.5, 0.8, 1],
-      repeat: 5,
+      repeat: 1,
      // repeat: Infinity,
       repeatDelay: 1
     }}
     >
-        <div className='gallery'>
-          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
-          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
-          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
-          <img src="/office.jpg" alt="Section 3" style={{ width: '200%', height: '200%' }} />
-        </div>
+      <div  className='gallery' >
+        <img src="/shared-office.png" alt="" className="src" style={{ width: '100%', height: '100%' }} />
+        <img src="/co-work-space.gif" alt="" className="src" style={{ width: '100%', height: '100%' }}/>
+        <img src="/free-workspace.gif" alt="" className="src" style={{ width: '100%', height: '100%' }}/>
+        <img src="/free-workspace.webp" alt="" className="src" style={{ width: '100%', height: '100%' }} />
+      </div>
+        {/* <div className='gallery'>
+          <img src="/co-work-space.gif" alt="Section 3" style={{ width: '100%', height: '100%' }} />
+          <img src="/co-work-space.gif" alt="Section 3" style={{ width: '100%', height: '100%' }} />
+          <img src="/co-work-space.gif" alt="Section 3" style={{ width: '100%', height: '100%' }} />
+          <img src="/co-work-space.gif" alt="Section 3" style={{ width: '100%', height: '100%' }} />
+        </div> */}
 
       </motion.div>
     </div>

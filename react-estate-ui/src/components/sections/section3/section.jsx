@@ -22,7 +22,7 @@ const Section3 = () => {
   });
 
   return (
-    <div className="section1" ref={ref}>
+    <div className="section1" ref={ref} >
       <animated.div className="txt-content" style={imageProps}>
         <h2>Office Spaces</h2>
         <p>This is the first section content.</p>

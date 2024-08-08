@@ -18,19 +18,19 @@ const Section1 = () => {
   };
   const contentProps = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0)' : 'translateY(-1000px)',
+    transform: inView ? 'translateX(0)' : 'translateX(1000px)',
     config: { duration: 2500, easing: (t) => t * t * t }
   });
 
   const imageProps = useSpring({
     opacity: inView ? 1 : 0,
-    transform: inView ? 'translateX(0)' : 'translateX(1000px)',
+    transform: inView ? 'translateY(0)' : 'translateY(-1000px)',
     config: { duration: 2500, easing: (t) => t * t * t }
   });
 
   return (
     <div className="section1" ref={ref}>
-      <animated.div className="txt-content" style={imageProps}>
+      <animated.div className="txt-content" style={contentProps}>
         <h2>Budget & Eco Friendly Container shops and houses</h2>
         <p>This is the first section content.</p>
         <p>
@@ -41,7 +41,7 @@ const Section1 = () => {
 
         </p>
       </animated.div>
-      <animated.div className="image" style={contentProps}   animate={floatAnimation}>
+      <animated.div className="image" style={imageProps}   animate={floatAnimation}>
         <img src="/containershop.png" alt="Section 1" />
       </animated.div>
     </div>

@@ -14,7 +14,6 @@ const Chat = forwardRef((props,chatRef) =>
     const {chats,showLastMsgs} = props
     useEffect(()=>{
       if (!socket) return;
-      console.log(chat)
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
@@ -25,7 +24,6 @@ const Chat = forwardRef((props,chatRef) =>
     }
     if((chat && socket)){
       socket.on("getMessage", (data)=>{
-        console.log('getMessage invoked with data',data)
         if(chat.id==data.chatId){
           setChat((prev)=>({...prev,messages:[...prev.messages,data]}));
           read()
@@ -50,15 +48,10 @@ const Chat = forwardRef((props,chatRef) =>
 
 
     const openChat = async (id,receiver) =>{
-        
       try{
           const res = await apiRequest.get('/chats/'+id)
-          // console.log('from chat api req',res)
-          // console.log('chat state',chat)
-          // console.log('receiver data',receiver)
           setChat({...res.data,receiver})
-        console.log('After updating state',chat)
-      }catch(err){
+     }catch(err){
         console.log(err)
       }
     }
@@ -73,8 +66,7 @@ const Chat = forwardRef((props,chatRef) =>
         const res = await apiRequest.post("/message/"+chat.id,{text,receiverId:chat.receiver.id})
         setChat((prev)=>({...prev,messages:[...prev.messages,res.data]}))
         e.target.reset()
-        console.log('from chat jsx chat state---->',chat)
-        socket.emit("sendMessage",{
+       socket.emit("sendMessage",{
           receiverId:chat.receiver.id,
           data:res.data
          })

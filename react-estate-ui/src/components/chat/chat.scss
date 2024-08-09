@@ -2,14 +2,14 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-
+  
   .messages {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
     overflow-y: scroll;
-
+    position: relative;
     h1 {
       font-weight: 300;
     }
@@ -38,7 +38,10 @@
 
   .chatBox {
     flex: 1;
-    background-color: white;
+    width: 30%;
+    position: absolute;
+    bottom: 0px;
+   background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

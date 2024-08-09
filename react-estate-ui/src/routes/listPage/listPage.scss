@@ -3,9 +3,10 @@
 .listPage {
   display: flex;
   height: 100%;
-
+  width: 1024px;
+  margin-top: 5%;
   .listContainer {
-    flex: 3;
+    width: 70%;
     height: 100%;
 
     .wrapper{
@@ -19,7 +20,7 @@
     }
   }
   .mapContainer {
-    flex: 2;
+    width: 30%;
     height: 100%;
     background-color: #fcf5f3;
 

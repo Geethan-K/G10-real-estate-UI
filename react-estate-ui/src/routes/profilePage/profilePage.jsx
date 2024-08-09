@@ -85,7 +85,7 @@ function ProfilePage() {
         </div>
       </div>
       <div className="chatContainer">
-        <div className="wrapper">
+        <div>
           <Suspense fallback={<p>Loading ...</p>}>
               <Await 
                 resolve={data.chatResponse}

@@ -51,8 +51,8 @@ const Section3 = () => {
       <div  className='gallery' >
         <img src="/shared-office.png" alt="" className="src" style={{ width: '100%', height: '100%' }} />
         <img src="/co-work-space.gif" alt="" className="src" style={{ width: '100%', height: '100%' }}/>
-        <img src="/free-workspace.gif" alt="" className="src" style={{ width: '100%', height: '100%' }}/>
-        <img src="/free-workspace.webp" alt="" className="src" style={{ width: '100%', height: '100%' }} />
+        <img src="/office-space.jpg" alt="" className="src" style={{ width: '100%', height: '100%' }}/>
+        <img src="/free-workspace.gif" alt="" className="src" style={{ width: '100%', height: '100%' }} />
       </div>
         {/* <div className='gallery'>
           <img src="/co-work-space.gif" alt="Section 3" style={{ width: '100%', height: '100%' }} />

@@ -13,36 +13,37 @@ const Featured = () => {
     })
     const objProperties = [
         {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
+            img_src: "/cities/chennai.jpg",
             city: "Chennai",
             count: 123
         },
         {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
+            img_src: "/cities/mumbai.png",
+            city: "Mumbai",
+            count: 123
+        },
+        {
+            img_src: "/cities/delhi.jpg",
+            city: "Delhi",
+            count: 123
+        },
+        {
+            img_src: "/cities/bangalore.jpg",
             city: "Bangalore",
             count: 123
         },
         {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
+            img_src: "/cities/hyderabad.png",
             city: "Hydrabad",
             count: 123
         },
         {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
-            city: "Pune",
+            img_src: "/cities/goa.jpg",
+            city: "Goa",
             count: 123
         },
-        {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
-            city: "Delhi",
-            count: 123
-        },
-        {
-            img_src: "https://www.home-designing.com/wp-content/uploads/2020/04/modern-home-on-the-coast.jpg",
-            city: "Delhi",
-            count: 123
-        },
-    ]
+
+     ]
     useEffect(() => {
         const sequence = async () => {
             objProperties.map(async (element) => {

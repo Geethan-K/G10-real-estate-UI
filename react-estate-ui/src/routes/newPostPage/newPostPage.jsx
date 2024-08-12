@@ -7,13 +7,15 @@ import CloudinaryUploadWidget from "../../components/upload widget/uploadwidget"
 function NewPostPage() {
   const [value,setValue] = useState("")
   const [err,setErr] = useState("")
+//  const [inputs,setInputs] = useState(inputs)
   const [images,setImages] = useState([])
   const navigate = useNavigate();
+
   const handleSubmit = async (e) =>{
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData.entries());
-    console.log('inputs',inputs)
+   
     try{
       const res = await apiRequest.post("/posts",
         {
@@ -25,6 +27,9 @@ function NewPostPage() {
             bedroom:parseInt(inputs.bedroom),
             bathroom:parseInt(inputs.bathroom),
             type:inputs.type,
+            rent:inputs.rent,
+            deposit:inputs.deposit,
+            sqft:inputs.sqft,
             property:inputs.property,
             latitude:inputs.latitude,
             longitude:inputs.longitude,
@@ -35,6 +40,12 @@ function NewPostPage() {
             utilities:inputs.utilities,
             pet:inputs.pet,
             income:inputs.income,
+            BHKType:inputs.BHK,
+
+            furnishedType:inputs.furnishedType,
+            PreferredTenants:inputs.PreferredTenants,
+            availableWithin:inputs.availableWithin,
+
             size:parseInt(inputs.size),
             school:parseInt(inputs.school),
             bus:parseInt(inputs.bus),
@@ -66,6 +77,27 @@ function NewPostPage() {
               <input id="price" name="price" type="number" />
             </div>
             <div className="item">
+              <label htmlFor="type">Type</label>
+              <select name="type">
+                <option value="rent" defaultChecked>
+                  Rent
+                </option>
+                <option value="buy">Buy</option>
+                <option value="booking">Hotel Booking</option>
+              </select>
+            </div>
+            {
+              
+            }
+            <div className="item">
+              <label htmlFor="deposit">Deposit</label>
+              <input id="deposit" name="deposit" type="number" />
+            </div>
+            <div className="item">
+              <label htmlFor="rent">Rent</label>
+              <input id="rent" name="rent" type="number" />
+            </div>
+            <div className="item">
               <label htmlFor="address">Address</label>
               <input id="address" name="address" type="text" />
             </div>
@@ -93,22 +125,57 @@ function NewPostPage() {
               <label htmlFor="longitude">Longitude</label>
               <input id="longitude" name="longitude" type="text" />
             </div>
+
             <div className="item">
-              <label htmlFor="type">Type</label>
-              <select name="type">
-                <option value="rent" defaultChecked>
-                  Rent
-                </option>
-                <option value="buy">Buy</option>
-              </select>
-            </div>
-            <div className="item">
-              <label htmlFor="type">Property</label>
+              <label htmlFor="property">Property</label>
               <select name="property">
                 <option value="apartment">Apartment</option>
                 <option value="house">House</option>
-                <option value="condo">Condo</option>
-                <option value="land">Land</option>
+                <option value="villa">Villa</option>
+                <option value="sharing">Shared room</option>
+                <option value="hostel">PG / Hostel</option>
+                <option value="hostel">Hotel Booking</option>
+              </select>
+            </div>
+            <div className="item">
+              <label htmlFor="BHK">BHK</label>
+              <select name="BHK">
+                <option value="ONE_RK" >
+                  1RK
+                </option>
+                <option value="ONE_BHK" defaultChecked>1BHK</option>
+                <option value="TWO_BHK">2BHK</option>
+                <option value="THREE_BHK">3BHK</option>
+                <option value="FOUR_BHK">4BHK</option>
+                <option value="FOUR_PLUS_BHK">4+ BHK</option>
+              </select>
+            </div>
+            <div className="item">
+              <label htmlFor="PreferredTenants">Preferred Tenants</label>
+              <select name="PreferredTenants">
+                <option value="family">family</option>
+                <option value="company">company</option>
+                <option value="bachelor_male">bachelors (male)</option>
+                <option value="bachelor_female">bachelors (female)</option>
+              </select>
+            </div>
+            <div className="item">
+              <label htmlFor="Availability">Availability</label>
+              <select name="Availability">
+                <option value="immediate" >
+                  Immediately available
+                </option>
+                <option value="within_15_days" defaultChecked>Available within 15 days</option>
+                <option value="within_30_days">Available within 30 days</option>
+                <option value="after_30_days">Available after 30 days</option>
+              </select>
+            </div>
+            <div className="item">
+              <label htmlFor="furnished_type">Furnished Type </label>
+              <select name="furnished_type">
+                <option value="full">Fully furnished</option>
+                <option value="semi">Semi furnished</option>
+                <option value="none">None</option>
               </select>
             </div>
             <div className="item">

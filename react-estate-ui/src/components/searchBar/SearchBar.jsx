@@ -11,33 +11,6 @@ import { format } from 'date-fns'
 const types = ["buy", "rent", "booking"];
 
 function SearchBar({ popupsVisibility, handleVisibStatus }) {
-  const [query, setQuery] = useState({
-    type: "buy",
-    city: "",
-    minPrice: 0,
-    maxPrice: 0,
-    minRent: 0,
-    maxRent: 0,
-    minDeposit: 0,
-    maxDeposit: 0,
-    BHKType: 'ONE_BHK'
-    // minPrice: 0,
-    // maxPrice: 0,
-  });
-  const [showCalendar, setshowCalendar] = useState(false);
-  const [options, setOptions] = useState({
-    adults: 1,
-    children: 0,
-    room: 1
-  })
-  const handleSpanClick = (e) => {
-    e.stopPropagation();
-    setshowCalendar(!showCalendar);
-  };
-
-  const handleCalendarClick = (e) => {
-    e.stopPropagation();
-  };
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(),
@@ -47,6 +20,39 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
       color: 'green'
     }
   ]);
+  const [options, setOptions] = useState({
+    adults: 1,
+    children: 0,
+    room: 1
+  })
+  const [query, setQuery] = useState({
+    type: "buy",
+    city: "",
+    minPrice: 0,
+    maxPrice: 0,
+    minRent: 0,
+    maxRent: 0,
+    minDeposit: 0,
+    maxDeposit: 0,
+    BHKType: 'ONE_BHK',
+    checkInandOut:dateRange[0],
+    adults:options.adults,
+    children:options.children,
+    room:options.room
+    // minPrice: 0,
+    // maxPrice: 0,
+  });
+  const [showCalendar, setshowCalendar] = useState(false);
+
+  const handleSpanClick = (e) => {
+    e.stopPropagation();
+    setshowCalendar(!showCalendar);
+  };
+
+  const handleCalendarClick = (e) => {
+    e.stopPropagation();
+  };
+ 
   const switchType = (val) => {
     setQuery((prev) => ({ ...prev, type: val }));
   };
@@ -55,11 +61,13 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
   }
   const selectedDates = (item) => {
     setDateRange([item.selection])
+    setQuery((prev)=>({...prev,[prev.checkInandOut]:[item.selection]}))
     setshowCalendar(false)
   }
   const handleOption = (e, name, operation) => {
     e.preventDefault()
     setOptions((prev) => {
+      setQuery((prev) => ({ ...prev, [name]: operation === "incr" ? options[name] + 1 : options[name] - 1 }))
       return {
         ...prev,
         [name]: operation === "incr" ? options[name] + 1 : options[name] - 1
@@ -153,7 +161,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
             </span>
             <FontAwesomeIcon icon={faPerson} className="icon" />
           </span>
-          <Link to={`/list?type=${query.type}&city=${query.city}&minprice=${query.minPrice}&maxprice=${query.maxprice}`}>
+          <Link to={`/list?type=${query.type}&city=${query.city}&minprice=${query.minRent}&maxprice=${query.maxRent}&checkInandOut=${dateRange}&adults=${query.adults}&children=${query.children}&room=${query.room}`}>
             <button>
               <img src="/search.png" alt="" />
             </button>

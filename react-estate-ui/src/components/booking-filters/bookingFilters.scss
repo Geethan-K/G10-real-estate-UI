@@ -1,0 +1,59 @@
+.booking-filter-container{
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    gap: 8px;
+    background-color: darksalmon;
+}
+.booking-filter-wrapper{
+    width: 100%;
+    display: flex;
+    padding: 10px;
+    margin: 10px;
+  
+    form{
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+        z-index: 5;
+        .item{
+            z-index: 0;
+        }
+        .item>label{
+            font-size: 12px;
+        }
+      
+        .input{
+            height: 50px;
+            border: 1px solid gray;
+            padding: 5px;
+            margin: 10px;
+            border-radius: 8px;
+            z-index: 0;
+           // position: relative;
+            .calendar-input{
+                z-index: 222 !important;
+             //   position: absolute;
+                margin-top: 25px;
+            }
+        }
+        .item>span{
+            height: 50px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+    }
+}
+
+.search-btn{
+    img{
+        width: 25px;
+        height: 25px;
+    }
+
+}
+
+
+

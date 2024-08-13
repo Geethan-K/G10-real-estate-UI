@@ -4,15 +4,19 @@
   display: flex;
   height: 100%;
   max-width: 100%;
-  width: 1024px;
+  width: auto;
   margin-top: 5%;
+  .bookingFilterContainer{
+    width: 20%;
+  }
   .listContainer {
-    width: 70%;
+    width: 40%;
     height: 100%;
 
     .wrapper{
       height: 100%;
       padding-right: 50px;
+      padding-left: 50px;
       display: flex;
       flex-direction: column;
       gap: 50px;
@@ -21,7 +25,7 @@
     }
   }
   .mapContainer {
-    width: 40%;
+    width: 20%;
     height: 100%;
     background-color: #fcf5f3;
 

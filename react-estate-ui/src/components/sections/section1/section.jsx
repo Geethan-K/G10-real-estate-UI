@@ -31,7 +31,7 @@ const Section1 = () => {
   return (
     <div className="section1" ref={ref}>
       <animated.div className="txt-content" style={contentProps}>
-        <h2>Budget & Eco Friendly Container shops and houses</h2>
+        <h2>Budget & Eco Friendly Container shops , houses and stays</h2>
         <p>This is the first section content.</p>
         <p>
           To ensure that the .content div completely occupies the first screen and only shows the .body-content divs when the user starts scrolling down, you can adjust your CSS and JavaScript accordingly. Here's how you can achieve this:

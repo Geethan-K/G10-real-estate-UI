@@ -16,6 +16,13 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
     city: "",
     minPrice: 0,
     maxPrice: 0,
+    minRent: 0,
+    maxRent: 0,
+    minDeposit: 0,
+    maxDeposit: 0,
+    BHKType: 'ONE_BHK'
+    // minPrice: 0,
+    // maxPrice: 0,
   });
   const [showCalendar, setshowCalendar] = useState(false);
   const [options, setOptions] = useState({
@@ -59,7 +66,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
       }
     })
   }
-  const handlePopupsVisibility = (e) =>{
+  const handlePopupsVisibility = (e) => {
     e.stopPropagation()
     handleVisibStatus(true)
   }
@@ -86,7 +93,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
           </span>
           <span onClick={handleSpanClick}>
             <FontAwesomeIcon icon={faCalendarDays} className="icon" />
-            {showCalendar  && 
+            {showCalendar &&
               <span className="input" >
                 <div className="date" onClick={handleCalendarClick}>
                   <DateRange
@@ -119,7 +126,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
                     <div className="option-item">
                       <span className="option-text">adult</span>
                       <div className="option-counter">
-                        <button className="option-counter-btn" disabled={options.adults<=1} onClick={(e) => handleOption(e, "adults", "decr")}>-</button>
+                        <button className="option-counter-btn" disabled={options.adults <= 1} onClick={(e) => handleOption(e, "adults", "decr")}>-</button>
                         <span className="option-counter-num">{options.adults}</span>
                         <button className="option-counter-btn" onClick={(e) => handleOption(e, "adults", "incr")}>+</button>
                       </div>
@@ -127,7 +134,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
                     <div className="option-item">
                       <span className="option-text">children</span>
                       <div className="option-counter">
-                        <button className="option-counter-btn" disabled={options.children<=1} onClick={(e) => handleOption(e, "children", "decr")}>-</button>
+                        <button className="option-counter-btn" disabled={options.children <= 1} onClick={(e) => handleOption(e, "children", "decr")}>-</button>
                         <span className="option-counter-num">{options.children}</span>
                         <button className="option-counter-btn" onClick={(e) => handleOption(e, "children", "incr")}>+</button>
                       </div>
@@ -135,7 +142,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
                     <div className="option-item">
                       <span className="option-text">room</span>
                       <div className="option-counter">
-                        <button className="option-counter-btn" disabled={options.room<=1} onClick={(e) => handleOption(e, "room", "decr")}>-</button>
+                        <button className="option-counter-btn" disabled={options.room <= 1} onClick={(e) => handleOption(e, "room", "decr")}>-</button>
                         <span className="option-counter-num">{options.room}</span>
                         <button className="option-counter-btn" onClick={(e) => handleOption(e, "room", "incr")}>+</button>
                       </div>
@@ -157,23 +164,51 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
         !(query.type == 'booking') &&
         <form>
           <input type="text" name="city" placeholder="City Location" onChange={handleChange} />
-          <input
-            type="number"
-            name="minPrice"
-            min={0}
-            max={10000000}
-            placeholder="Min Price"
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="maxPrice"
-            min={0}
-            max={10000000}
-            placeholder="Max Price"
-            onChange={handleChange}
-          />
-          <Link to={`/list?type=${query.type}&city=${query.city}&minprice=${query.minPrice}&maxprice=${query.maxprice}`}>
+          {
+            query.type == 'buy' && (
+              <>
+                <input
+                  type="number"
+                  name="minPrice"
+                  min={0}
+                  max={10000000}
+                  placeholder="Min Price"
+                  onChange={handleChange}
+                />
+                <input
+                  type="number"
+                  name="maxPrice"
+                  min={0}
+                  max={10000000}
+                  placeholder="Max Price"
+                  onChange={handleChange}
+                />
+              </>
+            )
+          }
+          {
+            query.type == 'rent' && (
+              <>
+                <input
+                  type="number"
+                  name="minRent"
+                  min={0}
+                  max={10000000}
+                  placeholder="Min Rent"
+                  onChange={handleChange}
+                />
+                <input
+                  type="number"
+                  name="maxRent"
+                  min={0}
+                  max={10000000}
+                  placeholder="Max Rent"
+                  onChange={handleChange} />
+              </>
+            )
+          }
+
+          <Link to={`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&minRent=${query.minRent}&maxRent=${query.maxRent}&minDeposit=${query.minDeposit}&maxDeposit=${query.maxDeposit}&BHKType=${query.BHKType}`}>
             <button>
               <img src="/search.png" alt="" />
             </button>

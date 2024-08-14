@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./newPostPage.scss";
 import ReactQuill from 'react-quill'
@@ -7,15 +7,23 @@ import CloudinaryUploadWidget from "../../components/upload widget/uploadwidget"
 function NewPostPage() {
   const [value,setValue] = useState("")
   const [err,setErr] = useState("")
-//  const [inputs,setInputs] = useState(inputs)
+  const [propertyType,setPropertyType] = useState({type:'rent'})
   const [images,setImages] = useState([])
   const navigate = useNavigate();
+
+  const handleChange = async (e) => {
+    setPropertyType({
+      type:e.target.value
+    })
+  }
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData.entries());
-   
+    setInputs(inputs);
+
+
     try{
       const res = await apiRequest.post("/posts",
         {
@@ -60,8 +68,7 @@ function NewPostPage() {
       console.log(err)
       setErr(err)
     }
-
-  }
+ }
   return (
     <div className="newPostPage">
       <div className="formContainer">
@@ -78,7 +85,7 @@ function NewPostPage() {
             </div>
             <div className="item">
               <label htmlFor="type">Type</label>
-              <select name="type">
+              <select name="type" value={propertyType.type} onChange={handleChange}>
                 <option value="rent" defaultChecked>
                   Rent
                 </option>
@@ -87,16 +94,22 @@ function NewPostPage() {
               </select>
             </div>
             {
-              
-            }
-            <div className="item">
+              propertyType.type === 'rent' && ( 
+              <div className="item">
               <label htmlFor="deposit">Deposit</label>
               <input id="deposit" name="deposit" type="number" />
             </div>
-            <div className="item">
-              <label htmlFor="rent">Rent</label>
-              <input id="rent" name="rent" type="number" />
-            </div>
+            )
+            }
+            {
+              propertyType.type === 'rent' && ( 
+                <div className="item">
+                <label htmlFor="rent">Rent</label>
+                <input id="rent" name="rent" type="number" />
+              </div>
+            )
+            }
+           
             <div className="item">
               <label htmlFor="address">Address</label>
               <input id="address" name="address" type="text" />

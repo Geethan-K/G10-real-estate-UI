@@ -3,11 +3,11 @@ import React from 'react';
 import ReactStars from 'react-rating-stars-component';
 import "./card.scss";
 
-function Card({ item,ratings,comments }) {
-  console.log(ratings,comments)
+function Card({ item, ratings, comments }) {
+  console.log(item, ratings, comments)
   var averageRating = 0.0
-  if(ratings !==undefined){
-     averageRating = ratings.reduce((acc, rating) => acc + rating.stars, 0) / ratings.length || 0;
+  if (item.ratings !== undefined) {
+    averageRating = item.ratings.reduce((acc, rating) => acc + rating.stars, 0) / item.ratings.length || 0;
   }
   return (
     <div className="card">
@@ -22,7 +22,47 @@ function Card({ item,ratings,comments }) {
           <img src="/pin.png" alt="" />
           <span>{item.address}</span>
         </p>
-        <p className="price">	&#8377; {item.price}</p>
+        {/* <p className="price">	&#8377; {item.price}</p> */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '12px', gap: '15px', border: '1px solid black' }}>
+          <span className="rent">
+            <label>rent :</label>
+            <p>&#8377; {item.rent}</p>
+          </span>
+          <span className="rent">
+            <label>deposit :</label>
+            <p>&#8377; {item.deposit}</p>
+          </span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', fontSize: '12px', margin: '5px', gap: '8px' }} className="amenities">
+          {
+            !(item.postDetail.BHKType === null) && (
+              <span>
+                <p>{item.postDetail.BHKType}</p>
+              </span>
+            )
+          }
+          {
+            !(item.sqft === null) && (
+              <span>
+                <p>{item.sqft} sqft</p>
+              </span>
+            )
+          }
+          {
+            !(item.postDetail.furnishedType === null) && (
+              <span>
+                <p>{item.postDetail.furnishedType}</p>
+              </span>
+            )
+          }
+          {
+            !(item.postDetail.availableWithin === null) && (
+              <span>
+                <p>{item.postDetail.availableWithin}</p>
+              </span>
+            )
+          }
+        </div>
         <span style={{ display: 'flex', alignItems: 'center', padding: '2px' }}>
           <ReactStars
             count={5}
@@ -34,10 +74,10 @@ function Card({ item,ratings,comments }) {
             activeColor="#ffd700"
           />
           {
-            averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px',marginLeft:'8px' }}>(No reviews yet)</p>
-          ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px',marginLeft:'8px' }}>{averageRating.toFixed(1)}</h3>)
+            averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '8px' }}>(No reviews yet)</p>
+            ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '8px' }}>{averageRating.toFixed(1)}</h3>)
           }
-       </span>
+        </span>
         <div className="bottom">
           <div className="features">
             <div className="feature">

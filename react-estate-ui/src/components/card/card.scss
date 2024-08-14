@@ -19,12 +19,16 @@
       border-radius: 10px;
     }
   }
+  .rent {
+    flex:1;
+    padding: 3px;
+  }
   .textContainer {
     flex: 3;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
+    
 
     img {
       width: 16px;
@@ -99,5 +103,27 @@
         }
       }
     }
+  }
+  .amenities{
+    display:'flex';
+    flex-direction: row;
+    justify-content:'flex-start';
+    align-items:'center';
+    font-size:'12px';
+    margin:'5px';
+    gap:'8px';
+    span{
+      min-width: 15px;
+      height: 25px;
+      font-size: 10px;
+     padding-left: 8px;
+     padding-right: 8px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    background-color: orange;
+      border-radius: 8px;
+    }
+
   }
 }

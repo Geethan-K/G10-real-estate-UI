@@ -139,7 +139,16 @@ function SinglePage() {
                   <img src="/pin.png" alt="" />
                   <span>{post.address}</span>
                 </div>
-                <div className="price">$ {post.price}</div>
+                <div style={{display:'flex',gap:'8px'}}>
+                <div>
+                <label>Deposit</label>
+                <div className="price">$ {post.deposit}</div>
+                </div>
+                <div>
+                <label>Rent</label>
+                <div className="price">$ {post.rent}</div>
+                </div>
+                </div>
               </div>
               <div className="user">
                 <img src={post.user.avatar} alt="" />

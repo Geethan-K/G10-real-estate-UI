@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./bookingFilters.scss";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBed, faPerson, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faPerson, faCalendarDays,faLocationPin } from "@fortawesome/free-solid-svg-icons";
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
@@ -58,10 +58,12 @@ function BookingFilters() {
       <div className="booking-filter-wrapper">
         <form>
           <span className="item">
-            <FontAwesomeIcon icon={faBed} className="icon" />
+            <label>Destination :</label>
+             <FontAwesomeIcon icon={faLocationPin} className="icon"/>
             <input type="text" name="city" placeholder="City Location" onChange={handleChange} className="input" defaultValue={query.city} />
           </span>
           <span onClick={handleSpanClick} className="cal-container">
+            <label>Check-In & Check-out</label>
             <FontAwesomeIcon icon={faCalendarDays} className="icon" />
             {showCalendar &&
               <span className="calendar-input" >
@@ -88,24 +90,29 @@ function BookingFilters() {
           </span>
 
           <span className="item">
+          <label>Adults :</label>
             <FontAwesomeIcon icon={faPerson} className="icon" />
             <input type="number" name="adults"  onChange={handleChange} className="input" defaultValue={Number(query.adults)} />
           </span>
           <span className="item">
+          <label>Children :</label>
             <FontAwesomeIcon icon={faPerson} className="icon" />
             <input type="number" name="children"  onChange={handleChange} className="input" defaultValue={Number(query.children)} />
 
           </span>
           <span className="item">
-            <FontAwesomeIcon icon={faPerson} className="icon" />
+          <label>Room :</label>
+          <FontAwesomeIcon icon={faBed} className="icon" />
             <input type="number" name="rooms"  onChange={handleChange} className="input" defaultValue={Number(query.rooms)} />
 
           </span>
 
-
+            <span className="search-btn-container">
             <button onClick={()=>handleFilter} className="search-btn">
               <img src="/search.png" alt="" />
             </button>
+            </span>
+
         </form>
       </div>
     </div>

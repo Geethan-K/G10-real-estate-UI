@@ -2,32 +2,55 @@
     // display: flex;
     // flex-direction: column;
     // justify-content: center;
-    gap: 8px;
-    background-color: darksalmon;
+    background-color: orange;
 }
 .booking-filter-wrapper{
     width: 100%;
     display: flex;
-    padding: 10px;
-    margin: 10px;
   
     form{
         display: flex;
         flex-direction: column;
-        padding: 12px;
+        padding: 8px;
         z-index: 5;
         .item{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             z-index: 0;
         }
+        .item>.icon{
+            z-index: 3;
+            position: absolute;
+            left: 10%;
+            margin-top: 5%;
+        }
+        .cal-container{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .cal-container>.icon{
+            z-index: 3;
+            position: absolute;
+            left: 10%;
+            margin-top: 5%;
+        }
         .item>label{
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 400;
+            margin-left: 18px;
         }
       
         .input{
             height: 50px;
+            width: 135%;
             border: 1px solid gray;
             padding: 5px;
             margin: 10px;
+            padding-left: 18%;
             border-radius: 8px;
             z-index: 0;
            // position: relative;
@@ -47,13 +70,19 @@
     }
 }
 
-.search-btn{
-    img{
-        width: 25px;
-        height: 25px;
-    }
-
+.search-btn-container{
+    width: 130%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .search-btn{
+        img{
+            width: 25px;
+            height: 25px;
+        }
+    }   
 }
+
 
 
 

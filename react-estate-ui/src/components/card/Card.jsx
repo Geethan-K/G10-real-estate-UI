@@ -35,28 +35,28 @@ function Card({ item, ratings, comments }) {
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', fontSize: '12px', margin: '5px', gap: '8px' }} className="amenities">
           {
-            !(item.postDetail.BHKType === null) && (
+            (!item.postDetail?.BHKType === null && !item.postDetail?.BHKType === undefined) && (
               <span>
                 <p>{item.postDetail.BHKType}</p>
               </span>
             )
           }
           {
-            !(item.sqft === null) && (
+            (!item.sqft === null && !item.sqft === undefined) && (
               <span>
                 <p>{item.sqft} sqft</p>
               </span>
             )
           }
           {
-            !(item.postDetail.furnishedType === null) && (
+            (!item.postDetail?.furnishedType === null  && !item.postDetail?.furnishedType === undefined) && (
               <span>
                 <p>{item.postDetail.furnishedType}</p>
               </span>
             )
           }
           {
-            !(item.postDetail.availableWithin === null) && (
+            (!item.postDetail?.availableWithin === null && !item.postDetail?.availableWithin === undefined) && (
               <span>
                 <p>{item.postDetail.availableWithin}</p>
               </span>

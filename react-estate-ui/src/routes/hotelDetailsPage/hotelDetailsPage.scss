@@ -21,9 +21,9 @@
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.hotel_img{
+.room_img{
   width: 100%;
-  object-fit:fill;
+  object-fit:cover;
 }
 .hotel_title{
     font-size: 24px;
@@ -50,7 +50,7 @@
     color: orange;
     font-weight: 500;
 }
-.hotel_details{
+.hotel_details_container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;

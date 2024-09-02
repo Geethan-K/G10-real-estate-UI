@@ -129,7 +129,7 @@ function Card({ item, ratings, comments }) {
         <div className="hotel_details">
             <div className="hotel_ratings">
               <span>Excellent</span>
-              <button>5.5</button>
+              <button className="rating-btn">5.5</button>
             </div>
             <div className="detail_texts">
               <span className="hotel_price">£ 123</span>

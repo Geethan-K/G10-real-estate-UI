@@ -70,12 +70,12 @@ function HotelDetailsPage() {
                     {
                         photos.map((photo,i)=>(
                             <div className="hotel_img_wrapper">
-                                <img onClick={()=>handleOpen(i)} src={photo.src} alt="" className="hotel_img" />
+                                <img onClick={()=>handleOpen(i)} src={photo.src} alt="" className="room_img" />
                             </div>
                         ))
                     }
                 </div>
-                <div className="hotel_details">
+                <div className="hotel_details_container">
                     <div className="hotel_details_texts">
                         <h1 className="hotel_title">Stay in the heart of ooty</h1>
                         <p className="hotel_desc">

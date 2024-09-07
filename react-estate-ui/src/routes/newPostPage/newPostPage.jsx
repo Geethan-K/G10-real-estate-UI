@@ -9,97 +9,107 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import '@djthoms/pretty-checkbox';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function NewPostPage() {
-  const [value,setValue] = useState("")
-  const [err,setErr] = useState("")
-  const [propertyType,setPropertyType] = useState({type:'rent'})
-  const [images,setImages] = useState([])
-  const [highlights,setHighlights] = useState({
-    swimming_Pool:false,
-    gym:false,
-    garden:false,
-    balcony:false,
-    power_Backup:false,
-    security_available:false,
-    children_play_area:false,
-    close_to_school:false,
-    close_to_ATM:false,
-    close_to_hospital:false,
-    close_to_pharmacy:false,
-    close_to_bustand:false,
-    close_to_metro:false,
-    close_to_railway_station:false
+  const [value, setValue] = useState("")
+  const [err, setErr] = useState("")
+  const [propertyType, setPropertyType] = useState({ type: 'rent' })
+  const [images, setImages] = useState([])
+  const [highlights, setHighlights] = useState({
+    swimming_Pool: false,
+    gym: false,
+    garden: false,
+    balcony: false,
+    power_Backup: false,
+    security_available: false,
+    children_play_area: false,
+    close_to_school: false,
+    close_to_ATM: false,
+    close_to_hospital: false,
+    close_to_pharmacy: false,
+    close_to_bustand: false,
+    close_to_metro: false,
+    close_to_railway_station: false
+  })
+  const [highlightDetails, setHighlightDetails] = useState({
+    close_to_hospital: { hospital_name: '', km: '' },
+    close_to_pharmacy: { pharmacy_name: 'close_to_pharmacy', km: '' },
+    close_to_ATM: { pharmacy_name: 'close_to_ATM', km: '' },
+    close_to_bustand: { bustand_name: 'close_to_bustand', km: '' },
+    close_to_railway_station: { railway_station_name: 'close_to_railway_station', km: '' },
+    close_to_school: { bustand_name: 'close_to_school', km: '' },
+    close_to_metro: { metro_name: 'close_to_metro', km: '' },
+
   })
   const navigate = useNavigate();
 
   const handleChange = async (e) => {
     setPropertyType({
-      type:e.target.value
+      type: e.target.value
     })
   }
-  const checkedChange = async(e) =>{
+  const checkedChange = async (e) => {
 
-   setHighlights((prevDetails)=>({
+    setHighlights((prevDetails) => ({
       ...prevDetails,
-      [e.target.name]:e.target.checked
+      [e.target.name]: e.target.checked
     }))
-   }
-   
+  }
 
-  const handleSubmit = async (e) =>{
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData.entries());
     setInputs(inputs);
 
-  
 
-    try{
+
+    try {
       const res = await apiRequest.post("/posts",
         {
-          postData:{
-            title:inputs.title,
-            price:parseInt(inputs.price),
-            address:inputs.address,
-            city:inputs.city,
-            bedroom:parseInt(inputs.bedroom),
-            bathroom:parseInt(inputs.bathroom),
-            parking:parseInt(inputs.parking),
-            facing:inputs.facing,
-            type:inputs.type,
-            rent:inputs.rent,
-            deposit:inputs.deposit,
-            sqft:inputs.sqft,
-            property:inputs.property,
-            latitude:inputs.latitude,
-            longitude:inputs.longitude,
-            images:images
+          postData: {
+            title: inputs.title,
+            price: parseInt(inputs.price),
+            address: inputs.address,
+            city: inputs.city,
+            bedroom: parseInt(inputs.bedroom),
+            bathroom: parseInt(inputs.bathroom),
+            parking: parseInt(inputs.parking),
+            facing: inputs.facing,
+            type: inputs.type,
+            rent: inputs.rent,
+            deposit: inputs.deposit,
+            sqft: inputs.sqft,
+            property: inputs.property,
+            latitude: inputs.latitude,
+            longitude: inputs.longitude,
+            images: images
           },
-          postDetail:{
-            desc:value,
-        //    utilities:inputs.utilities,
-            pet:inputs.pet,
-         //   income:inputs.income,
-            BHKType:inputs.BHK,
+          postDetail: {
+            desc: value,
+            //    utilities:inputs.utilities,
+            pet: inputs.pet,
+            //   income:inputs.income,
+            BHKType: inputs.BHK,
 
-            furnishedType:inputs.furnishedType,
-            PreferredTenants:inputs.PreferredTenants,
-            availableWithin:inputs.availableWithin,
+            furnishedType: inputs.furnishedType,
+            PreferredTenants: inputs.PreferredTenants,
+            availableWithin: inputs.availableWithin,
 
-            size:parseInt(inputs.size),
-            school:parseInt(inputs.school),
-            bus:parseInt(inputs.bus),
-            restaurant:parseInt(inputs.restaurant)
-            
+            size: parseInt(inputs.size),
+            // school: parseInt(inputs.school),
+            // bus: parseInt(inputs.bus),
+            restaurant: parseInt(inputs.restaurant)
+
           }
-        }).catch((err)=>{
-          console.log('err from new post page',err)
+        }).catch((err) => {
+          console.log('err from new post page', err)
         })
-        navigate('/'+res.data.id)
-    }catch(err){
+      navigate('/' + res.data.id)
+    } catch (err) {
       console.log(err)
       setErr(err)
     }
- }
+  }
   return (
     <div className="newPostPage">
       <div className="formContainer">
@@ -110,14 +120,17 @@ function NewPostPage() {
               <label htmlFor="title">Title</label>
               <input id="title" name="title" type="text" />
             </div>
-             <div className="item">
-              <label htmlFor="price">Price</label>
-              <input id="price" name="price" type="number" />
-            </div>
+            {
+              propertyType == 'buy' && <div className="item">
+                <label htmlFor="price">Price</label>
+                <input id="price" name="price" type="number" />
+              </div>
+            }
+
             <div className="item">
               <label htmlFor="type">Type</label>
-              <select name="type" value={propertyType.type} >
-                <option value="rent" defaultChecked>
+              <select name="type" value={propertyType.type} onChange={handleChange}>
+                <option value="rent" >
                   Rent
                 </option>
                 <option value="buy">Buy</option>
@@ -125,29 +138,29 @@ function NewPostPage() {
               </select>
             </div>
             {
-              propertyType.type === 'rent' && ( 
-              <div className="item">
-              <label htmlFor="deposit">Deposit</label>
-              <input id="deposit" name="deposit" type="number" />
-            </div>
-            )
+              propertyType.type === 'rent' && (
+                <div className="item">
+                  <label htmlFor="deposit">Deposit</label>
+                  <input id="deposit" name="deposit" type="number" />
+                </div>
+              )
             }
             {
-              propertyType.type === 'rent' && ( 
+              propertyType.type === 'rent' && (
                 <div className="item">
-                <label htmlFor="rent">Rent</label>
-                <input id="rent" name="rent" type="number" />
-              </div>
-            )
+                  <label htmlFor="rent">Rent</label>
+                  <input id="rent" name="rent" type="number" />
+                </div>
+              )
             }
-           
+
             <div className="item">
               <label htmlFor="address">Address</label>
               <input id="address" name="address" type="text" />
             </div>
             <div className="item description">
               <label htmlFor="desc">Description</label>
-              <ReactQuill theme="snow" onChange={setValue} value={value}/>
+              <ReactQuill theme="snow" onChange={setValue} value={value} />
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
@@ -258,13 +271,13 @@ function NewPostPage() {
               <label htmlFor="size">Total Size (sqft)</label>
               <input min={0} id="size" name="size" type="number" />
             </div>
-            {
-              highlights.close_to_school &&  <div className="item">
-              <label htmlFor="school">School</label>
-              <input min={0} id="school" name="school" type="number" />
-            </div>
+            {/* {
+              highlights.close_to_school && <div className="item">
+                <label htmlFor="school">School</label>
+                <input min={0} id="school" name="school" type="number" />
+              </div>
             }
-           
+
             <div className="item">
               <label htmlFor="bus">bus</label>
               <input min={0} id="bus" name="bus" type="number" />
@@ -272,47 +285,149 @@ function NewPostPage() {
             <div className="item">
               <label htmlFor="restaurant">Restaurant</label>
               <input min={0} id="restaurant" name="restaurant" type="number" />
-            </div>
+            </div> */}
             <div className="highlights">
-            <Checkbox color="warning-o"  bigger="true" name="close_to_hospital" icon={highlights.close_to_hospital?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  className="Checkbox"  checked={highlights.close_to_hospital} shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby hospital
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_pharmacy" icon={highlights.close_to_pharmacy?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_pharmacy}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby Pharmacy
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_school" icon={highlights.close_to_school?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_school}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby school
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_ATM" icon={highlights.close_to_ATM?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_ATM}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby ATM
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_bustand" icon={highlights.close_to_bustand} checked={highlights.close_to_bustand}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby Bus Stand
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_railway_station" icon={highlights.close_to_railway_station} checked={highlights.close_to_railway_station}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby Railway Station
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="close_to_metro" icon={highlights.close_to_metro?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_metro}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               Nearby Metro
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="security_available" icon={highlights.security_available?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.security_available}  shape="curve" onChange={(e)=>checkedChange(e)}>
-               24 x 7 Security
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="power_Backup" icon={highlights.power_Backup?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.power_Backup}  shape="curve" onChange={(e)=>checkedChange(e)}>
-              Power Backup
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="gym" checked={highlights.gym} icon={highlights.gym?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}   shape="curve" onChange={(e)=>checkedChange(e)}>
-              GYM
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="gym" checked={highlights.balcony} icon={highlights.balcony?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}   shape="curve" onChange={(e)=>checkedChange(e)}>
-              Balcony
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="children_play_area" icon={highlights.children_play_area?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.children_play_area}  shape="curve" onChange={(e)=>checkedChange(e)}>
-              Children's Park 
-            </Checkbox>
-            <Checkbox color="warning-o"  bigger="true" name="swimming_Pool" icon={highlights.swimming_Pool?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.swimming_Pool}  shape="curve" onChange={(e)=>checkedChange(e)}>
-              Swimming Pool 
-            </Checkbox>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_hospital" icon={highlights.close_to_hospital ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} className="Checkbox" checked={highlights.close_to_hospital} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby hospital
+                  </Checkbox>
+                </span>
+
+                {
+                  highlights.close_to_hospital && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_hospital" name="close_to_hospital" type="text" placeholder="hospital name" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_pharmacy" icon={highlights.close_to_pharmacy ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_pharmacy} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby Pharmacy
+                  </Checkbox>
+                </span>
+
+                {
+                  highlights.close_to_pharmacy && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_pharmacy" name="close_to_pharmacy" type="text" placeholder="Apollo pharmacy" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_school" icon={highlights.close_to_school ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_school} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby school
+                  </Checkbox>
+                </span>
+
+                {
+                  highlights.close_to_school && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_school" name="close_to_school" type="text" placeholder="School name" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_ATM" icon={highlights.close_to_ATM ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_ATM} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby ATM
+                  </Checkbox>
+                </span>
+                {
+                  highlights.close_to_ATM && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_ATM" name="close_to_ATM" type="text" placeholder="ATM name" />
+                    </div>
+                  </span>
+                }
+              </span>
+
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_bustand" icon={highlights.close_to_bustand ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_bustand} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby Bus Stand
+                  </Checkbox>
+                </span>
+                {
+                  highlights.close_to_bustand && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_bustand" name="close_to_bustand" type="text" placeholder="busstand name" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_railway_station" icon={highlights.close_to_railway_station ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_railway_station} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby Railway Station
+                  </Checkbox>
+                </span>
+                {
+                  highlights.close_to_railway_station && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_railway_station" name="close_to_railway_station" type="text" placeholder="railway station name" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <span className="highlights-input-area">
+                <span className="check-area">
+                  <Checkbox color="warning-o" bigger="true" name="close_to_metro" icon={highlights.close_to_metro ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.close_to_metro} shape="curve" onChange={(e) => checkedChange(e)}>
+                    Nearby Metro
+                  </Checkbox>
+                </span>
+                {
+                  highlights.close_to_metro && <span>
+                    <div className="highlights-input">
+                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                    </div>
+                    <div className="highlights-input">
+                      <input id="close_to_metro" name="close_to_metro" type="text" placeholder="metro station name" />
+                    </div>
+                  </span>
+                }
+              </span>
+              <Checkbox color="warning-o" bigger="true" name="security_available" icon={highlights.security_available ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.security_available} shape="curve" onChange={(e) => checkedChange(e)}>
+                24 x 7 Security
+              </Checkbox>
+              <Checkbox color="warning-o" bigger="true" name="power_Backup" icon={highlights.power_Backup ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.power_Backup} shape="curve" onChange={(e) => checkedChange(e)}>
+                Power Backup
+              </Checkbox>
+              <Checkbox color="warning-o" bigger="true" name="gym" checked={highlights.gym} icon={highlights.gym ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
+                GYM
+              </Checkbox>
+              <Checkbox color="warning-o" bigger="true" name="balcony" checked={highlights.balcony} icon={highlights.balcony ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
+                Balcony
+              </Checkbox>
+              <Checkbox color="warning-o" bigger="true" name="children_play_area" icon={highlights.children_play_area ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.children_play_area} shape="curve" onChange={(e) => checkedChange(e)}>
+                Children's Park
+              </Checkbox>
+              <Checkbox color="warning-o" bigger="true" name="swimming_Pool" icon={highlights.swimming_Pool ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.swimming_Pool} shape="curve" onChange={(e) => checkedChange(e)}>
+                Swimming Pool
+              </Checkbox>
             </div>
             <button className="sendButton">Add</button>
             {err && <span>{err}</span>}
@@ -321,15 +436,17 @@ function NewPostPage() {
       </div>
       <div className="sideContainer">
         {
-          images.map((image,index)=>(
+          images.map((image, index) => (
             <img src={image} key={index} alt="" />
           ))
         }
-        <CloudinaryUploadWidget 
-        uwConfig={{multiple:true, 
-          cloudName:'dynvtl13s',
-          uploadPreset:'real-estate',
-          folder:'posts'}}
+        <CloudinaryUploadWidget
+          uwConfig={{
+            multiple: true,
+            cloudName: 'dynvtl13s',
+            uploadPreset: 'real-estate',
+            folder: 'posts'
+          }}
           setState={setImages}
         ></CloudinaryUploadWidget>
       </div>

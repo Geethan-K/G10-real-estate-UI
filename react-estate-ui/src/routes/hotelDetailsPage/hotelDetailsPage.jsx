@@ -42,8 +42,8 @@ function HotelDetailsPage() {
     return (
         <div className="hotel_container">
             {
-                open && <div className="slider">
-                    <FontAwesomeIcon icon={faCircleXmark}   className='close'   onClick={()=>setOpen(false)}/>
+                open && <div className="slider-images">
+                    <FontAwesomeIcon icon={faCircleXmark}   className='close-lg-view'   onClick={()=>setOpen(false)}/>
                     <FontAwesomeIcon icon={faCircleArrowLeft} className='arrow' onClick={()=>handleMove('l')}/>
                     <div className="sliderWrapper">
                         <img src={photos[slideNum].src} alt="" id="sliderImg" />

@@ -2,11 +2,14 @@
 
 .card {
   display: flex;
-  gap: 20px;
-
+  gap: 10px;
+  border: 1px solid rgb(184, 69, 69);
+  cursor: pointer;
+  border-radius: 15px;
+  padding: 2vh;
   .imageContainer {
     flex: 2;
-    height: 200px;
+    height: 30vh;
 
     @include md {
       display: none;
@@ -19,9 +22,63 @@
       border-radius: 10px;
     }
   }
+  .bhk-type{
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.4s ease;
+    padding: none;
+    color:rgb(53, 52, 52);
+    &:hover {
+      color: #fece51;
+      scale: 1.01;
+    }
+  }
   .rent {
+    
     flex:1;
     padding: 3px;
+    
+  }
+  .property-detail-section{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    &:hover {
+      color: #fece51;
+      scale: 1.09;
+    }
+    .details-space{
+     // flex: 1;
+      width:fit-content;
+      padding: none;
+      label{
+        font-weight: 600;
+      }
+      p{
+        font-size: 10px;
+       color: #416edf;
+        margin-top: 2px;
+      }
+      
+    }  
+     span{
+      //flex: 1;
+      
+    //  justify-content: center;
+    //  align-items: center;
+       
+      .amenities-icon{
+        font-size: 20px;
+        padding-right: 8px;
+        color: #0d5806;
+      //  flex: 1;
+      //  width: 50%;
+        // height: 4.5vh;
+        // font-size: 15px;
+        // justify-content: center;
+        // align-items: center;
+      }
+    }
   }
   .textContainer {
     flex: 3;
@@ -36,19 +93,19 @@
     }
 
     .title {
-      font-size: 20px;
+      font-size: 14px;
       font-weight: 600;
-      color: #444;
+      color: #6d6d6d;
       transition: all 0.4s ease;
-
+      padding: none;
       &:hover {
-        color: #000;
+        color: #fece51;
         scale: 1.01;
       }
     }
 
     .address {
-      font-size: 14px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       gap: 5px;
@@ -62,6 +119,21 @@
       border-radius: 5px;
       background-color: rgba(254, 205, 81, 0.438);
       width: max-content;
+    }
+    .property-details{
+      font-size: 13px;
+      display: 'flex';
+      flex-direction:'row';
+      justify-content: 'center';
+      align-items: center;
+      align-items: 'center';
+      padding: 8px;
+      font-size: '12px';
+      gap: '15px';
+      border: '1px solid gray !important';
+      border-radius: 15px;
+      background-color: rgb(247, 244, 244);
+      
     }
 
     .bottom {
@@ -104,28 +176,7 @@
       }
     }
   }
-  .amenities{
-    display:'flex';
-    flex-direction: row;
-    justify-content:'flex-start';
-    align-items:'center';
-    font-size:'12px';
-    margin:'5px';
-    gap:'8px';
-    span{
-      min-width: 15px;
-      height: 25px;
-      font-size: 10px;
-     padding-left: 8px;
-     padding-right: 8px;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-    background-color: orange;
-      border-radius: 8px;
-    }
-
-  }
+ 
 }
 .hotel_card{
   display: flex;
@@ -222,5 +273,29 @@
     
     }
   }
-  
+ 
+}
+.amenities{
+  background-color: #6a90f1;
+  display:'flex';
+  //flex-direction: row;
+  // justify-content:'flex-start';
+  // align-items:'center';
+  font-size:'12px';
+  margin:'5px';
+  gap:'8px';
+  span{
+    flex: 1;
+    width: fit-content;
+    height: 25px;
+    font-size: 10px;
+   padding-left: 8px;
+   padding-right: 8px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+  background-color: orange;
+    border-radius: 8px;
+  }
+
 }

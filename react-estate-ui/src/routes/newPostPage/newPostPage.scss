@@ -73,4 +73,22 @@
       border-radius: 5px;
     }
   }
+  .tick{
+    font-size: 35px;
+  }
+  .highlights{
+    width: 95%;
+    height: 20vh;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    .Checkbox{
+      // width: max-content;
+      // height:5vh;
+      // background-color: orange;
+      // border-radius: 5vh;
+    }
+  }
 }

@@ -54,10 +54,13 @@ function Filter() {
         <div className="item">
           <label htmlFor="property">Property</label>
           <select name="property" id="property" onChange={handleChange} defaultValue={query.property}>
-            <option value="">any</option>
+            <option value="any">any</option>
             <option value="apartment">Apartment</option>
             <option value="house">House</option>
             <option value="PG">PG</option>
+            <option value="hotel">Hotel</option>
+            <option value="resort">Resort</option>
+            <option value="office_space">Office space</option>
             <option value="land">Land</option>
           </select>
         </div>

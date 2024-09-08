@@ -4,6 +4,7 @@
   margin: 0;
   box-sizing: border-box;
   width: auto;
+  // max-width: 1024px;
 }
 
 a {
@@ -13,8 +14,10 @@ a {
 
 body{
   font-family: "Lato", sans-serif;
- // overflow-y: scroll;
-  
-
-//  overflow: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 } 
+.body-content::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}

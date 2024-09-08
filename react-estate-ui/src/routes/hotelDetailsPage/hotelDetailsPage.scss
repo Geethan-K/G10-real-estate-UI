@@ -23,7 +23,8 @@
 }
 .room_img{
   width: 100%;
-  object-fit:cover;
+  height: 200px;
+ // height: -webkit-fill-available;
 }
 .hotel_title{
     font-size: 24px;
@@ -90,7 +91,7 @@
     cursor: pointer;
     border-radius: 5px;
 }
-.slider{
+.slider-images{
     position: absolute;
     top: 0;
     left: 0;
@@ -113,7 +114,7 @@
     height: 80vh;
     object-fit: fill;
 }
-.close{
+.close-lg-view{
     position: absolute;
     top: 20px;
     right: 20px;

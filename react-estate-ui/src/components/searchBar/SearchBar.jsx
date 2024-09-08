@@ -34,6 +34,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
     maxRent: 0,
     minDeposit: 0,
     maxDeposit: 0,
+    property:'any',
     BHKType: 'ONE_BHK',
     checkInandOut:dateRange[0],
     adults:options.adults,
@@ -216,7 +217,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
             )
           }
 
-          <Link to={`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&minRent=${query.minRent}&maxRent=${query.maxRent}&minDeposit=${query.minDeposit}&maxDeposit=${query.maxDeposit}&BHKType=${query.BHKType}`}>
+          <Link to={`/list?type=${query.type}&city=${query.city}&property=${query.property}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&minRent=${query.minRent}&maxRent=${query.maxRent}&minDeposit=${query.minDeposit}&maxDeposit=${query.maxDeposit}&BHKType=${query.BHKType}`}>
             <button>
               <img src="/search.png" alt="" />
             </button>

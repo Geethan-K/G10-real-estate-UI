@@ -12,7 +12,6 @@ export const singlePageLoader = async ({request,params}) =>{
 export const listPageLoader = async ({request,params}) => {
     const query = request.url.split('?')[1]
     const postPromise  = await apiRequest.get("/posts?"+query);
-    console.log('postpromise from loader js',postPromise)
     return defer ({
         postResponse:postPromise
     })
@@ -20,6 +19,7 @@ export const listPageLoader = async ({request,params}) => {
 
 export const profilePageLoader = async () => {
     const postPromise = apiRequest.get('/users/profilePosts')
+    console.log((await postPromise).data)
     const chatPromise = apiRequest.get('/chats')
     return defer({
         postResponse:postPromise,

@@ -102,7 +102,7 @@ function HomePage() {
         <div className="body-content">
           <SmoothScroll />
         </div>
-        <div className="body-content">
+        <div className="featured-content">
           <Featured />
         </div>
         <div className="body-content">

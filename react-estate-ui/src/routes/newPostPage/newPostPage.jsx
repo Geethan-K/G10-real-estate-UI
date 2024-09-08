@@ -4,11 +4,31 @@ import "./newPostPage.scss";
 import ReactQuill from 'react-quill'
 import apiRequest from "../../lib/apiRequest";
 import CloudinaryUploadWidget from "../../components/upload widget/uploadwidget";
+import { Checkbox, Radio, Switch } from 'pretty-checkbox-react';
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import '@djthoms/pretty-checkbox';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function NewPostPage() {
   const [value,setValue] = useState("")
   const [err,setErr] = useState("")
   const [propertyType,setPropertyType] = useState({type:'rent'})
   const [images,setImages] = useState([])
+  const [highlights,setHighlights] = useState({
+    swimming_Pool:false,
+    gym:false,
+    garden:false,
+    balcony:false,
+    power_Backup:false,
+    security_available:false,
+    children_play_area:false,
+    close_to_school:false,
+    close_to_ATM:false,
+    close_to_hospital:false,
+    close_to_pharmacy:false,
+    close_to_bustand:false,
+    close_to_metro:false,
+    close_to_railway_station:false
+  })
   const navigate = useNavigate();
 
   const handleChange = async (e) => {
@@ -16,6 +36,14 @@ function NewPostPage() {
       type:e.target.value
     })
   }
+  const checkedChange = async(e) =>{
+
+   setHighlights((prevDetails)=>({
+      ...prevDetails,
+      [e.target.name]:e.target.checked
+    }))
+   }
+   
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -23,6 +51,7 @@ function NewPostPage() {
     const inputs = Object.fromEntries(formData.entries());
     setInputs(inputs);
 
+  
 
     try{
       const res = await apiRequest.post("/posts",
@@ -34,6 +63,8 @@ function NewPostPage() {
             city:inputs.city,
             bedroom:parseInt(inputs.bedroom),
             bathroom:parseInt(inputs.bathroom),
+            parking:parseInt(inputs.parking),
+            facing:inputs.facing,
             type:inputs.type,
             rent:inputs.rent,
             deposit:inputs.deposit,
@@ -45,9 +76,9 @@ function NewPostPage() {
           },
           postDetail:{
             desc:value,
-            utilities:inputs.utilities,
+        //    utilities:inputs.utilities,
             pet:inputs.pet,
-            income:inputs.income,
+         //   income:inputs.income,
             BHKType:inputs.BHK,
 
             furnishedType:inputs.furnishedType,
@@ -85,7 +116,7 @@ function NewPostPage() {
             </div>
             <div className="item">
               <label htmlFor="type">Type</label>
-              <select name="type" value={propertyType.type} onChange={handleChange}>
+              <select name="type" value={propertyType.type} >
                 <option value="rent" defaultChecked>
                   Rent
                 </option>
@@ -123,21 +154,29 @@ function NewPostPage() {
               <input id="city" name="city" type="text" />
             </div>
             <div className="item">
-              <label htmlFor="bedroom">Bedroom Number</label>
+              <label htmlFor="bedroom">Bedroom's</label>
               <input min={1} id="bedroom" name="bedroom" type="number" />
             </div>
             <div className="item">
-              <label htmlFor="bathroom">Bathroom Number</label>
+              <label htmlFor="bathroom">Bathroom's</label>
               <input min={1} id="bathroom" name="bathroom" type="number" />
             </div>
             <div className="item">
+              <label htmlFor="parking">Parking's</label>
+              <input min={0} id="parking" name="parking" type="number" />
+            </div>
+            <div className="item">
+              <label htmlFor="facing">Main door Facing</label>
+              <input id="facing" name="facing" type="text" />
+            </div>
+            {/* <div className="item">
               <label htmlFor="latitude">Latitude</label>
               <input id="latitude" name="latitude" type="text" />
             </div>
             <div className="item">
               <label htmlFor="longitude">Longitude</label>
               <input id="longitude" name="longitude" type="text" />
-            </div>
+            </div> */}
 
             <div className="item">
               <label htmlFor="property">Property</label>
@@ -191,14 +230,14 @@ function NewPostPage() {
                 <option value="none">None</option>
               </select>
             </div>
-            <div className="item">
+            {/* <div className="item">
               <label htmlFor="utilities">Utilities Policy</label>
               <select name="utilities">
                 <option value="owner">Owner is responsible</option>
                 <option value="tenant">Tenant is responsible</option>
                 <option value="shared">Shared</option>
               </select>
-            </div>
+            </div> */}
             <div className="item">
               <label htmlFor="pet">Pet Policy</label>
               <select name="pet">
@@ -206,7 +245,7 @@ function NewPostPage() {
                 <option value="not-allowed">Not Allowed</option>
               </select>
             </div>
-            <div className="item">
+            {/* <div className="item">
               <label htmlFor="income">Income Policy</label>
               <input
                 id="income"
@@ -214,15 +253,18 @@ function NewPostPage() {
                 type="text"
                 placeholder="Income Policy"
               />
-            </div>
+            </div> */}
             <div className="item">
               <label htmlFor="size">Total Size (sqft)</label>
               <input min={0} id="size" name="size" type="number" />
             </div>
-            <div className="item">
+            {
+              highlights.close_to_school &&  <div className="item">
               <label htmlFor="school">School</label>
               <input min={0} id="school" name="school" type="number" />
             </div>
+            }
+           
             <div className="item">
               <label htmlFor="bus">bus</label>
               <input min={0} id="bus" name="bus" type="number" />
@@ -230,6 +272,47 @@ function NewPostPage() {
             <div className="item">
               <label htmlFor="restaurant">Restaurant</label>
               <input min={0} id="restaurant" name="restaurant" type="number" />
+            </div>
+            <div className="highlights">
+            <Checkbox color="warning-o"  bigger="true" name="close_to_hospital" icon={highlights.close_to_hospital?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  className="Checkbox"  checked={highlights.close_to_hospital} shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby hospital
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_pharmacy" icon={highlights.close_to_pharmacy?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_pharmacy}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby Pharmacy
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_school" icon={highlights.close_to_school?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_school}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby school
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_ATM" icon={highlights.close_to_ATM?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_ATM}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby ATM
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_bustand" icon={highlights.close_to_bustand} checked={highlights.close_to_bustand}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby Bus Stand
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_railway_station" icon={highlights.close_to_railway_station} checked={highlights.close_to_railway_station}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby Railway Station
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="close_to_metro" icon={highlights.close_to_metro?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.close_to_metro}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               Nearby Metro
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="security_available" icon={highlights.security_available?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.security_available}  shape="curve" onChange={(e)=>checkedChange(e)}>
+               24 x 7 Security
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="power_Backup" icon={highlights.power_Backup?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.power_Backup}  shape="curve" onChange={(e)=>checkedChange(e)}>
+              Power Backup
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="gym" checked={highlights.gym} icon={highlights.gym?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}   shape="curve" onChange={(e)=>checkedChange(e)}>
+              GYM
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="gym" checked={highlights.balcony} icon={highlights.balcony?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}   shape="curve" onChange={(e)=>checkedChange(e)}>
+              Balcony
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="children_play_area" icon={highlights.children_play_area?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.children_play_area}  shape="curve" onChange={(e)=>checkedChange(e)}>
+              Children's Park 
+            </Checkbox>
+            <Checkbox color="warning-o"  bigger="true" name="swimming_Pool" icon={highlights.swimming_Pool?<FontAwesomeIcon icon={faCheck} className="tick" /> : undefined}  checked={highlights.swimming_Pool}  shape="curve" onChange={(e)=>checkedChange(e)}>
+              Swimming Pool 
+            </Checkbox>
             </div>
             <button className="sendButton">Add</button>
             {err && <span>{err}</span>}

@@ -1,5 +1,7 @@
 @import "../../responsive.scss";
-
+::-webkit-scrollbar{
+  scrollbar-width: none;
+}
 .listPage {
   display: flex;
   justify-content: space-between;
@@ -7,8 +9,10 @@
   max-width: 100%;
   width: auto;
   margin-top: 2%;
+  z-index: 0;
   .bookingFilterContainer{
-    width: 25%;
+    width: 22%;
+    position: -webkit-sticky;
   }
   .listContainer {
     width: 60%;
@@ -27,7 +31,7 @@
   }
   .mapContainer {
     width: 25%;
-    height: 100%;
+    height: 80vh;
  
     @include md{
       display: none;

@@ -77,7 +77,7 @@ function ProfilePage() {
             >
               {
                 (postResponse) => {
-                 return <List posts={postResponse.data.savedPosts} />
+                 return <List posts={postResponse.data.saved} />
                 }
               }
             </Await>

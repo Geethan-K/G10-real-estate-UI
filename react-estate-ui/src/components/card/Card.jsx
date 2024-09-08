@@ -1,12 +1,27 @@
 import { Link } from "react-router-dom";
-import React from 'react';
+import React , { useState, useEffect } from 'react';
 import ReactStars from 'react-rating-stars-component';
-
+import { faCoins , faMoneyBill1Wave,faChartArea,faCouch,faCarSide,faDoorOpen,} from "@fortawesome/free-solid-svg-icons";
 import "./card.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Card({ item, ratings, comments }) {
   console.log(item, ratings, comments)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentImageIndex(prevIndex => 
+        (prevIndex + 1) % item.images.length
+      );
+    }, 2000); // Change image every 3 seconds
+
+    return () => clearInterval(intervalId);
+  }, [item.images.length]);
+
   var averageRating = 0.0
+  if(ratings!== undefined){
+    item.ratings = ratings
+  }   
   if (item.ratings !== undefined) {
     averageRating = item.ratings.reduce((acc, rating) => acc + rating.stars, 0) / item.ratings.length || 0;
   }
@@ -15,58 +30,106 @@ function Card({ item, ratings, comments }) {
     {
      !(item.type == 'booking') &&  <div className="card">
      <Link to={`/${item.id}`} className="imageContainer">
-       <img src={item.images[0]} alt="" />
+       <img src={item.images[currentImageIndex]} alt="" />
      </Link>
      <div className="textContainer">
+     <h1 className="bhk-type">
+        <span>{item.postDetail?.BHKType} independent {item.property} for {item.type} </span>
+       </h1>
        <h2 className="title">
          <Link to={`/${item.id}`}>{item.title}</Link>
        </h2>
+
+
+       {/* <p className="price">	&#8377; {item.price}</p> */}
+       <div className="property-details">
+         <div style={{display:'flex',flex:1}}>
+         <span className="rent">
+          <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faMoneyBill1Wave} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>rent </label>
+            <p>&#8377; {item.rent}</p>
+            </span>
+          </div>
+         </span>
+         <span className="rent">
+         <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faCoins} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>deposit </label>
+            <p>&#8377; {item.deposit}</p>
+            </span>
+          </div>
+         
+          
+         </span>
+         <span className="rent">
+         <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faChartArea} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>built up </label>
+            <p>{item.sqft} sqft</p>
+            </span>
+          </div>
+           
+          
+         </span>
+         </div>
+         <div style={{display:'flex',flex:1}}>
+         <span className="rent">
+         <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faCouch} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>Furnishing </label>
+            <p>{item.postDetail?.furnishedType}</p>
+            </span>
+          </div>
+          
+         
+         </span>
+         <span className="rent">
+         <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faCarSide} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>parking </label>
+            <p>{item.parking}</p>
+            </span>
+          </div>
+           
+           
+         </span>
+         <span className="rent">
+         <div className="property-detail-section">
+            <span className="icon-space">
+            <FontAwesomeIcon icon={faDoorOpen} className="amenities-icon"/>
+            </span>
+            <span className="details-space">
+            <label>facing </label>
+            <p>{item.facing}</p>
+            </span>
+          </div>
+           
+         
+         </span>
+         </div>
+       </div>
        <p className="address">
          <img src="/pin.png" alt="" />
          <span>{item.address}</span>
        </p>
-       {/* <p className="price">	&#8377; {item.price}</p> */}
-       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '12px', gap: '15px', border: '1px solid black' }}>
-         <span className="rent">
-           <label>rent :</label>
-           <p>&#8377; {item.rent}</p>
-         </span>
-         <span className="rent">
-           <label>deposit :</label>
-           <p>&#8377; {item.deposit}</p>
-         </span>
-       </div>
-       <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', fontSize: '12px', margin: '5px', gap: '8px' }} className="amenities">
-         {
-           (!item.postDetail?.BHKType === null && !item.postDetail?.BHKType === undefined) && (
-             <span>
-               <p>{item.postDetail.BHKType}</p>
-             </span>
-           )
-         }
-         {
-           (!item.sqft === null && !item.sqft === undefined) && (
-             <span>
-               <p>{item.sqft} sqft</p>
-             </span>
-           )
-         }
-         {
-           (!item.postDetail?.furnishedType === null && !item.postDetail?.furnishedType === undefined) && (
-             <span>
-               <p>{item.postDetail.furnishedType}</p>
-             </span>
-           )
-         }
-         {
-           (!item.postDetail?.availableWithin === null && !item.postDetail?.availableWithin === undefined) && (
-             <span>
-               <p>{item.postDetail.availableWithin}</p>
-             </span>
-           )
-         }
-       </div>
-       <span style={{ display: 'flex', alignItems: 'center', padding: '2px' }}>
+  
+       <span style={{ display: 'flex', alignItems: 'center'}}>
          <ReactStars
            count={5}
            isHalf={true}
@@ -77,8 +140,8 @@ function Card({ item, ratings, comments }) {
            activeColor="#ffd700"
          />
          {
-           averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '8px' }}>(No reviews yet)</p>
-           ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '8px' }}>{averageRating.toFixed(1)}</h3>)
+           averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',padding: '2px', marginLeft: '5px' }}>(No reviews yet)</p>
+           ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '5px' }}>{averageRating.toFixed(1)}</h3>)
          }
        </span>
        <div className="bottom">

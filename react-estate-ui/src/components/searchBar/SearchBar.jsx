@@ -35,7 +35,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
     minDeposit: 0,
     maxDeposit: 0,
     property:'any',
-    BHKType: 'ONE_BHK',
+    BHKType: 'any',
     checkInandOut:dateRange[0],
     adults:options.adults,
     children:options.children,

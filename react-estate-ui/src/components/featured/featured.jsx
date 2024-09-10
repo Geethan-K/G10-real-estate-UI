@@ -12,6 +12,7 @@ const Featured = () => {
         transform: inView ? 'translateY(0)' : 'translateY(100px)',
         scale: inView ? 1 : 0
     })
+    
     const handleMouseEnter = () => {
         setIsHovered(true);
         controlAnimation.stop(); // Stop the animation
@@ -94,6 +95,18 @@ const Featured = () => {
         }
     ]
     useEffect(() => {
+
+        controlAnimation.start({
+            x: ["100%", "-100%"],
+            transition: {
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 10,
+                ease: "linear",
+              },
+            },
+          });
         const sequence = async () => {
             objProperties.map(async (element) => {
                 await controlAnimation.start((i) => ({

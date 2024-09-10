@@ -30,18 +30,18 @@ function NewPostPage() {
     close_to_railway_station: false
   })
   const [highlightDetails, setHighlightDetails] = useState({
-    close_to_hospital: { hospital_name: '', km: '' },
-    close_to_pharmacy: { pharmacy_name: 'close_to_pharmacy', km: '' },
-    close_to_ATM: { pharmacy_name: 'close_to_ATM', km: '' },
-    close_to_bustand: { bustand_name: 'close_to_bustand', km: '' },
-    close_to_railway_station: { railway_station_name: 'close_to_railway_station', km: '' },
-    close_to_school: { bustand_name: 'close_to_school', km: '' },
-    close_to_metro: { metro_name: 'close_to_metro', km: '' },
+    close_to_hospital: { name: '', km: '' },
+    close_to_pharmacy: { name: '', km: '' },
+    close_to_ATM: { name: '', km: '' },
+    close_to_bustand: { name: '', km: '' },
+    close_to_railway_station: { name: '', km: '' },
+    close_to_school: { name: '', km: '' },
+    close_to_metro: { name: '', km: '' },
 
   })
   const navigate = useNavigate();
 
-  const handleChange = async (e) => {
+  const handlePropertyChange = async (e) => {
     setPropertyType({
       type: e.target.value
     })
@@ -54,62 +54,79 @@ function NewPostPage() {
     }))
   }
 
+  const handleChange = (e) =>{
+    const {id, name,value,type} = e.target
+    setHighlightDetails((prev) => ({
+      ...prev,
+      [name]: {
+        ...prev[name],
+        [id]: value,
+      },
+    }));
+    console.log(highlightDetails)
+  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const inputs = Object.fromEntries(formData.entries());
-    setInputs(inputs);
+ //   setInputs(inputs);
+    console.log(inputs)
 
 
+    // try {
+    //   const res = await apiRequest.post("/posts",
+    //     {
+    //       postData: {
+    //         title: inputs.title,
+    //         price: parseFloat(inputs.price),
+    //         address: inputs.address,
+    //         city: inputs.city,
+    //         bedroom: parseInt(inputs.bedroom),
+    //         bathroom: parseInt(inputs.bathroom),
+    //         parking: parseInt(inputs.parking),
+    //         facing: inputs.facing,
+    //         type: inputs.type,
+    //         rent: parseFloat(inputs.rent),
+    //         deposit: parseFloat(inputs.deposit) ,
+    //         sqft: inputs.sqft,
+    //         property: inputs.property,
+    //         latitude: inputs.latitude,
+    //         longitude: inputs.longitude,
+    //         images: images
+    //       },
+    //       postDetail: {
+    //         desc: value,
+    //         //    utilities:inputs.utilities,
+    //         pet: inputs.pet,
+    //         //   income:inputs.income,
+    //         BHKType: inputs.BHK,
 
-    try {
-      const res = await apiRequest.post("/posts",
-        {
-          postData: {
-            title: inputs.title,
-            price: parseInt(inputs.price),
-            address: inputs.address,
-            city: inputs.city,
-            bedroom: parseInt(inputs.bedroom),
-            bathroom: parseInt(inputs.bathroom),
-            parking: parseInt(inputs.parking),
-            facing: inputs.facing,
-            type: inputs.type,
-            rent: inputs.rent,
-            deposit: inputs.deposit,
-            sqft: inputs.sqft,
-            property: inputs.property,
-            latitude: inputs.latitude,
-            longitude: inputs.longitude,
-            images: images
-          },
-          postDetail: {
-            desc: value,
-            //    utilities:inputs.utilities,
-            pet: inputs.pet,
-            //   income:inputs.income,
-            BHKType: inputs.BHK,
+    //         furnishedType: inputs.furnishedType,
+    //         PreferredTenants: inputs.PreferredTenants,
+    //         availableWithin: inputs.availableWithin,
 
-            furnishedType: inputs.furnishedType,
-            PreferredTenants: inputs.PreferredTenants,
-            availableWithin: inputs.availableWithin,
-
-            size: parseInt(inputs.size),
-            // school: parseInt(inputs.school),
-            // bus: parseInt(inputs.bus),
-            restaurant: parseInt(inputs.restaurant)
-
-          }
-        }).catch((err) => {
-          console.log('err from new post page', err)
-        })
-      navigate('/' + res.data.id)
-    } catch (err) {
-      console.log(err)
-      setErr(err)
-    }
+    //         size: parseInt(inputs.size),
+    //         // school: parseInt(inputs.school),
+    //         // bus: parseInt(inputs.bus),
+    //      //   restaurant: parseInt(inputs.restaurant),
+    //         highlights:highlights,
+    //         highlightDetails:highlightDetails
+    //       }
+    //     }).catch((err) => {
+    //       console.log('err from new post page', err)
+    //     })
+    //   navigate('/' + res.data.id)
+    // } catch (err) {
+    //   console.log(err)
+    //   setErr(err)
+    // }
   }
+  // const Test = async() =>{
+  //   console.log(highlights)
+  //   console.log(highlightDetails)
+  // }
   return (
     <div className="newPostPage">
       <div className="formContainer">
@@ -129,7 +146,7 @@ function NewPostPage() {
 
             <div className="item">
               <label htmlFor="type">Type</label>
-              <select name="type" value={propertyType.type} onChange={handleChange}>
+              <select name="type" value={propertyType.type} onChange={handlePropertyChange}>
                 <option value="rent" >
                   Rent
                 </option>
@@ -182,6 +199,14 @@ function NewPostPage() {
               <label htmlFor="facing">Main door Facing</label>
               <input id="facing" name="facing" type="text" />
             </div>
+            <div className="item">
+              <label htmlFor="latitude">Latitude</label>
+              <input id="latitude" name="latitude" type="text" />
+            </div>
+            <div className="item">
+              <label htmlFor="longitude">Longitude</label>
+              <input id="longitude" name="longitude" type="text" />
+            </div>
             {/* <div className="item">
               <label htmlFor="latitude">Latitude</label>
               <input id="latitude" name="latitude" type="text" />
@@ -218,6 +243,7 @@ function NewPostPage() {
             <div className="item">
               <label htmlFor="PreferredTenants">Preferred Tenants</label>
               <select name="PreferredTenants">
+              <option value="any">any</option>
                 <option value="family">family</option>
                 <option value="company">company</option>
                 <option value="bachelor_male">bachelors (male)</option>
@@ -225,8 +251,8 @@ function NewPostPage() {
               </select>
             </div>
             <div className="item">
-              <label htmlFor="Availability">Availability</label>
-              <select name="Availability">
+              <label htmlFor="availableWithin">Availability</label>
+              <select name="availableWithin">
                 <option value="immediate" >
                   Immediately available
                 </option>
@@ -236,8 +262,8 @@ function NewPostPage() {
               </select>
             </div>
             <div className="item">
-              <label htmlFor="furnished_type">Furnished Type </label>
-              <select name="furnished_type">
+              <label htmlFor="furnishedType">Furnished Type </label>
+              <select name="furnishedType">
                 <option value="full">Fully furnished</option>
                 <option value="semi">Semi furnished</option>
                 <option value="none">None</option>
@@ -297,10 +323,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_hospital && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="2.5 km" name="close_to_hospital" type="text" value={highlightDetails.close_to_hospital.km}  onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_hospital" name="close_to_hospital" type="text" placeholder="hospital name" />
+                      <input id="name" name="close_to_hospital" type="text" placeholder="hospital name"   value={highlightDetails.close_to_hospital.name}   onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -315,10 +341,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_pharmacy && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="30 feet" name="close_to_pharmacy" type="text" value={highlightDetails.close_to_pharmacy.km}  onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_pharmacy" name="close_to_pharmacy" type="text" placeholder="Apollo pharmacy" />
+                      <input id="name" name="close_to_pharmacy" type="text" placeholder="Apollo pharmacy"     value={highlightDetails.close_to_pharmacy.name}  onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -333,10 +359,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_school && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="2.5 km" name="close_to_school" type="text" value={highlightDetails.close_to_school.km}  onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_school" name="close_to_school" type="text" placeholder="School name" />
+                      <input id="name" name="close_to_school" type="text" placeholder="School name"   value={highlightDetails.close_to_school.name} onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -350,10 +376,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_ATM && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="500 m" name="close_to_ATM" type="text" value={highlightDetails.close_to_ATM.km}   onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_ATM" name="close_to_ATM" type="text" placeholder="ATM name" />
+                      <input id="name" name="close_to_ATM" type="text" placeholder="ATM name"    value={highlightDetails.close_to_ATM.name}  onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -368,10 +394,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_bustand && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="2.5 km" name="close_to_bustand" type="text" value={highlightDetails.close_to_bustand.km}   onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_bustand" name="close_to_bustand" type="text" placeholder="busstand name" />
+                      <input id="name" name="close_to_bustand" type="text" placeholder="busstand name"    value={highlightDetails.close_to_bustand.name}   onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -385,10 +411,10 @@ function NewPostPage() {
                 {
                   highlights.close_to_railway_station && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="2.5 km" name="close_to_railway_station" type="text"  value={highlightDetails.close_to_railway_station.km}  onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_railway_station" name="close_to_railway_station" type="text" placeholder="railway station name" />
+                      <input id="name" name="close_to_railway_station" type="text" placeholder="railway station name" value={highlightDetails.close_to_railway_station.name}  onChange={handleChange}/>
                     </div>
                   </span>
                 }
@@ -402,34 +428,49 @@ function NewPostPage() {
                 {
                   highlights.close_to_metro && <span>
                     <div className="highlights-input">
-                      <input min={0} id="km" placeholder="2.5 km" name="km" type="number" />
+                      <input min={0} id="km" placeholder="2.5 km" name="close_to_metro" type="text" value={highlightDetails.close_to_metro.km}  onChange={handleChange}/>
                     </div>
                     <div className="highlights-input">
-                      <input id="close_to_metro" name="close_to_metro" type="text" placeholder="metro station name" />
+                      <input id="name" name="close_to_metro" type="text" placeholder="metro station name" value={highlightDetails.close_to_metro.name} onChange={handleChange}/>
                     </div>
                   </span>
                 }
               </span>
-              <Checkbox color="warning-o" bigger="true" name="security_available" icon={highlights.security_available ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.security_available} shape="curve" onChange={(e) => checkedChange(e)}>
-                24 x 7 Security
-              </Checkbox>
-              <Checkbox color="warning-o" bigger="true" name="power_Backup" icon={highlights.power_Backup ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.power_Backup} shape="curve" onChange={(e) => checkedChange(e)}>
-                Power Backup
-              </Checkbox>
-              <Checkbox color="warning-o" bigger="true" name="gym" checked={highlights.gym} icon={highlights.gym ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
-                GYM
-              </Checkbox>
-              <Checkbox color="warning-o" bigger="true" name="balcony" checked={highlights.balcony} icon={highlights.balcony ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
-                Balcony
-              </Checkbox>
-              <Checkbox color="warning-o" bigger="true" name="children_play_area" icon={highlights.children_play_area ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.children_play_area} shape="curve" onChange={(e) => checkedChange(e)}>
-                Children's Park
-              </Checkbox>
-              <Checkbox color="warning-o" bigger="true" name="swimming_Pool" icon={highlights.swimming_Pool ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.swimming_Pool} shape="curve" onChange={(e) => checkedChange(e)}>
-                Swimming Pool
-              </Checkbox>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="security_available" icon={highlights.security_available ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.security_available} shape="curve" onChange={(e) => checkedChange(e)}>
+                  24 x 7 Security
+                </Checkbox>
+              </span>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="power_Backup" icon={highlights.power_Backup ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.power_Backup} shape="curve" onChange={(e) => checkedChange(e)}>
+                  Power Backup
+                </Checkbox>
+              </span>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="gym" checked={highlights.gym} icon={highlights.gym ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
+                  GYM
+                </Checkbox>
+              </span>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="balcony" checked={highlights.balcony} icon={highlights.balcony ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} shape="curve" onChange={(e) => checkedChange(e)}>
+                  Balcony
+                </Checkbox>
+              </span>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="children_play_area" icon={highlights.children_play_area ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.children_play_area} shape="curve" onChange={(e) => checkedChange(e)}>
+                  Children's Park
+                </Checkbox>
+              </span>
+              <span className="highlights-input-area">
+                <Checkbox color="warning-o" bigger="true" name="swimming_Pool" icon={highlights.swimming_Pool ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={highlights.swimming_Pool} shape="curve" onChange={(e) => checkedChange(e)}>
+                  Swimming Pool
+                </Checkbox>
+              </span>
             </div>
-            <button className="sendButton">Add</button>
+            <div className="add-btn-container">
+              <button className="sendButton">Add</button>
+            </div>
+           
             {err && <span>{err}</span>}
           </form>
         </div>
@@ -450,6 +491,7 @@ function NewPostPage() {
           setState={setImages}
         ></CloudinaryUploadWidget>
       </div>
+     
     </div>
   );
 }

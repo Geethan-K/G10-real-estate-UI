@@ -11,7 +11,7 @@
 
   .details {
     flex: 3;
-    height: 100%;
+    height: auto;
     overflow-y: scroll;
 
     @include md {
@@ -219,4 +219,36 @@
     border-radius: 50%;
     object-fit: cover;
   }
+  .horizontal-images{
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    overflow-x: scroll;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    @include sm {
+      flex: 1;
+    }
+
+    img {
+      height: 100px;
+
+      @include sm {
+        height: 80px;
+      }
+    }
+  
+}
+.small-img-gallery{
+  display: flex;
+  height: 50%;
+  margin-top: 20px;
+}
 }

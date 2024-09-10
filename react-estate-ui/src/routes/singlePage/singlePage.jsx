@@ -14,8 +14,9 @@ import {format} from 'timeago.js'
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
+
   const post = singlePageLoader.postResponse
-  console.log(post)
+ 
   let { comments, ratings } = post
   const RatingMap = globalThis.Map; // Create an alias for the Map object
 
@@ -48,6 +49,7 @@ function SinglePage() {
   const [editRating, setEditRating] = useState(true)
   const [comment, setcomment] = useState([])
   const [sent, updateSent] = useState(false)
+  const [wallpaper,setWallpaper] = useState({src:post.images[0],index:0})
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
   const textarea = "Write some of the best experience of yours from this place ...."
@@ -65,6 +67,10 @@ function SinglePage() {
     }
     fetchData()
   }, [postedUserData])
+
+  const changeWallpaper = (image,i) =>{
+    setWallpaper({src:image,index:i})
+  }
 
   const handleSave = async () => {
     setSaved((prev) => !prev)
@@ -130,7 +136,21 @@ function SinglePage() {
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={post.images} />
+          <span>
+          <Slider images={post.images} wallpaper={wallpaper}/>
+          </span>
+          <span className="small-img-gallery">
+          <div className="horizontal-images">
+      {post.images.slice(1).map((image, i) => (
+          <img
+            src={image}
+            alt=""
+            key={i}
+            onClick={() => changeWallpaper(image,i)}
+          />
+        ))}
+      </div>
+          </span>
           <div className="info">
             <div className="top">
               <div className="post">

@@ -166,7 +166,7 @@ function Filter() {
             <option value="FOUR_PLUS_BHK">4+ BHK</option>
           </select>
         </div>
-        <button onClick={handleFilter}>
+        <button onClick={()=>handleFilter()}>
           <img src="/search.png" alt="" />
         </button>
       </div>

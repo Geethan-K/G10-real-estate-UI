@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "./slider.scss";
 
-function Slider({ images }) {
+function Slider({ images,wallpaper }) {
   const [imageIndex, setImageIndex] = useState(null);
-
+  
   const changeSlide = (direction) => {
     if (direction === "left") {
       if (imageIndex === 0) {
@@ -39,7 +39,7 @@ function Slider({ images }) {
         </div>
       )}
       <div className="bigImage">
-        <img src={images[0]} alt="" onClick={() => setImageIndex(0)} />
+        <img src={wallpaper.src} alt="" onClick={() => setImageIndex(wallpaper.index)} />
       </div>
       <div className="smallImages">
         {images.slice(1).map((image, index) => (
@@ -51,6 +51,7 @@ function Slider({ images }) {
           />
         ))}
       </div>
+     
     </div>
   );
 }

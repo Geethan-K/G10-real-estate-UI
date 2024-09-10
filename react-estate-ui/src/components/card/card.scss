@@ -2,13 +2,15 @@
 
 .card {
   display: flex;
+  overflow-x: scroll;
   gap: 10px;
   border: 1px solid rgb(184, 69, 69);
   cursor: pointer;
   border-radius: 15px;
   padding: 2vh;
   .imageContainer {
-    flex: 2;
+    flex: 3;
+    min-width: 40%;
     height: 30vh;
 
     @include md {
@@ -138,28 +140,38 @@
 
     .bottom {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       gap: 10px;
-
+      overflow: scroll;
+    //  position: relative;
       .features {
         display: flex;
         gap: 20px;
         font-size: 14px;
-
+        overflow-x: scroll;
+        width: auto;
+      
+      //  position: absolute;
         .feature {
           display: flex;
           align-items: center;
-          gap: 5px;
-          background-color: whitesmoke;
+          justify-content: flex-start;
+          font-size: 10px;
+          min-width: fit-content;
+          background-color: orange;
+         // overflow-x: scroll;
+        //  gap: 5px;
+        //  background-color: whitesmoke;
           padding: 5px;
-          border-radius: 5px;
+          border-radius: 15px;
         }
       }
 
       .icons {
         display: flex;
         gap: 20px;
-
+        //position: absolute;
         .icon {
           border: 1px solid #999;
           padding: 2px 5px;

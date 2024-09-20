@@ -7,7 +7,7 @@
   justify-content: space-between;
   height: 100%;
   max-width: 100%;
-  width: auto;
+ // width: auto;
   margin-top: 2%;
   z-index: 0;
   .bookingFilterContainer{
@@ -15,13 +15,14 @@
     position: -webkit-sticky;
   }
   .listContainer {
-    width: 70%;
-    height: 100%;
+    width:auto ;
+    height: auto;
 
     .wrapper{
-      height: 100%;
-      padding-right: 50px;
-      padding-left: 50px;
+      height: auto;
+      width: auto;
+      // padding-right: 50px;
+      // padding-left: 50px;
       display: flex;
       flex-direction: column;
       gap: 50px;
@@ -30,8 +31,8 @@
     }
   }
   .mapContainer {
-    width: 25%;
-    height: 80vh;
+    width: 20%;
+    height: auto;
  
     @include md{
       display: none;

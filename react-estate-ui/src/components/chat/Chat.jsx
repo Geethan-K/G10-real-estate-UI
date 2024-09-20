@@ -17,8 +17,7 @@ const Chat = forwardRef((props,chatRef) =>
     const read = async () => {
       try{
         await apiRequest.put("/chats/read"+chat.id)
-  
-      }catch(err){
+        }catch(err){
         console.log(err)
       }
     }
@@ -82,24 +81,24 @@ const Chat = forwardRef((props,chatRef) =>
            showLastMsgs && chats?.map((c)=>{
             if(c.senderID!==currentUser.id){
                return (
-                 <div className="message"
+                <div  className="message-container" style={{ backgroundColor: c.seenBy.includes(currentUser.id) || chat?.id == c.id ? "green" : "#fecd514e" }}>
+                <span
                    key={c.id}
-                   style={{ backgroundColor: c.seenBy.includes(currentUser.id) || chat?.id == c.id ? "green" : "#fecd514e" }}
                    onClick={() => openChat(c.id, c.receiver)}
+                   style={{display:'flex',flexDirection:'column'}}
                  >
                    <img
                      src={c.receiver.avatar || "/noavatar.jpg"}
                      alt=""
                    />
                    <span>{c.receiver.username}</span>
-                   <p>{c.lastMessage}</p>
-                 </div>
+                 </span>
+                  <p className="message-txt">{c.lastMessage}</p>
+                </div>
+                 
                )
-
              }
            }
-
-              
             )
           }
         </div>

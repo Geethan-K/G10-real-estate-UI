@@ -218,7 +218,7 @@ function SearchBar({ popupsVisibility, handleVisibStatus }) {
           }
 
           <Link to={`/list?type=${query.type}&city=${query.city}&property=${query.property}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&minRent=${query.minRent}&maxRent=${query.maxRent}&minDeposit=${query.minDeposit}&maxDeposit=${query.maxDeposit}&BHKType=${query.BHKType}`}>
-            <button>
+            <button className="btn"> 
               <img src="/search.png" alt="" />
             </button>
           </Link>

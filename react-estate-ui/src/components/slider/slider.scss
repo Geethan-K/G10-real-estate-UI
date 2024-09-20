@@ -46,11 +46,11 @@
     }
     .imgContainer {
       flex: 10;
-
+      
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
     }
 
@@ -76,29 +76,68 @@
 
   .bigImage {
     flex: 3;
-
+    min-height: 49vh;
+    img{
+      border: 5px solid black;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
     @include sm {
       flex: 2;
     }
   }
+  
   .smallImages {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 50vh;
     justify-content: space-between;
     gap: 20px;
     overflow: scroll;
-
+    z-index: 0;
+   position: relative;
+   .chevron-btn-container{
+   position: absolute;
+   }
     @include sm {
       flex: 1;
     }
 
     img {
-      height: 100px;
-
+     // height: 100px;
+      position: relative;
+      border: 5px solid black;
+      // &:hover{
+      //   scale: 2.5;
+      //   overflow: visible;
+      //   position: absolute;
+        
+      // width: 200px;
+      // height: 200px;
+      // z-index: 1000;
+      // }
       @include sm {
-        height: 80px;
+        height: 80px; 
       }
     }
   }
+}
+.top-container{
+  width: 100%;
+  height: auto;
+  float: right;
+  position: absolute;
+  .title-container{
+
+  }
+  .chevron-up-btn-container{
+    display: flex;
+    width: 25%;
+    .chevron-icon{
+      font-size: 25px;
+    }
+  }
+
 }

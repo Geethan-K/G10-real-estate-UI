@@ -1,15 +1,21 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
-import Map from "../../components/map/Map";
 import { useLoaderData, useNavigate, Await } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { AuthContext } from '../../context/AuthContext'
-import { useContext, useState, Suspense, useRef, useEffect } from "react";
+import { useContext, useState,  useRef, useEffect } from "react";
 import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
 import ReactStars from 'react-rating-stars-component';
 import TextareaAutosize from 'react-textarea-autosize';
-import {format} from 'timeago.js'
+import { format } from 'timeago.js'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCarAlt,   faChevronCircleLeft,  faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,  faChevronCircleDown, faChevronCircleUp, faThumbsUp,  faBathtub, faBed, faToriiGate, faFireBurner } from "@fortawesome/free-solid-svg-icons";
+import { BHKType } from "../../interfaces/BHKType-interface";
+import { FurnishedType } from "../../interfaces/FurnishedType-interface";
+import { Amenities } from '../../interfaces/icons-interface.ts'
+import Map from "../../components/map/Map";
+import Services_Offered from "../../interfaces/services-interface.ts";
 
 function SinglePage() {
 
@@ -17,7 +23,20 @@ function SinglePage() {
 
   const post = singlePageLoader.postResponse
  
-  let { comments, ratings } = post
+  let { comments, ratings,postDetail } = post
+  if (postDetail?.amenities !== undefined) {
+    var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
+      if (postDetail.amenities[key]) {
+        result[key] = Amenities[key]
+      }
+      return result
+    }, {})
+  }
+
+  console.log(post)
+  console.log(postDetail)
+  console.log(comments)
+
   const RatingMap = globalThis.Map; // Create an alias for the Map object
 
   const mergeRatingsIntoComments = (comments, ratings) => {
@@ -35,10 +54,17 @@ function SinglePage() {
       }
     })
   }
+  
 
   comments = mergeRatingsIntoComments(comments, ratings)
-  console.log(comments)
 
+  var averageRating = 0.0
+  if (ratings !== undefined) {
+    post.ratings = ratings
+  }
+  if (post.ratings !== undefined) {
+    averageRating = post.ratings.reduce((acc, rating) => acc + rating.stars, 0) / post.ratings.length || 0;
+  }
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
@@ -49,7 +75,7 @@ function SinglePage() {
   const [editRating, setEditRating] = useState(true)
   const [comment, setcomment] = useState([])
   const [sent, updateSent] = useState(false)
-  const [wallpaper,setWallpaper] = useState({src:post.images[0],index:0})
+  const [wallpaper, setWallpaper] = useState({ src: post.images[0], index: 0 })
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
   const textarea = "Write some of the best experience of yours from this place ...."
@@ -68,8 +94,8 @@ function SinglePage() {
     fetchData()
   }, [postedUserData])
 
-  const changeWallpaper = (image,i) =>{
-    setWallpaper({src:image,index:i})
+  const changeWallpaper = (image, i) => {
+    setWallpaper({ src: image, index: i })
   }
 
   const handleSave = async () => {
@@ -134,53 +160,165 @@ function SinglePage() {
 
   return (
     <div className="singlePage">
-      <div className="details">
-        <div className="wrapper">
-          <span>
-          <Slider images={post.images} wallpaper={wallpaper}/>
+     <div className="details">
+        <div className="detail-wrapper">
+      <span className="flex title-container">
+          <span className="padding-sm">
+            <h1 className="bhk-type">
+              {
+                !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {post.property} for {post.type} in {post.city}</span>
+              }
+            </h1>
+          </span>       
+      </span>
+          <span style={{height:'50vh'}}> 
+            <Slider images={post.images} wallpaper={wallpaper} />
           </span>
           <span className="small-img-gallery">
-          <div className="horizontal-images">
-      {post.images.slice(1).map((image, i) => (
-          <img
-            src={image}
-            alt=""
-            key={i}
-            onClick={() => changeWallpaper(image,i)}
-          />
-        ))}
-      </div>
+            <div className="horizontal-images">
+            <span className="chevron-btn-container">
+              <FontAwesomeIcon icon={faChevronCircleLeft} className="chevron-icon"/>
+            </span>
+              {post.images.slice(1).map((image, i) => (
+                <img
+                  src={image}
+                  alt=""
+                  className="horizontal-wrapper-img"
+                  key={i}
+                  onClick={() => changeWallpaper(image, i)}
+                />
+              ))}
+            </div>
           </span>
           <div className="info">
             <div className="top">
               <div className="post">
-                <h1>{post.title}</h1>
-                <div className="address">
-                  <img src="/pin.png" alt="" />
-                  <span>{post.address}</span>
-                </div>
-                <div style={{display:'flex',gap:'8px'}}>
-                <div>
-                <label>Deposit</label>
-                <div className="price">$ {post.deposit}</div>
-                </div>
-                <div>
-                <label>Rent</label>
-                <div className="price">$ {post.rent}</div>
-                </div>
-                </div>
+                <span className="post-title-container">
+                  <h1>{post.title}</h1>
+                  <div className="address" style={{color:'black'}}>
+                    <p>{FurnishedType[postDetail.furnishedType]}</p> , <p>{post.sqft} Sqft</p> , <p>{post.facing} Facing</p>
+                  </div>
+                  <div className="address">
+                    <img src="/pin.png" alt="" />
+                    <span>{post.address}</span>
+                  </div>
+                  <div className="address">
+                  <p>Ad Created {format(postDetail.createdAt)}</p> 
+                  </div>
+                  <div className="property-detail-container flex">
+                    <div className=" flex-column padding-sm">
+                    <span>
+                      <FontAwesomeIcon icon={faBed} className="font-size-md" />
+                    </span>
+                    <span>
+                      <label className="font-semiBold">{post.bedroom} bedroom</label>
+                    </span>
+                    </div>
+                    <div  className=" flex-column padding-sm">
+                    <span>
+                      <FontAwesomeIcon icon={faBathtub} className="font-size-md"/>
+                    </span>
+                    <span>
+                      <label  className="font-semiBold">{post.bathroom} bathroom</label>
+                    </span>
+                    </div>
+                    <div  className="flex-column  padding-sm">
+                    <span>
+                      <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
+                    </span>
+                    <span>
+                      <label className="font-semiBold">{post.parking} parking</label>
+                    </span>
+                    </div>
+                  </div>
+                </span>
+                <span>
+                  <div className="footer-container review-buttons">
+                  <button className="icon">
+                      <FontAwesomeIcon icon={faThumbsUp} className="icon"/>
+                    </button>
+                    <button className="icon">
+                      <FontAwesomeIcon icon={faShareNodes} className="icon"/>
+                    </button>
+                    <button onClick={openChatBox}>
+                      <img src="/chat.png" alt=""  />
+                    </button>
+                    <button onClick={handleSave} style={{ backgroundColor: saved ? "orange" : "white", color: "black" }}>
+                      <img src="/save.png" alt="" />
+                    </button>
+                  </div>
+                  <div className="flex padding-sm" >                    
+                      <ReactStars
+                        count={5}
+                        isHalf={true}
+                        edit={false}
+                        disable={true}
+                        size={24}
+                        value={averageRating.toFixed(1)}
+                        activeColor="#ffd700"
+                      />
+                      {
+                        averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
+                        ) : (<span className="padding-sm"><label className="font-semiBold font-size-md">{averageRating.toFixed(1)}  / 5</label></span> )
+                      }
+                  </div>
+                    <div className="flex padding-sm">
+                    <div className="padding-sm">
+                      <label>Deposit</label>
+                      <div className="font-size-md font-semiBold">$ {post.deposit}</div>
+                    </div>
+                    <div  className="padding-sm">
+                      <label>Rent</label>
+                      <div className="font-size-md font-semiBold">$ {post.rent}</div>
+                    </div>
+                    </div>
+                </span>
               </div>
-              <div className="user">
+              {/* <div className="user">
                 <img src={post.user.avatar} alt="" />
                 <span>{post.user.username}</span>
+              </div> */}
+            </div>
+            <div className="desc-container">
+              <span className="title">Description</span>
+            <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
+            </div>
+            <div className=" desc-container">
+              <span className="flex title flex-start">
+                Services Offered
+              </span>
+              <span className="flex justify-space-around" >
+                  {
+                    Services_Offered.map((service)=>(
+                      <span className="flex-column padding-sm justify-space-between hover-scaleUp">
+                        <span className="services-img-container padding-sm round-border" >
+                          <img src={service.src} alt="" className="src" />
+                        </span>
+                        <span className="flex-column" style={{flexWrap:'wrap'}}>
+                          <label className="font-semiBold">{service.name}</label>
+                        </span>
+                      </span>
+                    ))
+                  }
+                 
+              </span>
+            </div>
+            <div className="desc-container">
+              <div className="flex title flex-start">
+                Nearby Locations
+              </div>
+              <div style={{height:'38vh'}}>
+                <Map items={[post]}/>
               </div>
             </div>
-            <div className="bottom" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.postDetail.desc) }}></div>
+            <div className="desc-container">
+              
+            </div>
           </div>
         </div>
       </div>
-      <div className="features">
-        <div className="wrapper">
+      <div className="additional-info">
+        <div className="info-wrapper">
           {
             !alreadyRated && (
               <div className="Ratings">
@@ -195,7 +333,7 @@ function SinglePage() {
                     activeColor="#ffd700"
                     onChange={changeRating}
                   />
-                  <span className="title" style={{ display: 'flex', alignContent: 'center', justifyContent: 'center', padding: '20px' }}>{rating} out of 5</span>
+                  <span className="title flex">{rating} out of 5</span>
                 </span>
               </div>
             )
@@ -225,38 +363,116 @@ function SinglePage() {
           }
 
           <p className="title">General</p>
-          <div className="listVertical">
-            <div className="feature">
-              <img src="/utility.png" alt="" />
-              <div className="featureText">
-                <span>Utilities</span>
-                <span>
-                  {post.postDetail.utilities === "owner" ?
-                    (<p>Owner is responsible</p>) : (<p>Tenant is responsible</p>)
-                  }
-                </span>
+          <div className="flex listVertical">
+            
+              <div className="property-details">
+                <div className="justify-space-between padding-sm ">
+                 
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>rent </label>
+                        <p >&#8377; {post.rent}</p>
+                      </span>
+                    </div>
+                  
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCoins} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>deposit </label>
+                        <p>&#8377; {post.deposit}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faChartArea} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>built up </label>
+                        <p>{post.sqft} sqft</p>
+                      </span>
+                    </div>
+                </div>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCarSide} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>parking </label>
+                        <p>{post.parking}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faBathtub} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>bathroom </label>
+                        <p>{post.bathroom}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faBed} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>bedroom </label>
+                        <p>{post.bedroom}</p>
+                      </span>
+                    </div>
+                </div>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCouch} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Furnishing </label>
+                        <p>{post.postDetail?.furnishedType}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>facing </label>
+                        <p>{post.facing}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Gas line </label>
+                        <p>{postDetail.gasPipeline}</p>
+                      </span>
+                    </div>
+                </div>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Gated Community </label>
+                        <p>{postDetail.gatedCommunity}</p>
+                      </span>
+                    </div>
+                </div>
               </div>
-            </div>
-            <div className="feature">
-              <img src="/pet.png" alt="" />
-              <div className="featureText">
-                <span>Pet Policy</span>
-                <span>{post.postDetail.pet === "allowed" ? (<p>Pets are allowed</p>) : (<p>Pets are not allowed</p>)}</span>
-              </div>
-            </div>
-            <div className="feature">
-              <img src="/fee.png" alt="" />
-              <div className="featureText">
-                <span>Property Fees</span>
-                <span>{post.postDetail.income}</span>
-              </div>
-            </div>
           </div>
           <p className="title">Sizes</p>
-          <div className="sizes">
+          <div className="sizes pointer">
             <div className="size">
               <img src="/size.png" alt="" />
-              <span>{post.postDetail.size} sqft</span>
+              <span>{post.sqft} sqft</span>
             </div>
             <div className="size">
               <img src="/bed.png" alt="" />
@@ -267,63 +483,79 @@ function SinglePage() {
               <span>{post.bathroom} bathroom</span>
             </div>
           </div>
+          <p className="title">Amenities</p>
+            <div className="property-details">
+              <div className="flex ">
+              {
+                  !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                          {
+                            Object.keys(filteredAmenities).slice(0,Object.keys(filteredAmenities).length).map((key) => (
+                              <div className="amenities-column">
+                                <span>
+                                  <img src={filteredAmenities[key]} alt="" className="src" />
+                                </span>
+                                <span>
+                                  <p>{key}</p>
+                                </span>
+                              </div>
+                            ))
+                          }
+                  </>
+                }
+              </div>
+            </div>
           <p className="title">Nearby Places</p>
-          <div className="listHorizontal">
-            <div className="feature">
-              <img src="/school.png" alt="" />
-              <div className="featureText">
-                <span>School</span>
-                <p>{post.postDetail.school > 1000 ? post.postDetail.school / 1000 + "km" : post.postDetail.school + "m"} away</p>
-              </div>
-            </div>
-            <div className="feature">
-              <img src="/pet.png" alt="" />
-              <div className="featureText">
-                <span>Bus Stop</span>
-                <p>{post.postDetail.bus}m away</p>
-              </div>
-            </div>
-            <div className="feature">
-              <img src="/fee.png" alt="" />
-              <div className="featureText">
-                <span>Restaurant</span>
-                <p>{post.postDetail.restaurant}m away</p>
-              </div>
+          <div className="property-details">
+            <div className="flex">
+            {
+                        Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
+                          <div key={key} className="amenities-column">
+                            <span>
+                              <img src={'/highlights/' + key + '.png'} alt="" className="src" />
+                            </span>
+                            <span>
+                              <p>{detail.name}</p>
+                              <p>{detail.km}</p>
+                              </span>
+                          </div>
+                        ))
+                      }
             </div>
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
             <Map items={[post]} />
           </div>
-          <div className="comments-ratings">
+          <p className="title">Top Comments</p>
+          <div className="comments-ratings padding-sm">
             {
               comments.map((comment) => (
                 <div className="user-comments" key={comment.id}>
-                  <div style={{ display: 'flex' }}>
-                    <div >
-                      <img className="avatar-img" src={comment.user.avatar} />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '1vh' }}>
-                      <span>{comment.user.username}</span>
-                      <span style={{display:'flex',width:'200%'}}>
-                        <div style={{display:'flex',alignItems:'flex-start'}}>
-                        <ReactStars
-                          count={5}
-                          isHalf={true}
-                          size={20}
-                          edit={false}
-                          value={comment.stars}
-                          activeColor="#ffd700"
-                        />
+                  <div className="flex flex-start full-width" >
+                    <span className="flex-column padding-sm" >
+                    <img className="avatar-img" src={comment.user.avatar} />
+                    </span>
+                    <div className="flex-column " style={{flex:1}}>
+                      <span className="white-txt">{comment.user.username}</span>
+                      <span className="flex justify-space-between" >
+                        <div className="flex">
+                          <ReactStars
+                            count={5}
+                            isHalf={true}
+                            size={20}
+                            edit={false}
+                            value={comment.stars}
+                            activeColor="#ffd700"
+                          />
                         </div>
-                        <div style={{display:'flex',alignItems:'center',marginLeft:'40%'}}>
+                        <div className="flex white-txt">
                           {format(comment.createdAt)}
                         </div>
                       </span>
                       <div className="comment">
                         <TextareaAutosize
                           cols={20}
-                          style={{ padding: '15px', width: '180%' }}
+                          style={{ padding: '15px', width: '100%' }}
                           autoFocus={true}
                           minRows={1}
                           maxRows={7}
@@ -344,16 +576,6 @@ function SinglePage() {
                 <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
               }
             </div>
-          </div>
-          <div className="buttons">
-            <button onClick={openChatBox}>
-              <img src="/chat.png" alt="" style={{ width: "70%" }} />
-              <span style={{ color: "black" }} >Send a Message</span>
-            </button>
-            <button onClick={handleSave} style={{ backgroundColor: saved ? "#fece51" : "white", color: "black" }}>
-              <img src="/save.png" alt="" />
-              {saved == true ? "place saved " : "save the place"}
-            </button>
           </div>
         </div>
       </div>

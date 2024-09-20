@@ -1,13 +1,77 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import ReactStars from 'react-rating-stars-component';
-import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, } from "@fortawesome/free-solid-svg-icons";
+import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock, faCheckDouble, faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
+import { BHKType } from '../../interfaces/BHKType-interface.ts'
 import "./card.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DOMPurify from "dompurify";
-const Card = React.memo(({ item, ratings, comments }) => {
-  console.log(item, ratings, comments)
+
+import { format } from 'timeago.js';
+import { Amenities } from '../../interfaces/icons-interface.ts'
+import { color, motion, useAnimation } from 'framer-motion'
+import ReactPlayer from 'react-player'
+import TextareaAutosize from 'react-textarea-autosize';
+
+const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) => {
+  console.log(item)
+  console.log(ratings)
+  console.log(comments)
+  console.log(postDetail)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [expandProperties, setExpandProperties] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [amenitiesExpand, setAmenitiesIsExpand] = useState(false);
+  const [expandFurnishings, setExpandFurnishings] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [houseTour, setHouseTour] = useState(true);
+  const [readComments, setReadComments] = useState(false)
+  const [showFullComments,setShowFullComments]=useState(false)
+
+  const controlAnimation = useAnimation()
+  if (item.postDetail?.amenities !== undefined) {
+    var filteredAmenities = Object.keys(item.postDetail.amenities).reduce((result, key) => {
+      if (item.postDetail.amenities[key]) {
+        result[key] = Amenities[key]
+      }
+      return result
+    }, {})
+  }
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    controlAnimation.stop(); // Stop the animation
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    controlAnimation.start({
+      x: ["100%", "-100%"],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 20,
+          ease: "linear",
+        },
+      },
+    });
+  };
+  const RatingMap = globalThis.Map;
+  const mergeRatingsIntoComments = (comments, ratings) => {
+
+    const ratingsMap = new RatingMap();
+    ratings.forEach(rating => {
+      ratingsMap.set(rating.user.id, rating.stars)
+    })
+
+    return comments.map((comment) => {
+      const stars = ratingsMap.get(comment.user.id) || 0.0
+      return {
+        ...comment,
+        stars
+      }
+    })
+  }
+  comments = mergeRatingsIntoComments(comments, ratings)
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentImageIndex(prevIndex =>
@@ -18,6 +82,30 @@ const Card = React.memo(({ item, ratings, comments }) => {
     return () => clearInterval(intervalId);
   }, [item.images.length]);
 
+  useEffect(() => {
+    controlAnimation.start({
+      x: ["100%", "-100%"],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 20,
+          ease: "linear",
+        },
+      },
+    });
+  }, [controlAnimation])
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded)
+  }
+  const ChangeExpandProperties = () => {
+    setExpandProperties(!expandProperties);
+  }
+  const switchMode = () => {
+    setReadComments(!readComments)
+    setHouseTour(!houseTour)
+  }
+
   var averageRating = 0.0
   if (ratings !== undefined) {
     item.ratings = ratings
@@ -27,113 +115,36 @@ const Card = React.memo(({ item, ratings, comments }) => {
   }
   return (
     <>
-      {
-        !(item.type == 'booking') && <Link to={`/${item.id}`} className="card">
-          <div className="imageContainer">
-
-            <img src={item.images[currentImageIndex]} alt="" />
-          </div>
-          <div className="textContainer">
-            <h1 className="bhk-type">
-              <span>{item.postDetail?.BHKType} independent {item.property} for {item.type} </span>
-            </h1>
-            <h2 className="title">
-              <Link to={`/${item.id}`}>{item.title}</Link>
-            </h2>
-
-
-            {/* <p className="price">	&#8377; {item.price}</p> */}
-            <div className="property-details">
-              <div style={{ display: 'flex', flex: 1 }}>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faMoneyBill1Wave} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>rent </label>
-                      <p>&#8377; {item.rent}</p>
-                    </span>
-                  </div>
-                </span>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faCoins} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>deposit </label>
-                      <p>&#8377; {item.deposit}</p>
-                    </span>
-                  </div>
-
-
-                </span>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faChartArea} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>built up </label>
-                      <p>{item.sqft} sqft</p>
-                    </span>
-                  </div>
-
-
-                </span>
+      { // to={`/${item.id}`}
+        !(item.type == 'booking') && <div style={{ display: 'flex' }}>
+          <Link >
+            <div className="card">
+              <div className="imageContainer">
+                <img src={item.images[currentImageIndex]} alt="" />
               </div>
-              <div style={{ display: 'flex', flex: 1 }}>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faCouch} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>Furnishing </label>
-                      <p>{item.postDetail?.furnishedType}</p>
-                    </span>
-                  </div>
+              <div className="textContainer">
+                <span style={{ display: 'flex', justifyContent: 'space-between', height: '7px' }}>
+                  <span>
+                    <h1 className="bhk-type">
+                      {
+                        !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {item.property} for {item.type} </span>
+                      }
+                    </h1>
+                  </span>
+                  <span>
+                    {
+                      !(averageRating.toFixed(1) == 0.0) &&
+                      <div id="rating">
+                        <button>
+                          {averageRating.toFixed(1)}
+                        </button>
+                        <span>
+                          Excellent
+                        </span>
+                      </div>
+                    }
 
-
-                </span>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faCarSide} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>parking </label>
-                      <p>{item.parking}</p>
-                    </span>
-                  </div>
-
-
-                </span>
-                <span className="rent">
-                  <div className="property-detail-section">
-                    <span className="icon-space">
-                      <FontAwesomeIcon icon={faDoorOpen} className="amenities-icon" />
-                    </span>
-                    <span className="details-space">
-                      <label>facing </label>
-                      <p>{item.facing}</p>
-                    </span>
-                  </div>
-
-
-                </span>
-              </div>
-            </div>
-            <p className="address">
-              <img src="/pin.png" alt="" />
-              <span>{item.address}</span>
-            </p>
-            <div className="address"  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.postDetail.desc) }}>
-             
-            </div>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-              <ReactStars
+                    {/* <ReactStars
                 count={5}
                 isHalf={true}
                 edit={false}
@@ -141,48 +152,371 @@ const Card = React.memo(({ item, ratings, comments }) => {
                 size={24}
                 value={averageRating.toFixed(1)}
                 activeColor="#ffd700"
-              />
-              {
-                averageRating.toFixed(1) == 0.0 ? (<p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '5px' }}>(No reviews yet)</p>
-                ) : (<h3 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2px', marginLeft: '5px' }}>{averageRating.toFixed(1)}</h3>)
-              }
-            </span>
-            <div className="bottom">
-              {
-                !(item.postDetail.highlightDetails ===  null ) &&  <div className="features">
-                {
-                  Object.entries(item.postDetail.highlightDetails).map(([key, detail]) => (
-                    <div key={key} className="feature">
-                      <img src="/bed.png" alt="" />
-                      <span>{detail.name} - {detail.km}</span>
+              /> */}
+                    {
+                      averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
+                      ) : (<></>)
+                    }
+                  </span>
+                </span>
+                <h2 className="title">
+                  <Link to={`/${item.id}`}>"{item.title} "</Link>
+                </h2>
+                {/* <p className="price">	&#8377; {item.price}</p> */}
+                <span className="flex">
+                  <p className=" user-name">Property details</p>
+                </span>
+                <div className="flex">
+                <div className="property-details-container">
+                  <div className="property-details">
+                    <div className="flex">
+                      <span className="rent">
+                        <div className="property-detail-section">
+                          <span className="icon-space">
+                            <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
+                          </span>
+                          <span className="details-space">
+                            <label>rent </label>
+                            <p>&#8377; {item.rent}</p>
+                          </span>
+                        </div>
+                      </span>
+                      <span className="rent">
+                        <div className="property-detail-section">
+                          <span className="icon-space">
+                            <FontAwesomeIcon icon={faCoins} className="property-icon" />
+                          </span>
+                          <span className="details-space">
+                            <label>deposit </label>
+                            <p>&#8377; {item.deposit}</p>
+                          </span>
+                        </div>
+                      </span>
+                      <span className="rent">
+                        <div className="property-detail-section">
+                          <span className="icon-space">
+                            <FontAwesomeIcon icon={faChartArea} className="property-icon" />
+                          </span>
+                          <span className="details-space">
+                            <label>built up </label>
+                            <p>{item.sqft} sqft</p>
+                          </span>
+                        </div>
+                      </span>
                     </div>
-                  ))
-                  // item.highlightDetails?.map((detail)=>(
-                  //   <div className="feature">
-                  //   <img src="/bed.png" alt="" />
-                  //   <span>{detail.name} {detail.km}</span>
-                  // </div>
-                  // ))
-                }
-              </div>
-              }
-             
-              <div className="icons">
-                <div className="icon">
-                  <img src="/save.png" alt="" />
+                    {
+                      expandProperties && <div className="hidden-properties">
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faCarSide} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>parking </label>
+                              <p>{item.parking}</p>
+                            </span>
+                          </div>
+                        </span>
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faBathtub} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>bathroom </label>
+                              <p>{item.bathroom}</p>
+                            </span>
+                          </div>
+                        </span>
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faBed} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>bedroom </label>
+                              <p>{item.bedroom}</p>
+                            </span>
+                          </div>
+                        </span>
+                      </div>
+                    }
+                    {
+                      expandProperties && <div className="hidden-properties">
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faCouch} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>Furnishing </label>
+                              <p>{item.postDetail?.furnishedType}</p>
+                            </span>
+                          </div>
+                        </span>
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>facing </label>
+                              <p>{item.facing}</p>
+                            </span>
+                          </div>
+                        </span>
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>Gas line </label>
+                              <p>{postDetail.gasPipeline}</p>
+                            </span>
+                          </div>
+                        </span>
+                      </div>
+                    }
+                    {
+                      expandProperties && <div className="hidden-properties">
+                        <span className="rent">
+                          <div className="property-detail-section">
+                            <span className="icon-space">
+                              <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
+                            </span>
+                            <span className="details-space">
+                              <label>Gated Community </label>
+                              <p>{postDetail.gatedCommunity}</p>
+                            </span>
+                          </div>
+                        </span>
+                      </div>
+                    }
+                  </div>
+                  <div className="drop-down-container">
+                    <span>
+                      <FontAwesomeIcon icon={expandProperties ? faChevronCircleDown : faChevronCircleUp} className="drop-down-icon" onClick={() => setExpandProperties(!expandProperties)} />
+                    </span>
+                  </div>
+                 
                 </div>
-                <div className="icon">
-                  <img src="/chat.png" alt="" />
+                </div>
+                {
+                  !(item.postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                    <span className="flex">
+                    <p className="user-name">Amenities</p>
+                    </span>
+                   
+                      <span className="flex" >
+                      <div className="amenities-details">
+                        <span className="section">
+                          {
+                            Object.keys(filteredAmenities).slice(0,amenitiesExpand?Object.keys(filteredAmenities).length:3).map((key) => (
+                              <div className="column amenity">
+                                <span>
+                                  <img src={filteredAmenities[key]} alt="" className="src" />
+                                </span>
+                                <span>
+                                  <p>{key}</p>
+                                </span>
+                              </div>
+                            ))
+                          }
+                        </span>
+                      </div>
+                      <div className="flex">
+                        <span>
+                          <FontAwesomeIcon icon={amenitiesExpand ? faChevronCircleDown : faChevronCircleUp} className="drop-down-icon" onClick={() => setAmenitiesIsExpand(!amenitiesExpand)} />
+                        </span>
+                      </div>
+                      </span>
+                  </>
+                }
+                {
+                  !(item.postDetail?.furnishings === undefined || item.postDetail?.furnishings === null ) && Object.keys(postDetail?.furnishings).length > 0 &&
+                  <>
+                    <div className="flex user-name">
+                      Furnishing
+                    </div>
+                    <div className="flex">
+                      <div className="furnishings-container">
+                        {
+                          Object.keys(postDetail.furnishings).slice(0, expandFurnishings ? Object.keys(postDetail?.furnishings).length : 3).map((key) => (
+                            <div className="column">
+                              <span>
+                                <img src={'/furnishings/' + key + '.png'} alt="" className="furnishing-icon" />
+                              </span>
+                              <span>
+                                <label className="user-name furnishing-lbl">{key}</label>
+                              </span>
+                            </div>
+                          ))
+                        }
+                      </div>
+                      <div style={{ display: 'flex' }} onClick={() => setExpandFurnishings(!expandFurnishings)}>
+                        {
+                          expandFurnishings ? <FontAwesomeIcon icon={faChevronCircleUp} className="drop-down-icon" /> : <FontAwesomeIcon icon={faChevronCircleDown} className="drop-down-icon" />
+                        }
+                      </div>
+                    </div>
+                  </>
+                }
+                <p className="address">
+                  <img src="/pin.png" alt="" />
+                  <span>{item.address}</span>
+                </p>
+                {/* <div style={{display:'flex',width:'20%'}}>
+            <div  style={{ overflow: 'hidden', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} className="desc-container">
+                <p className="address" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.postDetail.desc) }}></p>
+              </div>
+              <div className="expand-btn-container">
+              <button  onClick={toggleExpand}>
+                {isExpanded ? 'Less...' : 'More...'}
+              </button>
+              </div>
+              
+            </div> */}
+                <div className="uploaded-time flex">
+                  <span className="address">
+                  <span style={{ display: 'flex', flexDirection: 'column' }}>
+                    <img src={userDetail.avatar} className="user-avatar" />
+                    <label className="user-name">{userDetail.username}</label>
+                  </span>
+                  <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <FontAwesomeIcon icon={faClock} style={{ fontSize: '15px', padding: '5px' }} />
+                    <p>posted {format(item.postDetail?.createdAt)}</p>
+                  </span>
+                  <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <FontAwesomeIcon icon={faCheck} color="green" style={{ fontSize: '15px', padding: '5px' }} />
+                    <p>trusted owner</p>
+                  </span>
+                  </span>
+                  <div className="flex" style={{ marginLeft:'2vh',width:'20vh' }}>
+                    <span style={{ display: 'flex', flexDirection: 'column',margin:'8px' }} onClick={switchMode}>
+                      <span>
+                        <FontAwesomeIcon icon={faVideoCamera} style={{color:houseTour?'orange':'black'}} />
+                      </span>
+                      <label className="user-name">House tour</label>
+                    </span>
+                    <span style={{ display: 'flex', flexDirection: 'column',margin:'8px' }} onClick={switchMode}>
+                      <span>
+                        <FontAwesomeIcon icon={faNewspaper}  style={{color:readComments?'orange':'black'}} />
+                      </span>
+                      <label className="user-name">Reviews</label>
+                    </span>
+                  </div>
+                  {
+                    !(item.postDetail?.highlightDetails === null || item.postDetail?.highlightDetails === undefined) && <motion.div
+                      animate={controlAnimation} className="features highlights-scroll" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                      {
+                        Object.entries(item.postDetail.highlightDetails).map(([key, detail]) => (
+                          <div key={key} className="feature">
+                            <span className="img-container">
+                              <img src={'/highlights/' + key + '.png'} alt="" className="highlight-img" />
+                            </span>
+                            <span className="highlight-details">{detail.name} - {detail.km}</span>
+                          </div>
+                        ))
+                      }
+                    </motion.div>
+                  }
                 </div>
               </div>
             </div>
+            <div className="footer-icons-container">
+              <span>
+                <div className="icon">
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </div>
+                <div className="icon">
+                  <FontAwesomeIcon icon={faShareNodes} />
+                </div>
+                <div className="icon">
+                  <FontAwesomeIcon icon={faComment} />
+                </div>
+                <div className="icon">
+                  <FontAwesomeIcon icon={faBookmark} />
+                </div>
+              </span>
+            </div>
+          </Link>
+          <div className="extra-detail-container" style={{border:houseTour? '1px solid #999':'none' }}>
+            {
+              readComments && !showFullComments && <>
+              <span className="flex">
+                  <label>Top Comments</label>
+                </span>
+                <span className="reviews-container" >
+                {
+                  comments.map((comment) => (
+                    <div className="user-comments" key={comment.id}>
+                      <img className="avatar-img" src={comment.user.avatar} />
+                      <div className="detail-container">
+                        <p className="user-name">{comment.user.username}</p>
+                        <span className="rating-container">
+                          <div style={{ display: 'flex', alignItems: 'flex-start', padding: '0px' }}>
+                            <ReactStars
+                              count={5}
+                              isHalf={true}
+                              size={20}
+                              edit={false}
+                              value={comment.stars}
+                              activeColor="#ffd700"
+                            />
+                          </div>
+                          <div className="created-date">
+                            {format(comment.createdAt)}
+                          </div>
+                        </span>
+                        <div className="comment">
+                          <p className="comment-txt">
+                            {comment.content}
+                          </p>
+                          {/* <TextareaAutosize
+                            cols={20}
+                            style={{ padding: '15px' }}
+                            autoFocus={true}
+                            minRows={1}
+                            maxRows={4}
+                            disabled={true}
+                            defaultValue={comment.content}
+                            onChange={ev => setcomment(ev.target.value)}
+                          /> */}
+                        </div>
+                        <div className="like-comment-section">
+                          <span>
+                            <FontAwesomeIcon icon={faThumbsUp} className="icon" />
+                          </span>
+                          <span><p className="address">17 Likes</p></span>
+                          <span><FontAwesomeIcon icon={faComment} className="icon" /></span>
+                          <span><p className="address">23 Comments</p></span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                }
+                <span className="flex" style={{width:'50%',height:'4vh',padding:'8px'}} onClick={()=>setShowFullComments(!showFullComments)}>
+                  <span className="flex">
+                  <p className="user-name">Show full comments</p>
+                  </span>
+                  <span className="flex" style={{margin:'10px'}}>
+                  <FontAwesomeIcon icon={faChevronCircleDown}/>
+                  </span>
+                </span>
+              </span>
+              </>
+            }
+            {
+              houseTour && <span className="video-container">
+                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'100%'} width={'auto'} controls={true} playIcon={true} />
+              </span>
+            }
           </div>
-
-
-        </Link>
+        </div>
       }
       {
-        <Link to={`/hotelDetail?hotel_id=${item.id}`}>
+     (item.type == 'booking') && <Link to={`/hotelDetail?hotel_id=${item.id}`}>
           <div className="hotel_card">
             <img src="https://res.cloudinary.com/dynvtl13s/image/upload/v1718504194/posts/x44dge9twe4nl7lxyrvj.jpg" alt="" className="hotel_img" />
             <div className="hotel_desc">
@@ -218,11 +552,8 @@ const Card = React.memo(({ item, ratings, comments }) => {
             </div>
           </div>
         </Link>
-
       }
-
     </>
-
   );
 })
 

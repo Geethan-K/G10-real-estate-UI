@@ -14,13 +14,13 @@
       font-weight: 300;
     }
 
-    .message {
+    .message-container {
       background-color: white;
-      padding: 20px;
+      padding: 6px;
       border-radius: 10px;
       display: flex;
-      align-items: center;
-      gap: 20px;
+    //  align-items: center;
+   //   gap: 20px;
       cursor: pointer;
 
       img {
@@ -29,9 +29,13 @@
         border-radius: 50%;
         object-fit: cover;
       }
-
+      .message-txt{
+        color: #fafafa;
+        font-size: 10px;
+      }
       span {
-        font-weight: bold;
+        font-size: 10px;
+        font-weight: 550;
       }
     }
   }

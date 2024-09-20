@@ -2,7 +2,6 @@
 import "./listPage.scss";
 import Filter from "../../components/filter/Filter"
 import Card from "../../components/card/Card"
-import Map from "../../components/map/Map";
 import BookingFilters from "../../components/booking-filters/bookingFilters";
 import { Await, useLoaderData } from "react-router-dom";
 import React,{useState} from "react";
@@ -33,7 +32,7 @@ const ListPage = React.memo(()=> {
          >
            {
              (postResponse)=> postResponse.data.map(post=>(
-               <Card key={post.id} item={post} ratings={post.ratings} comments={post.comments}/>
+               <Card key={post.id} item={post} ratings={post.ratings} comments={post.comments} postDetail={post.postDetail} userDetail={post.user}/>
              ))
            }
          </Await>
@@ -43,7 +42,7 @@ const ListPage = React.memo(()=> {
          ))} */}
        </div>
      </div>
-     <div className="mapContainer">
+     {/* <div className="mapContainer">
      <Suspense fallback={<p>Loading ...</p>}>
          <Await
            resolve={data.postResponse}
@@ -55,7 +54,7 @@ const ListPage = React.memo(()=> {
          </Await>
          </Suspense>
       
-     </div>
+     </div> */}
    </div>;
  }) 
 

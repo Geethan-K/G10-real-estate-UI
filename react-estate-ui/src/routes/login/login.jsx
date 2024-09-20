@@ -39,7 +39,7 @@ return (
         <h1>Welcome back</h1>
         <input name="username" required minLength={3}  type="text" placeholder="Username" />
         <input name="password" type="password" placeholder="Password" />
-        <button disabled={isLoading} onClick={(e)=>handleSubmit(e)}>Login</button>
+        <button disabled={isLoading} className="login-btn" onClick={(e)=>handleSubmit(e)}>Login</button>
         {err && <span>{err}</span>}
         <Link to="/register">{"Don't"} you have an account?</Link>
       </form>

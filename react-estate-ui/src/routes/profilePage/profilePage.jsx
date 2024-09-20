@@ -30,7 +30,7 @@ function ProfilePage() {
           <div className="title">
             <h1>User Information</h1>
             <Link to="/profile/update">
-              <button>Update Profile</button>
+              <button className="btn">Update Profile</button>
             </Link>
           </div>
           <div className="info">
@@ -47,11 +47,11 @@ function ProfilePage() {
             <span>
               E-mail: <b>{currentUser.email}</b>
             </span>
-            <button onClick={handleLogout}>Log out</button>
+            <button onClick={handleLogout} className="btn">Log out</button>
           </div>
           <div className="title">
             <Link to="/add">
-              <button>Create New Post</button>
+              <button className="btn">Create New Post</button>
             </Link>
           </div>
           <div className="title">
@@ -62,7 +62,7 @@ function ProfilePage() {
               resolve={data.postResponse}
               errorElement={<p>Error loading posts !</p>}
             >
-              {(postResponse) => <List posts={postResponse.data.userPosts} />
+              {(postResponse) => postResponse.data.userPosts && <List posts={postResponse.data.userPosts} />
               }
             </Await>
           </Suspense>

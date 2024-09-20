@@ -4,7 +4,7 @@
   display: flex;
 //  min-height: 100vh;
   max-height: 100%;
-
+  width: 100%;
   @include md{
     flex-direction: column;
     overflow: scroll;
@@ -21,10 +21,11 @@
     }
 
     .wrapper{
-      padding-right: 50px;
+   //   padding-right: 50px;
       display: flex;
       flex-direction: column;
-      gap: 50px;
+      width: 100%;
+     // gap: 50px;
 
       .title{
         display: flex;
@@ -63,7 +64,8 @@
     }
   }
   .chatContainer {
-    flex: 2;
+   // flex: 1;
+    width: 30vh;
     background-color: #fcf5f3;
   //  height: 100vh;
    // max-height: 100%;
@@ -78,7 +80,7 @@
     }
   }
 }
-button{
+.btn{
   width: 100px;
   padding: 10px 20px;
   background-color: teal;

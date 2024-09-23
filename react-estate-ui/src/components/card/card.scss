@@ -450,6 +450,13 @@
   flex-wrap: 'wrap';
   overflow: 'hidden'
 }
+.desc-txt{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #555;
+//  margin-top: 3%;
+}
 .amenities-details{
   display: flex;
   justify-content: space-between;

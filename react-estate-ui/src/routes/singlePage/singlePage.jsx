@@ -16,7 +16,9 @@ import { FurnishedType } from "../../interfaces/FurnishedType-interface";
 import { Amenities } from '../../interfaces/icons-interface.ts'
 import Map from "../../components/map/Map";
 import Services_Offered from "../../interfaces/services-interface.ts";
-
+import NearbyTransport from "../../components/nearby-transport/nearbyTransport.jsx";
+import ReactPlayer from 'react-player'
+import NearbyFacilities from "../../components/nearby-facilities/nearbyFacilities.jsx";
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
@@ -300,19 +302,31 @@ function SinglePage() {
                       </span>
                     ))
                   }
-                 
               </span>
             </div>
-            <div className="desc-container">
+            {/* <div className="desc-container">
               <div className="flex title flex-start">
                 Nearby Locations
               </div>
               <div style={{height:'38vh'}}>
                 <Map items={[post]}/>
               </div>
+            </div> */}
+            <div className="desc-container">
+            <h3>Nearby Transport</h3>
+              <div>
+                <NearbyTransport latitude={post.latitude} longitude={post.longitude} />
+              </div>
             </div>
             <div className="desc-container">
-              
+              <span className="flex ">
+              <h3>Popular places nearby</h3>
+              <label className="padding-sm">(within 5 kms)</label>
+              </span>
+            
+              <div>
+                <NearbyFacilities lat={post.latitude} lon={post.longitude}/>
+              </div>
             </div>
           </div>
         </div>
@@ -361,13 +375,17 @@ function SinglePage() {
               </div>
             )
           }
-
+          <div className="flex-column margin-sm ">
+            <span className="listVertical">
+              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true} playIcon={true} />
+            </span>
+            
+         
+          </div>
           <p className="title">General</p>
           <div className="flex listVertical">
-            
               <div className="property-details">
                 <div className="justify-space-between padding-sm ">
-                 
                     <div className="property-detail-section">
                       <span className="icon-space">
                         <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
@@ -377,7 +395,6 @@ function SinglePage() {
                         <p >&#8377; {post.rent}</p>
                       </span>
                     </div>
-                  
                     <div className="property-detail-section">
                       <span className="icon-space">
                         <FontAwesomeIcon icon={faCoins} className="property-icon" />
@@ -508,7 +525,7 @@ function SinglePage() {
           <div className="property-details">
             <div className="flex">
             {
-                        Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
+                 postDetail.highlightDetails &&   Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
                           <div key={key} className="amenities-column">
                             <span>
                               <img src={'/highlights/' + key + '.png'} alt="" className="src" />

@@ -16,6 +16,8 @@ import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loade
 
 import HotelDetailsPage from "./routes/hotelDetailsPage/hotelDetailsPage";
 
+import { store } from './redux-store/shared-store'
+import { Provider } from 'react-redux';
 
 function App() {
   const router = createBrowserRouter([
@@ -75,8 +77,10 @@ function App() {
   ]);
 
   return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
 
-    <RouterProvider router={router}/>
   );
 }
 

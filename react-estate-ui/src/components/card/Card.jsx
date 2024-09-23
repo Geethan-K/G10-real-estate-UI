@@ -5,7 +5,7 @@ import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,
 import { BHKType } from '../../interfaces/BHKType-interface.ts'
 import "./card.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import DOMPurify from "dompurify";
 import { format } from 'timeago.js';
 import { Amenities } from '../../interfaces/icons-interface.ts'
 import { color, motion, useAnimation } from 'framer-motion'
@@ -302,6 +302,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                  
                 </div>
                 </div>
+               
                 {
                   !(item.postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
                     <span className="flex">
@@ -361,6 +362,12 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       </div>
                     </div>
                   </>
+                }
+
+                {
+                  item.postDetail.amenities===undefined ||  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
+                   <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
+                  </div>
                 }
                 <p className="address">
                   <img src="/pin.png" alt="" />

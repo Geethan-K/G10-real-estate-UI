@@ -54,12 +54,23 @@
 .margin-sm{
   margin: 3vh;
 }
+.margin-xs{
+  margin: 5px;
+}
+.padding-xs{
+  padding: 3px;
+}
 .hover-orange{
   scale: 1.09;
   color: orange;
 }
 .pointer{
   cursor: pointer;
+}
+.mark-highlight{
+  margin:'8px';
+  background-color: orange;
+  border-radius: 5px;
 }
 .desc-container{
   padding: 2vh;

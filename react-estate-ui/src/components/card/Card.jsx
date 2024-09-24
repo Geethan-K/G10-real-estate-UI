@@ -365,7 +365,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 }
 
                 {
-                  item.postDetail.amenities===undefined ||  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
+                  item.postDetail?.amenities===undefined &&  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
                    <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
                   </div>
                 }

@@ -1,4 +1,4 @@
-import { createContext,useEffect,useState } from "react";
+import React,{ createContext,useEffect,useState } from "react";
 import apiRequest from "../lib/apiRequest";
 
 export const AuthContext = createContext()
@@ -14,7 +14,7 @@ export const AuthContextProvider = ({children}) =>{
     }
     useEffect(()=>{
         localStorage.setItem('user',JSON.stringify(currentUser))
-      // getChatInfo()
+     //  getChatInfo()
     },[currentUser])
     
   

@@ -1,16 +1,17 @@
 import "./singlePage.scss";
+import React, { Suspense, lazy } from 'react';
 import Slider from "../../components/slider/Slider";
 import { useLoaderData, useNavigate, Await } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { AuthContext } from '../../context/AuthContext'
-import { useContext, useState,  useRef, useEffect } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import apiRequest from '../../lib/apiRequest'
 import Chat from "../../components/chat/Chat";
 import ReactStars from 'react-rating-stars-component';
 import TextareaAutosize from 'react-textarea-autosize';
 import { format } from 'timeago.js'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarAlt,   faChevronCircleLeft,  faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,  faChevronCircleDown, faChevronCircleUp, faThumbsUp,  faBathtub, faBed, faToriiGate, faFireBurner } from "@fortawesome/free-solid-svg-icons";
+import { faCarAlt, faChevronCircleLeft, faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faThumbsUp, faBathtub, faBed, faToriiGate, faFireBurner } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from "../../interfaces/BHKType-interface";
 import { FurnishedType } from "../../interfaces/FurnishedType-interface";
 import { Amenities } from '../../interfaces/icons-interface.ts'
@@ -19,13 +20,14 @@ import Services_Offered from "../../interfaces/services-interface.ts";
 import NearbyTransport from "../../components/nearby-transport/nearbyTransport.jsx";
 import ReactPlayer from 'react-player'
 import NearbyFacilities from "../../components/nearby-facilities/nearbyFacilities.jsx";
+const RemoteChatBox = lazy(() => import('chatApp/ChatBox'));
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
-
-  const post = singlePageLoader.postResponse
  
-  let { comments, ratings,postDetail } = post
+  const post = singlePageLoader.postResponse
+
+  let { comments, ratings, postDetail } = post
   if (postDetail?.amenities !== undefined) {
     var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
       if (postDetail.amenities[key]) {
@@ -56,10 +58,7 @@ function SinglePage() {
       }
     })
   }
-  
-
   comments = mergeRatingsIntoComments(comments, ratings)
-
   var averageRating = 0.0
   if (ratings !== undefined) {
     post.ratings = ratings
@@ -162,25 +161,25 @@ function SinglePage() {
 
   return (
     <div className="singlePage">
-     <div className="details">
+      <div className="details">
         <div className="detail-wrapper">
-      <span className="flex title-container">
-          <span className="padding-sm">
-            <h1 className="bhk-type">
-              {
-                !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {post.property} for {post.type} in {post.city}</span>
-              }
-            </h1>
-          </span>       
-      </span>
-          <span style={{height:'50vh'}}> 
+          <span className="flex title-container">
+            <span className="padding-sm">
+              <h1 className="bhk-type">
+                {
+                  !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {post.property} for {post.type} in {post.city}</span>
+                }
+              </h1>
+            </span>
+          </span>
+          <span style={{ height: '50vh' }}>
             <Slider images={post.images} wallpaper={wallpaper} />
           </span>
           <span className="small-img-gallery">
             <div className="horizontal-images">
-            <span className="chevron-btn-container">
-              <FontAwesomeIcon icon={faChevronCircleLeft} className="chevron-icon"/>
-            </span>
+              <span className="chevron-btn-container">
+                <FontAwesomeIcon icon={faChevronCircleLeft} className="chevron-icon" />
+              </span>
               {post.images.slice(1).map((image, i) => (
                 <img
                   src={image}
@@ -197,7 +196,7 @@ function SinglePage() {
               <div className="post">
                 <span className="post-title-container">
                   <h1>{post.title}</h1>
-                  <div className="address" style={{color:'black'}}>
+                  <div className="address" style={{ color: 'black' }}>
                     <p>{FurnishedType[postDetail.furnishedType]}</p> , <p>{post.sqft} Sqft</p> , <p>{post.facing} Facing</p>
                   </div>
                   <div className="address">
@@ -205,75 +204,75 @@ function SinglePage() {
                     <span>{post.address}</span>
                   </div>
                   <div className="address">
-                  <p>Ad Created {format(postDetail.createdAt)}</p> 
+                    <p>Ad Created {format(postDetail.createdAt)}</p>
                   </div>
                   <div className="property-detail-container flex">
                     <div className=" flex-column padding-sm">
-                    <span>
-                      <FontAwesomeIcon icon={faBed} className="font-size-md" />
-                    </span>
-                    <span>
-                      <label className="font-semiBold">{post.bedroom} bedroom</label>
-                    </span>
+                      <span>
+                        <FontAwesomeIcon icon={faBed} className="font-size-md" />
+                      </span>
+                      <span>
+                        <label className="font-semiBold">{post.bedroom} bedroom</label>
+                      </span>
                     </div>
-                    <div  className=" flex-column padding-sm">
-                    <span>
-                      <FontAwesomeIcon icon={faBathtub} className="font-size-md"/>
-                    </span>
-                    <span>
-                      <label  className="font-semiBold">{post.bathroom} bathroom</label>
-                    </span>
+                    <div className=" flex-column padding-sm">
+                      <span>
+                        <FontAwesomeIcon icon={faBathtub} className="font-size-md" />
+                      </span>
+                      <span>
+                        <label className="font-semiBold">{post.bathroom} bathroom</label>
+                      </span>
                     </div>
-                    <div  className="flex-column  padding-sm">
-                    <span>
-                      <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
-                    </span>
-                    <span>
-                      <label className="font-semiBold">{post.parking} parking</label>
-                    </span>
+                    <div className="flex-column  padding-sm">
+                      <span>
+                        <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
+                      </span>
+                      <span>
+                        <label className="font-semiBold">{post.parking} parking</label>
+                      </span>
                     </div>
                   </div>
                 </span>
                 <span>
                   <div className="footer-container review-buttons">
-                  <button className="icon">
-                      <FontAwesomeIcon icon={faThumbsUp} className="icon"/>
+                    <button className="icon">
+                      <FontAwesomeIcon icon={faThumbsUp} className="icon" />
                     </button>
                     <button className="icon">
-                      <FontAwesomeIcon icon={faShareNodes} className="icon"/>
+                      <FontAwesomeIcon icon={faShareNodes} className="icon" />
                     </button>
                     <button onClick={openChatBox}>
-                      <img src="/chat.png" alt=""  />
+                      <img src="/chat.png" alt="" />
                     </button>
                     <button onClick={handleSave} style={{ backgroundColor: saved ? "orange" : "white", color: "black" }}>
                       <img src="/save.png" alt="" />
                     </button>
                   </div>
-                  <div className="flex padding-sm" >                    
-                      <ReactStars
-                        count={5}
-                        isHalf={true}
-                        edit={false}
-                        disable={true}
-                        size={24}
-                        value={averageRating.toFixed(1)}
-                        activeColor="#ffd700"
-                      />
-                      {
-                        averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
-                        ) : (<span className="padding-sm"><label className="font-semiBold font-size-md">{averageRating.toFixed(1)}  / 5</label></span> )
-                      }
+                  <div className="flex padding-sm" >
+                    <ReactStars
+                      count={5}
+                      isHalf={true}
+                      edit={false}
+                      disable={true}
+                      size={24}
+                      value={averageRating.toFixed(1)}
+                      activeColor="#ffd700"
+                    />
+                    {
+                      averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
+                      ) : (<span className="padding-sm"><label className="font-semiBold font-size-md">{averageRating.toFixed(1)}  / 5</label></span>)
+                    }
                   </div>
-                    <div className="flex padding-sm">
+                  <div className="flex padding-sm">
                     <div className="padding-sm">
                       <label>Deposit</label>
                       <div className="font-size-md font-semiBold">$ {post.deposit}</div>
                     </div>
-                    <div  className="padding-sm">
+                    <div className="padding-sm">
                       <label>Rent</label>
                       <div className="font-size-md font-semiBold">$ {post.rent}</div>
                     </div>
-                    </div>
+                  </div>
                 </span>
               </div>
               {/* <div className="user">
@@ -283,25 +282,25 @@ function SinglePage() {
             </div>
             <div className="desc-container">
               <span className="title">Description</span>
-            <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
+              <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
             </div>
             <div className=" desc-container">
               <span className="flex title flex-start">
                 Services Offered
               </span>
               <span className="flex justify-space-around" >
-                  {
-                    Services_Offered.map((service)=>(
-                      <span className="flex-column padding-sm justify-space-between hover-scaleUp">
-                        <span className="services-img-container padding-sm round-border" >
-                          <img src={service.src} alt="" className="src" />
-                        </span>
-                        <span className="flex-column" style={{flexWrap:'wrap'}}>
-                          <label className="font-semiBold">{service.name}</label>
-                        </span>
+                {
+                  Services_Offered.map((service) => (
+                    <span className="flex-column padding-sm justify-space-between hover-scaleUp">
+                      <span className="services-img-container padding-sm round-border" >
+                        <img src={service.src} alt="" className="src" />
                       </span>
-                    ))
-                  }
+                      <span className="flex-column" style={{ flexWrap: 'wrap' }}>
+                        <label className="font-semiBold">{service.name}</label>
+                      </span>
+                    </span>
+                  ))
+                }
               </span>
             </div>
             {/* <div className="desc-container">
@@ -313,19 +312,18 @@ function SinglePage() {
               </div>
             </div> */}
             <div className="desc-container">
-            <h3>Nearby Transport</h3>
+              <h3>Nearby Transport</h3>
               <div>
                 <NearbyTransport latitude={post.latitude} longitude={post.longitude} />
               </div>
             </div>
             <div className="desc-container">
               <span className="flex ">
-              <h3>Popular places nearby</h3>
-              <label className="padding-sm">(within 5 kms)</label>
+                <h3>Popular places nearby</h3>
+                <label className="padding-sm">(within 5 kms)</label>
               </span>
-            
               <div>
-                <NearbyFacilities lat={post.latitude} lon={post.longitude}/>
+                <NearbyFacilities lat={post.latitude} lon={post.longitude} />
               </div>
             </div>
           </div>
@@ -379,111 +377,109 @@ function SinglePage() {
             <span className="listVertical">
               <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true} playIcon={true} />
             </span>
-            
-         
           </div>
           <p className="title">General</p>
           <div className="flex listVertical">
-              <div className="property-details">
-                <div className="justify-space-between padding-sm ">
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>rent </label>
-                        <p >&#8377; {post.rent}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faCoins} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>deposit </label>
-                        <p>&#8377; {post.deposit}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faChartArea} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>built up </label>
-                        <p>{post.sqft} sqft</p>
-                      </span>
-                    </div>
+            <div className="property-details">
+              <div className="justify-space-between padding-sm ">
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>rent </label>
+                    <p >&#8377; {post.rent}</p>
+                  </span>
                 </div>
-                <div className="justify-space-between padding-sm">
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faCarSide} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>parking </label>
-                        <p>{post.parking}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faBathtub} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>bathroom </label>
-                        <p>{post.bathroom}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faBed} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>bedroom </label>
-                        <p>{post.bedroom}</p>
-                      </span>
-                    </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faCoins} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>deposit </label>
+                    <p>&#8377; {post.deposit}</p>
+                  </span>
                 </div>
-                <div className="justify-space-between padding-sm">
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faCouch} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>Furnishing </label>
-                        <p>{post.postDetail?.furnishedType}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>facing </label>
-                        <p>{post.facing}</p>
-                      </span>
-                    </div>
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>Gas line </label>
-                        <p>{postDetail.gasPipeline}</p>
-                      </span>
-                    </div>
-                </div>
-                <div className="justify-space-between padding-sm">
-                    <div className="property-detail-section">
-                      <span className="icon-space">
-                        <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
-                      </span>
-                      <span className="details-space">
-                        <label>Gated Community </label>
-                        <p>{postDetail.gatedCommunity}</p>
-                      </span>
-                    </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faChartArea} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>built up </label>
+                    <p>{post.sqft} sqft</p>
+                  </span>
                 </div>
               </div>
+              <div className="justify-space-between padding-sm">
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faCarSide} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>parking </label>
+                    <p>{post.parking}</p>
+                  </span>
+                </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faBathtub} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>bathroom </label>
+                    <p>{post.bathroom}</p>
+                  </span>
+                </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faBed} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>bedroom </label>
+                    <p>{post.bedroom}</p>
+                  </span>
+                </div>
+              </div>
+              <div className="justify-space-between padding-sm">
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faCouch} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>Furnishing </label>
+                    <p>{post.postDetail?.furnishedType}</p>
+                  </span>
+                </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>facing </label>
+                    <p>{post.facing}</p>
+                  </span>
+                </div>
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>Gas line </label>
+                    <p>{postDetail.gasPipeline}</p>
+                  </span>
+                </div>
+              </div>
+              <div className="justify-space-between padding-sm">
+                <div className="property-detail-section">
+                  <span className="icon-space">
+                    <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
+                  </span>
+                  <span className="details-space">
+                    <label>Gated Community </label>
+                    <p>{postDetail.gatedCommunity}</p>
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
           <p className="title">Sizes</p>
           <div className="sizes pointer">
@@ -501,42 +497,42 @@ function SinglePage() {
             </div>
           </div>
           <p className="title">Amenities</p>
-            <div className="property-details">
-              <div className="flex ">
+          <div className="property-details">
+            <div className="flex ">
               {
-                  !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
-                          {
-                            Object.keys(filteredAmenities).slice(0,Object.keys(filteredAmenities).length).map((key) => (
-                              <div className="amenities-column">
-                                <span>
-                                  <img src={filteredAmenities[key]} alt="" className="src" />
-                                </span>
-                                <span>
-                                  <p>{key}</p>
-                                </span>
-                              </div>
-                            ))
-                          }
-                  </>
-                }
-              </div>
+                !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                  {
+                    Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key) => (
+                      <div className="amenities-column">
+                        <span>
+                          <img src={filteredAmenities[key]} alt="" className="src" />
+                        </span>
+                        <span>
+                          <p>{key}</p>
+                        </span>
+                      </div>
+                    ))
+                  }
+                </>
+              }
             </div>
+          </div>
           <p className="title">Nearby Places</p>
           <div className="property-details">
             <div className="flex">
-            {
-                 postDetail.highlightDetails &&   Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
-                          <div key={key} className="amenities-column">
-                            <span>
-                              <img src={'/highlights/' + key + '.png'} alt="" className="src" />
-                            </span>
-                            <span>
-                              <p>{detail.name}</p>
-                              <p>{detail.km}</p>
-                              </span>
-                          </div>
-                        ))
-                      }
+              {
+                postDetail.highlightDetails && Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
+                  <div key={key} className="amenities-column">
+                    <span>
+                      <img src={'/highlights/' + key + '.png'} alt="" className="src" />
+                    </span>
+                    <span>
+                      <p>{detail.name}</p>
+                      <p>{detail.km}</p>
+                    </span>
+                  </div>
+                ))
+              }
             </div>
           </div>
           <p className="title">Location</p>
@@ -550,9 +546,9 @@ function SinglePage() {
                 <div className="user-comments" key={comment.id}>
                   <div className="flex flex-start full-width" >
                     <span className="flex-column padding-sm" >
-                    <img className="avatar-img" src={comment.user.avatar} />
+                      <img className="avatar-img" src={comment.user.avatar} />
                     </span>
-                    <div className="flex-column " style={{flex:1}}>
+                    <div className="flex-column " style={{ flex: 1 }}>
                       <span className="white-txt">{comment.user.username}</span>
                       <span className="flex justify-space-between" >
                         <div className="flex">
@@ -590,7 +586,10 @@ function SinglePage() {
           <div className="chatContainer">
             <div className="wrapper">
               {
-                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+                <Suspense fallback={<div>Loading Chat...</div>}>
+                  <RemoteChatBox />
+                </Suspense>
+                //  <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
               }
             </div>
           </div>

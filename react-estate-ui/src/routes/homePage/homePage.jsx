@@ -1,5 +1,5 @@
 import SearchBar from "../../components/searchBar/SearchBar";
-import { useState, useContext, useEffect } from "react";
+import React,{ useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { motion, useAnimation } from 'framer-motion';
 import Featured from "../../components/featured/featured";
@@ -19,7 +19,7 @@ function HomePage() {
   const images = ['/container1.png', '/container2.png', '/house.png', '/villa.webp']
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const controls = useAnimation();
+  const controls = React.lazy(()=>useAnimation()) 
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,7 +29,7 @@ function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     controls.start({ opacity: 1, transition: { duration: 1 } }).then(() =>
       controls.start({ opacity: 0, transition: { duration: 1, delay: 1 } })
     );

@@ -1,4 +1,6 @@
 import "./singlePage.scss";
+import React, { Suspense } from 'react';
+const Chatbox = React.lazy(() => import('chatbox/Chatbox'));
 import Slider from "../../components/slider/Slider";
 import { useLoaderData, useNavigate, Await } from "react-router-dom";
 import DOMPurify from "dompurify";
@@ -19,6 +21,8 @@ import Services_Offered from "../../interfaces/services-interface.ts";
 import NearbyTransport from "../../components/nearby-transport/nearbyTransport.jsx";
 import ReactPlayer from 'react-player'
 import NearbyFacilities from "../../components/nearby-facilities/nearbyFacilities.jsx";
+import { useDispatch,useSelector } from "react-redux";
+import {addChats,addSocket,addLastMsgs} from '../../redux-store/shared-store.js'
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
@@ -80,6 +84,7 @@ function SinglePage() {
   const [wallpaper, setWallpaper] = useState({ src: post.images[0], index: 0 })
   const { currentUser } = useContext(AuthContext);
   const chatRef = useRef()
+  const dispatch = useDispatch()
   const textarea = "Write some of the best experience of yours from this place ...."
   useEffect(() => {
     async function fetchData() {
@@ -88,6 +93,7 @@ function SinglePage() {
         const res = await apiRequest.get('/chats/get/' + postedUserId)
         if (res !== null) {
           setChatData(res.data)
+          dispatch(addChats(res.data))
         }
       } catch (err) {
         console.log(err)
@@ -127,6 +133,7 @@ function SinglePage() {
         const res = await apiRequest.post('/chats', { receiverId })
         let chatID = res.data?.id;
         setChatData(res.data)
+        dispatch(addChats(res.data))
         if (chatID !== undefined) {
           chatRef.current?.openChat(chatID, receiver);
         }
@@ -590,7 +597,10 @@ function SinglePage() {
           <div className="chatContainer">
             <div className="wrapper">
               {
-                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+               // <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+               <Suspense fallback={<div>Loading Chatbox...</div>}>
+               <Chatbox />
+             </Suspense>
               }
             </div>
           </div>

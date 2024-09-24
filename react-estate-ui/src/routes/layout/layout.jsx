@@ -1,4 +1,5 @@
 import "./layout.scss";
+import React from "react";
 import Navbar from "../../components/navbar/Navbar"
 import { Navigate, Outlet } from "react-router-dom";
 import { useContext, useEffect } from "react";

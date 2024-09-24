@@ -1,9 +1,28 @@
+
+import React, { Suspense, lazy } from 'react';
+//const HomePage = lazy(() => import('./routes/homePage/homePage'));
 import HomePage from "./routes/homePage/homePage";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+//const ListPage = lazy(()=>import('./routes/listPage/listPage'))
 import ListPage from "./routes/listPage/listPage";
+// const Layout = lazy(()=>import('./routes/layout/layout'))
+// const RequireAuth = lazy(()=>import('./routes/layout/layout'))
+// const SinglePage = lazy(()=>import('./routes/singlePage/singlePage'))
+// const ProfilePage = lazy(()=>import('./routes/profilePage/profilePage'))
+// const Login = lazy(()=>import('./routes/login/login'))
+// const Register = lazy(()=>import('./routes/register/register'))
+// const ProfileUpdatePage = lazy(()=>import('./routes/profileUpdatePage/profileUpdatePage'))
+// const NewPostPage = lazy(()=>import('./routes/newPostPage/newPostPage'))
+// const listPageLoader = lazy(()=>import('./lib/loaders'))
+// const profilePageLoader = lazy(()=>import('./lib/loaders'))
+// const singlePageLoader = lazy(()=>import('./lib/loaders'))
+// const HotelDetailsPage = lazy(()=>import('./routes/hotelDetailsPage/hotelDetailsPage'))
+// const store = lazy(()=>import('./redux-store/shared-store'))
+// const Provider = lazy(()=>import('react-redux'))
+
 import {Layout, RequireAuth } from "./routes/layout/layout";
 import SinglePage from "./routes/singlePage/singlePage";
 

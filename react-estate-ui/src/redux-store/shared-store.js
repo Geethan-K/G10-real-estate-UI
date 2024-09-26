@@ -17,10 +17,12 @@ const chatSlice = createSlice({
     addSocket:(state,action)=>{
         state.socket = action.payload.socket
     },
+    // emitSocket:(state,action)=>{
+    //   socket?.emit("newUser",action.payload.userId)
+    // },
     addChats:(state,action)=>{
         state.chats=action.payload.chats
     },
-
     addLastMsgs:(state,action) =>{ 
         state.showLastMsgs=action.payload.showLastMsgs
     }
@@ -41,7 +43,7 @@ const userSlice = createSlice({
 
 // Export the actions
 export const { addChats, addSocket,addLastMsgs} = chatSlice.actions;
-
+export const {addUser} = userSlice.actions;
 
 // Create the store
 export const store = configureStore({

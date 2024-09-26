@@ -20,14 +20,21 @@ import Services_Offered from "../../interfaces/services-interface.ts";
 import NearbyTransport from "../../components/nearby-transport/nearbyTransport.jsx";
 import ReactPlayer from 'react-player'
 import NearbyFacilities from "../../components/nearby-facilities/nearbyFacilities.jsx";
+import { useSelector,useDispatch } from "react-redux";
+import {addSocket,addChats,addLastMsgs,addUser} from '../../redux-store/shared-store.js'
+
 const RemoteChatBox = lazy(() => import('chatApp/ChatBox'));
 function SinglePage() {
+const[openChat,setOpenChat]=useState(false)
+  // const socketState = useSelector((state)=>state.chat.scoket)
+  // const chatsState = useSelector((state)=>state.chat.chats)
+  // const showLastMsgsState = useSelector((state)=>state.chat.showLastMsgs)
+  const dispatch = useDispatch()
 
   const singlePageLoader = useLoaderData();
- 
-  const post = singlePageLoader.postResponse
-
+  const post = singlePageLoader.postResponse 
   let { comments, ratings, postDetail } = post
+
   if (postDetail?.amenities !== undefined) {
     var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
       if (postDetail.amenities[key]) {
@@ -37,9 +44,9 @@ function SinglePage() {
     }, {})
   }
 
-  console.log(post)
-  console.log(postDetail)
-  console.log(comments)
+  // console.log(post)
+  // console.log(postDetail)
+  // console.log(comments)
 
   const RatingMap = globalThis.Map; // Create an alias for the Map object
 
@@ -116,18 +123,21 @@ function SinglePage() {
     const receiver = post?.user;
     const receiverId = post?.userId
     receiver["id"] = receiverId
-    console.log('chatData state', chatData)
+    // console.log('chatData state', chatData)
     if (chatData !== null) {
-      console.log('user & chat already exists', chatData)
+    //  console.log('user & chat already exists', chatData)
       chatRef.current?.openChat(chatData.id, receiver);
+      setOpenChat(true)
     } else {
-      console.log('new user has to be created')
+      // console.log('new user has to be created')
       try {
         const res = await apiRequest.post('/chats', { receiverId })
         let chatID = res.data?.id;
         setChatData(res.data)
+        dispatch(addChats({'chats':chatData}))
         if (chatID !== undefined) {
           chatRef.current?.openChat(chatID, receiver);
+          setOpenChat(true)
         }
       } catch (err) {
         console.log(err)
@@ -150,7 +160,7 @@ function SinglePage() {
   const saveComment = async () => {
     try {
       const res = await apiRequest.post('/commentsAndRatings/comments/add', { postId: post.id, content: comment })
-      console.log(res)
+   //   console.log(res)
       if (res) updateSent(true)
     } catch (err) {
       updateSent(false)
@@ -585,12 +595,12 @@ function SinglePage() {
           </div>
           <div className="chatContainer">
             <div className="wrapper">
-              {
-                <Suspense fallback={<div>Loading Chat...</div>}>
-                  <RemoteChatBox />
-                </Suspense>
-                //  <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+              {openChat && <Suspense fallback={<div>Loading Chat...</div>}>
+                <RemoteChatBox chats={chatData} ref={chatRef} showLastMsgs={false} />
+              </Suspense>
               }
+                  {/* <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+               */}
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ const Chat = forwardRef((props,chatRef) =>
   {
     const [chat, setChat] = useState(null);
     const {currentUser} = useContext(AuthContext);
+    console.log(currentUser)
     const {socket} = useContext(socketContext);
     const messageEndRef = useRef()
     const {chats,showLastMsgs} = props

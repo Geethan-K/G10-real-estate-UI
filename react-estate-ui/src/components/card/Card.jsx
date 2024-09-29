@@ -363,9 +363,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     </div>
                   </>
                 }
-
                 {
-                  item.postDetail.amenities===undefined ||  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
+                  !(item.postDetail?.amenities) &&  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
                    <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
                   </div>
                 }
@@ -386,27 +385,27 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
             </div> */}
                 <div className="uploaded-time flex">
                   <span className="address">
-                  <span style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span className="flex-column hover-scaleUp">
                     <img src={userDetail.avatar} className="user-avatar" />
                     <label className="user-name">{userDetail.username}</label>
                   </span>
-                  <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <span className="flex">
                     <FontAwesomeIcon icon={faClock} style={{ fontSize: '15px', padding: '5px' }} />
                     <p>posted {format(item.postDetail?.createdAt)}</p>
                   </span>
-                  <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <span className="flex">
                     <FontAwesomeIcon icon={faCheck} color="green" style={{ fontSize: '15px', padding: '5px' }} />
                     <p>trusted owner</p>
                   </span>
                   </span>
-                  <div className="flex" style={{ marginLeft:'2vh',width:'20vh' }}>
-                    <span style={{ display: 'flex', flexDirection: 'column',margin:'8px' }} onClick={switchMode}>
+                  <div className="flex padding-sm" >
+                    <span className="flex-column" onClick={switchMode}>
                       <span>
                         <FontAwesomeIcon icon={faVideoCamera} style={{color:houseTour?'orange':'black'}} />
                       </span>
                       <label className="user-name">House tour</label>
                     </span>
-                    <span style={{ display: 'flex', flexDirection: 'column',margin:'8px' }} onClick={switchMode}>
+                    <span className="flex-column" onClick={switchMode}>
                       <span>
                         <FontAwesomeIcon icon={faNewspaper}  style={{color:readComments?'orange':'black'}} />
                       </span>
@@ -448,13 +447,16 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
               </span>
             </div>
           </Link>
-          <div className="extra-detail-container" style={{border:houseTour? '1px solid #999':'none' }}>
-            {
-              readComments && !showFullComments && <>
-              <span className="flex">
-                  <label>Top Comments</label>
-                </span>
-                <span className="reviews-container" >
+          <div className="extra-detail-container">
+              <span className="video-container">
+                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o'  height={'100%'} width={'100%'} controls={true} playIcon={true} />
+              </span>
+              <div>
+            <div>
+              <span className="flex padding-sm" style={{ position: 'static' }}>
+                <label>Top Comments</label>
+              </span>
+              <span className="reviews-container pointer" >
                 {
                   comments.map((comment) => (
                     <div className="user-comments" key={comment.id}>
@@ -462,7 +464,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       <div className="detail-container">
                         <p className="user-name">{comment.user.username}</p>
                         <span className="rating-container">
-                          <div style={{ display: 'flex', alignItems: 'flex-start', padding: '0px' }}>
+                          <div className="flex " >
                             <ReactStars
                               count={5}
                               isHalf={true}
@@ -471,6 +473,9 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                               value={comment.stars}
                               activeColor="#ffd700"
                             />
+                            <div>
+                              <label className="user-name">{comment.stars}/5</label>
+                            </div>
                           </div>
                           <div className="created-date">
                             {format(comment.createdAt)}
@@ -480,16 +485,6 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                           <p className="comment-txt">
                             {comment.content}
                           </p>
-                          {/* <TextareaAutosize
-                            cols={20}
-                            style={{ padding: '15px' }}
-                            autoFocus={true}
-                            minRows={1}
-                            maxRows={4}
-                            disabled={true}
-                            defaultValue={comment.content}
-                            onChange={ev => setcomment(ev.target.value)}
-                          /> */}
                         </div>
                         <div className="like-comment-section">
                           <span>
@@ -503,23 +498,19 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     </div>
                   ))
                 }
-                <span className="flex" style={{width:'50%',height:'4vh',padding:'8px'}} onClick={()=>setShowFullComments(!showFullComments)}>
-                  <span className="flex">
+              </span>
+            </div>
+          </div>
+          <span className="flex show-more-container pointer" onClick={() => setShowFullComments(!showFullComments)}>
+                <span>
                   <p className="user-name">Show full comments</p>
-                  </span>
-                  <span className="flex" style={{margin:'10px'}}>
-                  <FontAwesomeIcon icon={faChevronCircleDown}/>
-                  </span>
+                </span>
+                <span>
+                  <FontAwesomeIcon icon={faChevronCircleDown} />
                 </span>
               </span>
-              </>
-            }
-            {
-              houseTour && <span className="video-container">
-                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'100%'} width={'auto'} controls={true} playIcon={true} />
-              </span>
-            }
           </div>
+         
         </div>
       }
       {

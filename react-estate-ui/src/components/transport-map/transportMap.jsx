@@ -53,7 +53,7 @@ const TransportMap = ({ busStation, trainStation, airport,latitude,longitude }) 
   const [airports,setAirports]=useState(airport)
   const [center,setCenter]=useState([latitude,longitude])
   return (
-    <MapContainer center={center} zoom={13} style={{ height: "45vh", width: "100%" }}  >
+    <MapContainer center={center} zoom={13} style={{ height: "30vh", width: "100%" }}  >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {/* {places.map((place) => (
           <Marker key={place.id} position={[place.lat, place.lon]}  icon={customIcon}>
@@ -63,22 +63,22 @@ const TransportMap = ({ busStation, trainStation, airport,latitude,longitude }) 
           </Marker>
         ))} */}
       {/* Add bus markers */}
-      {busStations.map((bus) => (
-        <Marker key={bus.lat} position={[bus.lat, bus.lon]} icon={busIcon}>
+      {busStations.map((bus,index) => (
+        <Marker key={index} position={[bus.lat, bus.lon]} icon={busIcon}>
           <Popup>{bus.name}</Popup>
         </Marker>
       ))}
 
       {/* Add train markers */}
 
-      {/* {trainStations.length > 0 && trainStations.map((train) => (
-        <Marker key={train.lat} position={[train.lat, train.lon]} icon={trainIcon}>
+      {trainStations.length > 0 && trainStations.map((train,index) => (
+        <Marker key={index} position={[train.lat, train.lon]} icon={trainIcon}>
           <Popup>{train.name}</Popup>
         </Marker>
-      ))} */}
+      ))}
 
-      {airports.length > 0 && airports.map((airport) => (
-        <Marker key={airport.lat} position={[airport.lat, airport.lon]} icon={flightIcon}>
+      {airports.length > 0 && airports.map((airport,index) => (
+        <Marker key={index} position={[airport.lat, airport.lon]} icon={flightIcon}>
           <Popup>{airport.name}</Popup>
         </Marker>
       ))}

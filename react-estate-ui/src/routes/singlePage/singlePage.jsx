@@ -10,7 +10,7 @@ import ReactStars from 'react-rating-stars-component';
 import TextareaAutosize from 'react-textarea-autosize';
 import { format } from 'timeago.js'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarAlt,   faChevronCircleLeft,  faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,  faChevronCircleDown, faChevronCircleUp, faThumbsUp,  faBathtub, faBed, faToriiGate, faFireBurner } from "@fortawesome/free-solid-svg-icons";
+import { faCarAlt,   faChevronCircleLeft,  faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,  faChevronCircleDown, faChevronCircleUp, faThumbsUp,  faBathtub, faBed, faToriiGate, faFireBurner, faDiamond, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from "../../interfaces/BHKType-interface";
 import { FurnishedType } from "../../interfaces/FurnishedType-interface";
 import { Amenities } from '../../interfaces/icons-interface.ts'
@@ -35,9 +35,9 @@ function SinglePage() {
     }, {})
   }
 
-  console.log(post)
-  console.log(postDetail)
-  console.log(comments)
+  // console.log(post)
+  // console.log(postDetail)
+  // console.log(comments)
 
   const RatingMap = globalThis.Map; // Create an alias for the Map object
 
@@ -70,6 +70,7 @@ function SinglePage() {
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
+  const [isReceiverLive,setIsReceiverLive] = useState(false)
   const [alreadyCommented, setAlreadyCommented] = useState(post.alreadyCommented)
   const [alreadyRated, setAlreadyRated] = useState(post.alreadyRated)
   const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
@@ -87,7 +88,8 @@ function SinglePage() {
         const postedUserId = postedUserData.id
         const res = await apiRequest.get('/chats/get/' + postedUserId)
         if (res !== null) {
-          setChatData(res.data)
+          setChatData(res.data.chatID)
+          setIsReceiverLive(res.data.isReceiverActive)
         }
       } catch (err) {
         console.log(err)
@@ -101,14 +103,19 @@ function SinglePage() {
   }
 
   const handleSave = async () => {
-    setSaved((prev) => !prev)
+   
     if (!currentUser) {
       navigate("/login")
     }
     try {
-      await apiRequest.post('/users/save', { postId: post.id })
+        const res = await apiRequest.post('/users/save', { postId: post.id })
+        if(res){
+          setSaved((prev) => !prev)
+        
+        }
+         
     } catch (err) {
-      setSaved((prev) => !prev)
+    //  setSaved((prev) => !prev)
       console.log(err)
     }
   }
@@ -117,16 +124,14 @@ function SinglePage() {
     const receiver = post?.user;
     const receiverId = post?.userId
     receiver["id"] = receiverId
-    console.log('chatData state', chatData)
     if (chatData !== null) {
-      console.log('user & chat already exists', chatData)
       chatRef.current?.openChat(chatData.id, receiver);
     } else {
-      console.log('new user has to be created')
       try {
         const res = await apiRequest.post('/chats', { receiverId })
         let chatID = res.data?.id;
         setChatData(res.data)
+       
         if (chatID !== undefined) {
           chatRef.current?.openChat(chatID, receiver);
         }
@@ -196,17 +201,25 @@ function SinglePage() {
             <div className="top">
               <div className="post">
                 <span className="post-title-container">
+                <div className="user">
+                      <img src={post.user.avatar} alt="" className="profile-img"/>
+                      <span className="flex">
+                      <span className="address padding-xs" >{post.user.username}</span>
+                      <span className="padding-sm">
+                      <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/>
+                      </span>
+                      <p className="address padding-xs" >Ad Created {format(postDetail.createdAt)}</p> 
+                      </span>
+                    </div>
                   <h1>{post.title}</h1>
                   <div className="address" style={{color:'black'}}>
                     <p>{FurnishedType[postDetail.furnishedType]}</p> , <p>{post.sqft} Sqft</p> , <p>{post.facing} Facing</p>
                   </div>
-                  <div className="address">
+                <div className="address">
                     <img src="/pin.png" alt="" />
                     <span>{post.address}</span>
                   </div>
-                  <div className="address">
-                  <p>Ad Created {format(postDetail.createdAt)}</p> 
-                  </div>
+                 
                   <div className="property-detail-container flex">
                     <div className=" flex-column padding-sm">
                     <span>
@@ -216,14 +229,16 @@ function SinglePage() {
                       <label className="font-semiBold">{post.bedroom} bedroom</label>
                     </span>
                     </div>
+                     {/* <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/> */}
                     <div  className=" flex-column padding-sm">
                     <span>
                       <FontAwesomeIcon icon={faBathtub} className="font-size-md"/>
                     </span>
-                    <span>
+                    <span> 
                       <label  className="font-semiBold">{post.bathroom} bathroom</label>
                     </span>
                     </div>
+                      {/* <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/> */}
                     <div  className="flex-column  padding-sm">
                     <span>
                       <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
@@ -245,8 +260,8 @@ function SinglePage() {
                     <button onClick={openChatBox}>
                       <img src="/chat.png" alt=""  />
                     </button>
-                    <button onClick={handleSave} style={{ backgroundColor: saved ? "orange" : "white", color: "black" }}>
-                      <img src="/save.png" alt="" />
+                    <button onClick={handleSave}   >
+                      <FontAwesomeIcon icon={faHeart} style={{ color: saved ? "orangered" : "gray",fontSize:'20px'}}/>
                     </button>
                   </div>
                   <div className="flex padding-sm" >                    
@@ -256,7 +271,7 @@ function SinglePage() {
                         edit={false}
                         disable={true}
                         size={24}
-                        value={averageRating.toFixed(1)}
+                        value={parseFloat(averageRating.toFixed(1))}
                         activeColor="#ffd700"
                       />
                       {
@@ -291,8 +306,8 @@ function SinglePage() {
               </span>
               <span className="flex justify-space-around" >
                   {
-                    Services_Offered.map((service)=>(
-                      <span className="flex-column padding-sm justify-space-between hover-scaleUp">
+                    Services_Offered.map((service,index)=>(
+                      <span key={index} className="flex-column padding-sm justify-space-between hover-scaleUp">
                         <span className="services-img-container padding-sm round-border" >
                           <img src={service.src} alt="" className="src" />
                         </span>
@@ -314,16 +329,15 @@ function SinglePage() {
             </div> */}
             <div className="desc-container">
             <h3>Nearby Transport</h3>
-              <div>
+              <div style={{overflowY:'scroll',height:'55vh'}}>
                 <NearbyTransport latitude={post.latitude} longitude={post.longitude} />
               </div>
             </div>
             <div className="desc-container">
-              <span className="flex ">
+              <span className="flex" >
               <h3>Popular places nearby</h3>
               <label className="padding-sm">(within 5 kms)</label>
               </span>
-            
               <div>
                 <NearbyFacilities lat={post.latitude} lon={post.longitude}/>
               </div>
@@ -343,7 +357,7 @@ function SinglePage() {
                     isHalf={true}
                     size={40}
                     edit={editRating}
-                    value={rating}
+                    value={parseFloat(rating)}
                     activeColor="#ffd700"
                     onChange={changeRating}
                   />
@@ -377,10 +391,8 @@ function SinglePage() {
           }
           <div className="flex-column margin-sm ">
             <span className="listVertical">
-              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true} playIcon={true} />
+              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true}  />
             </span>
-            
-         
           </div>
           <p className="title">General</p>
           <div className="flex listVertical">
@@ -502,24 +514,24 @@ function SinglePage() {
           </div>
           <p className="title">Amenities</p>
             <div className="property-details">
-              <div className="flex ">
+            <div className="flex ">
               {
-                  !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
-                          {
-                            Object.keys(filteredAmenities).slice(0,Object.keys(filteredAmenities).length).map((key) => (
-                              <div className="amenities-column">
-                                <span>
-                                  <img src={filteredAmenities[key]} alt="" className="src" />
-                                </span>
-                                <span>
-                                  <p>{key}</p>
-                                </span>
-                              </div>
-                            ))
-                          }
-                  </>
-                }
-              </div>
+                !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                  {
+                    Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key,index) => (
+                      <div key={index} className="amenities-column">
+                        <span>
+                          <img src={filteredAmenities[key]} alt="" className="src" />
+                        </span>
+                        <span>
+                          <p>{key}</p>
+                        </span>
+                      </div>
+                    ))
+                  }
+                </>
+              }
+            </div>
             </div>
           <p className="title">Nearby Places</p>
           <div className="property-details">
@@ -546,11 +558,11 @@ function SinglePage() {
           <p className="title">Top Comments</p>
           <div className="comments-ratings padding-sm">
             {
-              comments.map((comment) => (
-                <div className="user-comments" key={comment.id}>
-                  <div className="flex flex-start full-width" >
+              comments.map((comment,index) => (
+                <div className="user-comments" key={index}>
+                  <div className="flex flex-start full-width " >
                     <span className="flex-column padding-sm" >
-                    <img className="avatar-img" src={comment.user.avatar} />
+                     <img className="avatar-img" src={comment.user.avatar} />
                     </span>
                     <div className="flex-column " style={{flex:1}}>
                       <span className="white-txt">{comment.user.username}</span>
@@ -572,7 +584,7 @@ function SinglePage() {
                       <div className="comment">
                         <TextareaAutosize
                           cols={20}
-                          style={{ padding: '15px', width: '100%' }}
+                          style={{ padding: '15px', width: '100%',borderRadius:'5vh',color:'white' }}
                           autoFocus={true}
                           minRows={1}
                           maxRows={7}
@@ -590,7 +602,7 @@ function SinglePage() {
           <div className="chatContainer">
             <div className="wrapper">
               {
-                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
+                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} receiverData={isReceiverLive}/>
               }
             </div>
           </div>

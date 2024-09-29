@@ -107,7 +107,6 @@ const NearbyFacilities = ({ lat, lon }) => {
         axios
             .get(overpassUrl)
             .then((response) => {
-                console.log(response.data.elements)
                 // setPlaces(response.data.elements); // Setting the data from Overpass API
                 response.data.elements.map((element) => {
                   
@@ -200,7 +199,7 @@ const NearbyFacilities = ({ lat, lon }) => {
       }
     return (
         <>
-        <div className='flex margin-sm padding-sm'>
+        <div className='flex padding-sm'>
             <span className="check-area padding-sm">
                 <Checkbox color="warning-o" bigger="true" name="show_hospitals" icon={showPlaces.show_hospitals ? <FontAwesomeIcon icon={faCheck} className="tick" /> : undefined} checked={showPlaces.show_hospitals} shape="curve" onChange={(e) => highlightsCheck(e)}>
                    Show Nearby Hopitals
@@ -227,7 +226,7 @@ const NearbyFacilities = ({ lat, lon }) => {
                 </Checkbox>
             </span>
         </div>
-         <MapContainer center={[lat, lon]} zoom={12} style={{ height: '40vh', width: '100%' }}>
+         <MapContainer center={[lat, lon]} zoom={12} style={{ height: '30vh', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {/* {places.map((place) => (
                 <Marker key={place.id} position={[place.lat, place.lon]}>
@@ -281,13 +280,13 @@ const NearbyFacilities = ({ lat, lon }) => {
     );
 };
 
-const App = () => {
-    return (
-        <div>
-            <h1>Real Estate Project</h1>
-            <OverpassAPIQuery lat={lat} lon={lon} />
-        </div>
-    );
-};
+// const App = () => {
+//     return (
+//         <div>
+//             <h1>Real Estate Project</h1>
+//             <OverpassAPIQuery lat={lat} lon={lon} />
+//         </div>
+//     );
+// };
 
 export default NearbyFacilities;

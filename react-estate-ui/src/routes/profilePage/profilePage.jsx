@@ -13,10 +13,11 @@ function ProfilePage() {
   const navigate = useNavigate()
   const chatRef = useRef()
   const { currentUser, updateUser } = useContext(AuthContext)
+  console.log(currentUser)
   const handleLogout = async (e) => {
     e.preventDefault()
     try {
-      await apiRequest.post("/auth/logout")
+      await apiRequest.post("/auth/logout",{userId:currentUser.id})
       updateUser(null)
       navigate('/')
     } catch (err) {

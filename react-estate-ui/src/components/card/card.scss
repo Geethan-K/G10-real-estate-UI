@@ -1,14 +1,11 @@
 @import "../../responsive.scss";
-.flex{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
+
 .card {
   display: flex;
   overflow-x: hidden;
   gap: 10px;
-  width: 90vh;
+  width: 82vh;
   max-width: 100%;
   max-height: fit-content;
   border: 1px solid #999;
@@ -252,10 +249,17 @@
     }
   }
 }
+.show-more-container{
+  gap: 10px;
+  height: 3vh;
+  border-radius: 5vh;
+  width: 100%;
+  position: absolute;
+  margin-left: 30%;
+}
 .footer-icons-container {
   display: flex;
-  justify-content: flex-end;
-  
+  justify-content: flex-end; 
   padding: 8px;
   span{
     display: flex;
@@ -554,19 +558,23 @@
   border-radius: 50%;
   object-fit: cover;
 }
-
+.video-container{
+  position: relative;
+  display: flex;
+  height: 30vh;
+}
 .extra-detail-container{
  margin-left: 15px;
-//  max-width: 45vh;
-//  height: 40vh;
- 
-  padding: 15px;
+ position: relative;
+ // max-width: 50vh;
+  border: 1px solid #999;
+  height: 48vh;
+  border-radius: 3vh;
   overflow-y: scroll;
-  max-width: fit-content;
-  //max-height: fit-content;
-  .reviews-container{
-    border: 1px solid #999;
+  .reviews-container{ 
     max-width: 45vh;
+    height: 44vh;
+    overflow-y: scroll;
     padding: 2vh;
    // background-color: #999;
     overflow-y: scroll;
@@ -574,7 +582,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 100%;
+  //  width: 100%;
  //   height: 100%;
   }
   .avatar-img {

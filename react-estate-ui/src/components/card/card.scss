@@ -1,44 +1,62 @@
 @import "../../responsive.scss";
-.flex{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
+
 .card {
   display: flex;
   overflow-x: hidden;
   gap: 10px;
   width: 90vh;
-  max-width: 100%;
+  max-width: 95%;
   max-height: fit-content;
-  border: 1px solid #999;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   cursor: pointer;
   border-radius: 15px;
   padding: 1vh;
-  //max-height: 40vh;
   background-color: linear-gradient(
     to right bottom,
     rgba(255, 255, 255, 0.4),
     rgba(255, 255, 255, 0.2)
 );
- height: auto;
   position: relative;
  
   .imageContainer {
     flex: 2;
    // min-width: 30vh;
   // min-width: 30%; 
-   max-width: 30vh;
-   max-height: 40vh ;
+   max-width: 32vh;
+//   max-height: 38vh ;
     @include md {
       display: none;
     }
 
-    img {
+    .main-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 10px;
+    }
+    .small-images{
+      max-width: 32vh;
+     // height: 8vh;
+      overflow-x: scroll;
+      display: flex;
+      // justify-content: center;
+      // align-items: center;
+      span{
+        margin: 2px;
+         height: 8vh;
+         width: 8vh;
+        border: 2px solid gray;
+        flex-basis: calc(33.333%);
+        border-radius: 50%;
+        img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        
+      }
     }
   }
   .bhk-type{
@@ -52,10 +70,8 @@
     }
   }
   .rent {
-    
     flex:1;
     padding: 3px;
-    
   }
   .property-detail-section{
     display: flex;
@@ -80,26 +96,11 @@
       }
       
     }  
-     span{
-      //flex: 1;
-      
-    //  justify-content: center;
-    //  align-items: center;
-       
       .property-icon{
         font-size: 20px;
         padding-right: 8px;
         color: #666;
-     //   color: #0d5806;
-      //  flex: 1;
-      //  width: 50%;
-        // height: 4.5vh;
-        // font-size: 15px;
-        // justify-content: center;
-        // align-items: center;
-      }
-    }
- 
+      } 
     .amenity-icon-space{
       img{
         width: 30%;
@@ -116,10 +117,7 @@
     flex-direction: column;
     max-width: 100%;
     max-height: 50vh;
-   // background-color: #0d5806;
-   // justify-content: space-between;
     
-
     img {
       width: 16px;
       height: 16px;
@@ -157,13 +155,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 45vh;
-     
+      width: 46vh;   
     }
     .property-details{
       font-size: 13px;
-      width: 90%;
-    //  min-width: fit-content;
+      width: 100%;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+     // box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
       display: 'flex';
       flex-direction:'row';
       justify-content: 'center';
@@ -172,17 +170,9 @@
       padding: 2px;
       font-size: '12px';
       gap: '15px';
-      border: 1px solid #999 ;
+      border: 1px solid #c9c8c8 ;
       border-radius: 15px;
-    //  background-color: rgb(247, 244, 244);
-      // .drop-down-container{
-      //   display: flex;
-      //   justify-content: center;
-      //   align-items: center;
-       
-      // }
       &:hover {
-     
         background-color: #c0bfbf;
        }
     }
@@ -252,10 +242,18 @@
     }
   }
 }
+.show-more-container{
+  gap: 10px;
+  height: 3vh;
+  border-radius: 5vh;
+  width: 100%;
+  position: absolute;
+  margin-left: 30%;
+}
 .footer-icons-container {
+  max-width: 95%;
   display: flex;
-  justify-content: flex-end;
-  
+  justify-content: flex-end; 
   padding: 8px;
   span{
     display: flex;
@@ -270,9 +268,6 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    &:hover {
-      background-color: lightgray;
-    }
   }
 }
 .hotel_card{
@@ -398,6 +393,14 @@
 .desc-container{
  flex:3
 }
+.desc-card-container{
+  max-width:50vh;
+  background-color:'gainsboro';
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+ // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
 .expand-btn-container{
   flex: 1;
 }
@@ -407,6 +410,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ // box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border: 1px solid #999;
   margin: 10px;
 }
@@ -449,6 +454,7 @@
   height: 'auto';
   flex-wrap: 'wrap';
   overflow: 'hidden'
+  
 }
 .desc-txt{
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -461,10 +467,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-//  margin-top: 8px;
- 
+  margin-bottom: 8px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ // box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border: 1px solid rgb(161, 160, 160);
-  width: 43vh;
+  width: 42vh;
   margin-left: 2%;
  // flex-wrap: wrap;
  // border-radius: 15px;
@@ -506,6 +513,13 @@
   }
  
 }
+.comment-txt{
+  color: #fafafa;
+  font-size: 10px;
+  font-weight: 555;
+  word-spacing: 2px;
+  letter-spacing: 1px;
+}
 #rating>button{
   background-color: orange;
   color: #fff;
@@ -540,6 +554,7 @@
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid orange;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 .user-name{
   
@@ -554,19 +569,27 @@
   border-radius: 50%;
   object-fit: cover;
 }
-
+.video-container{
+  display: flex;
+  height: 30vh;
+ iframe{
+  width: 100% !important;
+ }
+}
 .extra-detail-container{
  margin-left: 15px;
-//  max-width: 45vh;
-//  height: 40vh;
- 
-  padding: 15px;
+ position: relative;
+  width: 40vh;
+  border: 1px solid #999;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 48vh;
+  border-radius: 3vh;
   overflow-y: scroll;
-  max-width: fit-content;
-  //max-height: fit-content;
-  .reviews-container{
-    border: 1px solid #999;
-    max-width: 45vh;
+  .reviews-container{ 
+   // max-width: 45vh;
+    width: auto;
+    height: auto;
+    overflow-y: scroll;
     padding: 2vh;
    // background-color: #999;
     overflow-y: scroll;
@@ -574,7 +597,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 100%;
+  //  width: 100%;
  //   height: 100%;
   }
   .avatar-img {
@@ -611,6 +634,7 @@
     color: #666;
     text-align: center;
   }
+  
   .comment{
     width: auto;
     display: flex;
@@ -618,13 +642,7 @@
     background-color: #035029;
     border-radius: 3vh;
     padding: 6px;
-    .comment-txt{
-      color: #fafafa;
-      font-size: 10px;
-      font-weight: 555;
-      word-spacing: 2px;
-      letter-spacing: 1px;
-    }
+   
   }
   .like-comment-section{
     display: flex;

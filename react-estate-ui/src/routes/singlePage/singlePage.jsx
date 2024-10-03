@@ -11,7 +11,7 @@ import ReactStars from 'react-rating-stars-component';
 import TextareaAutosize from 'react-textarea-autosize';
 import { format } from 'timeago.js'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarAlt, faChevronCircleLeft, faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faThumbsUp, faBathtub, faBed, faToriiGate, faFireBurner } from "@fortawesome/free-solid-svg-icons";
+import { faCarAlt,   faChevronCircleLeft,  faShareNodes, faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen,  faChevronCircleDown, faChevronCircleUp, faThumbsUp,  faBathtub, faBed, faToriiGate, faFireBurner, faDiamond, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from "../../interfaces/BHKType-interface";
 import { FurnishedType } from "../../interfaces/FurnishedType-interface";
 import { Amenities } from '../../interfaces/icons-interface.ts'
@@ -32,9 +32,13 @@ const[openChat,setOpenChat]=useState(false)
   const dispatch = useDispatch()
 
   const singlePageLoader = useLoaderData();
-  const post = singlePageLoader.postResponse 
-  let { comments, ratings, postDetail } = post
+  const [wikimediaImages, setWikimediaImages] = useState([]);
+  const [openStreetCamImages, setOpenStreetCamImages] = useState([]);
+  const [wikidataInfo, setWikidataInfo] = useState([]);
+  const post = singlePageLoader.postResponse
+ 
 
+  let { comments, ratings,postDetail } = post
   if (postDetail?.amenities !== undefined) {
     var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
       if (postDetail.amenities[key]) {
@@ -76,6 +80,7 @@ const[openChat,setOpenChat]=useState(false)
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
+  const [isReceiverLive,setIsReceiverLive] = useState(false)
   const [alreadyCommented, setAlreadyCommented] = useState(post.alreadyCommented)
   const [alreadyRated, setAlreadyRated] = useState(post.alreadyRated)
   const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
@@ -93,7 +98,8 @@ const[openChat,setOpenChat]=useState(false)
         const postedUserId = postedUserData.id
         const res = await apiRequest.get('/chats/get/' + postedUserId)
         if (res !== null) {
-          setChatData(res.data)
+          setChatData(res.data.chatID)
+          setIsReceiverLive(res.data.isReceiverActive)
         }
       } catch (err) {
         console.log(err)
@@ -107,14 +113,17 @@ const[openChat,setOpenChat]=useState(false)
   }
 
   const handleSave = async () => {
-    setSaved((prev) => !prev)
+   
     if (!currentUser) {
       navigate("/login")
     }
     try {
-      await apiRequest.post('/users/save', { postId: post.id })
+        const res = await apiRequest.post('/users/save', { postId: post.id })
+        if(res){
+          setSaved((prev) => !prev)
+        }
+         
     } catch (err) {
-      setSaved((prev) => !prev)
       console.log(err)
     }
   }
@@ -123,18 +132,15 @@ const[openChat,setOpenChat]=useState(false)
     const receiver = post?.user;
     const receiverId = post?.userId
     receiver["id"] = receiverId
-    // console.log('chatData state', chatData)
     if (chatData !== null) {
-    //  console.log('user & chat already exists', chatData)
       chatRef.current?.openChat(chatData.id, receiver);
       setOpenChat(true)
     } else {
-      // console.log('new user has to be created')
       try {
         const res = await apiRequest.post('/chats', { receiverId })
         let chatID = res.data?.id;
         setChatData(res.data)
-        dispatch(addChats({'chats':chatData}))
+       
         if (chatID !== undefined) {
           chatRef.current?.openChat(chatID, receiver);
           setOpenChat(true)
@@ -166,7 +172,6 @@ const[openChat,setOpenChat]=useState(false)
       updateSent(false)
       console.log(err)
     }
-
   }
 
   return (
@@ -205,17 +210,25 @@ const[openChat,setOpenChat]=useState(false)
             <div className="top">
               <div className="post">
                 <span className="post-title-container">
+                <div className="user">
+                      <img src={post.user.avatar} alt="" className="profile-img hover-scaleUp box-shadow"/>
+                      <span className="flex">
+                      <span className="address padding-xs hover-scaleUp" >{post.user.username}</span>
+                      <span className="padding-sm">
+                      <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/>
+                      </span>
+                      <p className="address padding-xs" >Ad Created {format(postDetail.createdAt)}</p> 
+                      </span>
+                    </div>
                   <h1>{post.title}</h1>
                   <div className="address" style={{ color: 'black' }}>
                     <p>{FurnishedType[postDetail.furnishedType]}</p> , <p>{post.sqft} Sqft</p> , <p>{post.facing} Facing</p>
                   </div>
-                  <div className="address">
+                <div className="address">
                     <img src="/pin.png" alt="" />
                     <span>{post.address}</span>
                   </div>
-                  <div className="address">
-                    <p>Ad Created {format(postDetail.createdAt)}</p>
-                  </div>
+                 
                   <div className="property-detail-container flex">
                     <div className=" flex-column padding-sm">
                       <span>
@@ -225,53 +238,55 @@ const[openChat,setOpenChat]=useState(false)
                         <label className="font-semiBold">{post.bedroom} bedroom</label>
                       </span>
                     </div>
-                    <div className=" flex-column padding-sm">
-                      <span>
-                        <FontAwesomeIcon icon={faBathtub} className="font-size-md" />
-                      </span>
-                      <span>
-                        <label className="font-semiBold">{post.bathroom} bathroom</label>
-                      </span>
+                     {/* <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/> */}
+                    <div  className=" flex-column padding-sm">
+                    <span>
+                      <FontAwesomeIcon icon={faBathtub} className="font-size-md"/>
+                    </span>
+                    <span> 
+                      <label  className="font-semiBold">{post.bathroom} bathroom</label>
+                    </span>
                     </div>
-                    <div className="flex-column  padding-sm">
-                      <span>
-                        <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
-                      </span>
-                      <span>
-                        <label className="font-semiBold">{post.parking} parking</label>
-                      </span>
+                      {/* <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/> */}
+                    <div  className="flex-column  padding-sm">
+                    <span>
+                      <FontAwesomeIcon icon={faCarAlt} className="font-size-md" />
+                    </span>
+                    <span>
+                      <label className="font-semiBold">{post.parking} parking</label>
+                    </span>
                     </div>
                   </div>
                 </span>
                 <span>
-                  <div className="footer-container review-buttons">
-                    <button className="icon">
-                      <FontAwesomeIcon icon={faThumbsUp} className="icon" />
+                  <div className=" review-buttons" >
+                  <button className=" box-shadow">
+                      <FontAwesomeIcon icon={faThumbsUp} />
                     </button>
-                    <button className="icon">
-                      <FontAwesomeIcon icon={faShareNodes} className="icon" />
+                    <button className=" box-shadow">
+                      <FontAwesomeIcon icon={faShareNodes} />
                     </button>
-                    <button onClick={openChatBox}>
-                      <img src="/chat.png" alt="" />
+                    <button onClick={openChatBox} className="box-shadow">
+                      <img src="/chat.png" alt=""  />
                     </button>
-                    <button onClick={handleSave} style={{ backgroundColor: saved ? "orange" : "white", color: "black" }}>
-                      <img src="/save.png" alt="" />
+                    <button onClick={handleSave} className="box-shadow"  >
+                      <FontAwesomeIcon icon={faHeart} style={{ color: saved ? "orangered" : "gray",fontSize:'20px'}}/>
                     </button>
                   </div>
-                  <div className="flex padding-sm" >
-                    <ReactStars
-                      count={5}
-                      isHalf={true}
-                      edit={false}
-                      disable={true}
-                      size={24}
-                      value={averageRating.toFixed(1)}
-                      activeColor="#ffd700"
-                    />
-                    {
-                      averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
-                      ) : (<span className="padding-sm"><label className="font-semiBold font-size-md">{averageRating.toFixed(1)}  / 5</label></span>)
-                    }
+                  <div className="flex padding-sm" >                    
+                      <ReactStars
+                        count={5}
+                        isHalf={true}
+                        edit={false}
+                        disable={true}
+                        size={24}
+                        value={parseFloat(averageRating.toFixed(1))}
+                        activeColor="#ffd700"
+                      />
+                      {
+                        averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
+                        ) : (<span className="padding-sm"><label className="font-semiBold font-size-md">{averageRating.toFixed(1)}  / 5</label></span> )
+                      }
                   </div>
                   <div className="flex padding-sm">
                     <div className="padding-sm">
@@ -299,18 +314,18 @@ const[openChat,setOpenChat]=useState(false)
                 Services Offered
               </span>
               <span className="flex justify-space-around" >
-                {
-                  Services_Offered.map((service) => (
-                    <span className="flex-column padding-sm justify-space-between hover-scaleUp">
-                      <span className="services-img-container padding-sm round-border" >
-                        <img src={service.src} alt="" className="src" />
+                  {
+                    Services_Offered.map((service,index)=>(
+                      <span key={index} className="flex-column padding-sm justify-space-between hover-scaleUp ">
+                        <span className="services-img-container padding-sm round-border box-shadow" >
+                          <img src={service.src} alt="" className="src" />
+                        </span>
+                        <span className="flex-column" style={{flexWrap:'wrap'}}>
+                          <label className="font-semiBold">{service.name}</label>
+                        </span>
                       </span>
-                      <span className="flex-column" style={{ flexWrap: 'wrap' }}>
-                        <label className="font-semiBold">{service.name}</label>
-                      </span>
-                    </span>
-                  ))
-                }
+                    ))
+                  }
               </span>
             </div>
             {/* <div className="desc-container">
@@ -322,15 +337,19 @@ const[openChat,setOpenChat]=useState(false)
               </div>
             </div> */}
             <div className="desc-container">
+              <span className="flex">
               <h3>Nearby Transport</h3>
-              <div>
+              <label className="padding-sm">(within 2 kms)</label>
+              </span>
+          
+              <div style={{overflowY:'scroll',height:'55vh'}}>
                 <NearbyTransport latitude={post.latitude} longitude={post.longitude} />
               </div>
             </div>
             <div className="desc-container">
-              <span className="flex ">
-                <h3>Popular places nearby</h3>
-                <label className="padding-sm">(within 5 kms)</label>
+              <span className="flex" >
+              <h3>Popular places nearby</h3>
+              <label className="padding-sm">(within 5 kms)</label>
               </span>
               <div>
                 <NearbyFacilities lat={post.latitude} lon={post.longitude} />
@@ -351,7 +370,7 @@ const[openChat,setOpenChat]=useState(false)
                     isHalf={true}
                     size={40}
                     edit={editRating}
-                    value={rating}
+                    value={parseFloat(rating)}
                     activeColor="#ffd700"
                     onChange={changeRating}
                   />
@@ -383,113 +402,113 @@ const[openChat,setOpenChat]=useState(false)
               </div>
             )
           }
-          <div className="flex-column margin-sm ">
+          <div className="margin-sm ">
             <span className="listVertical">
-              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true} playIcon={true} />
+              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true}  />
             </span>
           </div>
           <p className="title">General</p>
           <div className="flex listVertical">
-            <div className="property-details">
-              <div className="justify-space-between padding-sm ">
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>rent </label>
-                    <p >&#8377; {post.rent}</p>
-                  </span>
+              <div className="property-details">
+                <div className="justify-space-between padding-sm ">
+                    <div className="property-detail-section ">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon " />
+                      </span>
+                      <span className="details-space">
+                        <label>rent </label>
+                        <p >&#8377; {post.rent}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCoins} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>deposit </label>
+                        <p>&#8377; {post.deposit}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faChartArea} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>built up </label>
+                        <p>{post.sqft} sqft</p>
+                      </span>
+                    </div>
                 </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faCoins} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>deposit </label>
-                    <p>&#8377; {post.deposit}</p>
-                  </span>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCarSide} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>parking </label>
+                        <p>{post.parking}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faBathtub} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>bathroom </label>
+                        <p>{post.bathroom}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faBed} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>bedroom </label>
+                        <p>{post.bedroom}</p>
+                      </span>
+                    </div>
                 </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faChartArea} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>built up </label>
-                    <p>{post.sqft} sqft</p>
-                  </span>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faCouch} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Furnishing </label>
+                        <p>{post.postDetail?.furnishedType}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>facing </label>
+                        <p>{post.facing}</p>
+                      </span>
+                    </div>
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Gas line </label>
+                        <p>{postDetail.gasPipeline}</p>
+                      </span>
+                    </div>
+                </div>
+                <div className="justify-space-between padding-sm">
+                    <div className="property-detail-section">
+                      <span className="icon-space">
+                        <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
+                      </span>
+                      <span className="details-space">
+                        <label>Gated Community </label>
+                        <p>{postDetail.gatedCommunity}</p>
+                      </span>
+                    </div>
                 </div>
               </div>
-              <div className="justify-space-between padding-sm">
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faCarSide} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>parking </label>
-                    <p>{post.parking}</p>
-                  </span>
-                </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faBathtub} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>bathroom </label>
-                    <p>{post.bathroom}</p>
-                  </span>
-                </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faBed} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>bedroom </label>
-                    <p>{post.bedroom}</p>
-                  </span>
-                </div>
-              </div>
-              <div className="justify-space-between padding-sm">
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faCouch} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>Furnishing </label>
-                    <p>{post.postDetail?.furnishedType}</p>
-                  </span>
-                </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faDoorOpen} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>facing </label>
-                    <p>{post.facing}</p>
-                  </span>
-                </div>
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faFireBurner} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>Gas line </label>
-                    <p>{postDetail.gasPipeline}</p>
-                  </span>
-                </div>
-              </div>
-              <div className="justify-space-between padding-sm">
-                <div className="property-detail-section">
-                  <span className="icon-space">
-                    <FontAwesomeIcon icon={faToriiGate} className="property-icon" />
-                  </span>
-                  <span className="details-space">
-                    <label>Gated Community </label>
-                    <p>{postDetail.gatedCommunity}</p>
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
           <p className="title">Sizes</p>
           <div className="sizes pointer">
@@ -507,15 +526,15 @@ const[openChat,setOpenChat]=useState(false)
             </div>
           </div>
           <p className="title">Amenities</p>
-          <div className="property-details">
+            <div className="property-details">
             <div className="flex ">
               {
                 !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
                   {
-                    Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key) => (
-                      <div className="amenities-column">
+                    Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key,index) => (
+                      <div key={index} className="amenities-column">
                         <span>
-                          <img src={filteredAmenities[key]} alt="" className="src" />
+                          <img src={filteredAmenities[key]} alt="" className="src box-shadow" />
                         </span>
                         <span>
                           <p>{key}</p>
@@ -526,23 +545,23 @@ const[openChat,setOpenChat]=useState(false)
                 </>
               }
             </div>
-          </div>
+            </div>
           <p className="title">Nearby Places</p>
           <div className="property-details">
             <div className="flex">
-              {
-                postDetail.highlightDetails && Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
-                  <div key={key} className="amenities-column">
-                    <span>
-                      <img src={'/highlights/' + key + '.png'} alt="" className="src" />
-                    </span>
-                    <span>
-                      <p>{detail.name}</p>
-                      <p>{detail.km}</p>
-                    </span>
-                  </div>
-                ))
-              }
+            {
+                 postDetail.highlightDetails &&   Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
+                          <div key={key} className="amenities-column">
+                            <span>
+                              <img src={'/highlights/' + key + '.png'} alt="" className="box-shadow" />
+                            </span>
+                            <span>
+                              <p>{detail.name}</p>
+                              <p>{detail.km}</p>
+                              </span>
+                          </div>
+                        ))
+                      }
             </div>
           </div>
           <p className="title">Location</p>
@@ -552,11 +571,11 @@ const[openChat,setOpenChat]=useState(false)
           <p className="title">Top Comments</p>
           <div className="comments-ratings padding-sm">
             {
-              comments.map((comment) => (
-                <div className="user-comments" key={comment.id}>
-                  <div className="flex flex-start full-width" >
+              comments.map((comment,index) => (
+                <div className="user-comments" key={index}>
+                  <div className="flex flex-start full-width " >
                     <span className="flex-column padding-sm" >
-                      <img className="avatar-img" src={comment.user.avatar} />
+                     <img className="avatar-img" src={comment.user.avatar} />
                     </span>
                     <div className="flex-column " style={{ flex: 1 }}>
                       <span className="white-txt">{comment.user.username}</span>
@@ -578,7 +597,7 @@ const[openChat,setOpenChat]=useState(false)
                       <div className="comment">
                         <TextareaAutosize
                           cols={20}
-                          style={{ padding: '15px', width: '100%' }}
+                          style={{ padding: '15px', width: '100%',borderRadius:'5vh',color:'white' }}
                           autoFocus={true}
                           minRows={1}
                           maxRows={7}
@@ -595,12 +614,14 @@ const[openChat,setOpenChat]=useState(false)
           </div>
           <div className="chatContainer">
             <div className="wrapper">
-              {openChat && <Suspense fallback={<div>Loading Chat...</div>}>
-                <RemoteChatBox chats={chatData} ref={chatRef} showLastMsgs={false} />
+            {openChat && <Suspense fallback={<div>Loading Chat...</div>}>
+                <RemoteChatBox chats={chatData} ref={chatRef} showLastMsgs={false} currentUser={currentUser}/>
               </Suspense>
               }
-                  {/* <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
-               */}
+              {/* {
+                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} receiverData={isReceiverLive}/>
+              } */}
+                  
             </div>
           </div>
         </div>

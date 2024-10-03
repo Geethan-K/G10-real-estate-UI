@@ -4,7 +4,7 @@ import { faChevronCircleUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Slider({ images,wallpaper }) {
-  console.log(images)
+  // console.log(images)
   const [imageIndex, setImageIndex] = useState(null);
   
   const changeSlide = (direction) => {
@@ -26,10 +26,9 @@ function Slider({ images,wallpaper }) {
   return (
     <>
      <span className="top-container">
-      
-      <span className="chevron-up-btn-container" >
+      {/* <span className="chevron-up-btn-container" >
         <FontAwesomeIcon icon={faChevronCircleUp} className="chevron-icon" />
-      </span>
+      </span> */}
       </span>
       <div className="slider">
      

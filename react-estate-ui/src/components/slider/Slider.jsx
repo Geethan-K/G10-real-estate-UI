@@ -26,10 +26,9 @@ function Slider({ images,wallpaper }) {
   return (
     <>
      <span className="top-container">
-      
-      <span className="chevron-up-btn-container" >
+      {/* <span className="chevron-up-btn-container" >
         <FontAwesomeIcon icon={faChevronCircleUp} className="chevron-icon" />
-      </span>
+      </span> */}
       </span>
       <div className="slider">
      

@@ -1,24 +1,25 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import ReactStars from 'react-rating-stars-component';
-import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock, faCheckDouble, faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
+import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock,  faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from '../../interfaces/BHKType-interface.ts'
-import "./card.scss";
+import "./Card.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DOMPurify from "dompurify";
 import { format } from 'timeago.js';
 import { Amenities } from '../../interfaces/icons-interface.ts'
-import { color, motion, useAnimation } from 'framer-motion'
+import {  motion, useAnimation } from 'framer-motion'
 import ReactPlayer from 'react-player'
-import TextareaAutosize from 'react-textarea-autosize';
+
 
 const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) => {
-  console.log(item)
-  console.log(ratings)
-  console.log(comments)
-  console.log(postDetail)
+  // console.log(item)
+  // console.log(ratings)
+  // console.log(comments)
+  // console.log(postDetail)
+//  console.log({'user-detail':userDetail})
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [expandProperties, setExpandProperties] = useState(false);
+  const [expandProperties, setExpandProperties] = useState(postDetail.amenities.length>3 ?false:true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [amenitiesExpand, setAmenitiesIsExpand] = useState(false);
   const [expandFurnishings, setExpandFurnishings] = useState(false);
@@ -120,7 +121,18 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
           <Link >
             <div className="card">
               <div className="imageContainer">
-                <img src={item.images[currentImageIndex]} alt="" />
+                <span>
+                  <img src={item.images[currentImageIndex]} alt="" className="main-img" />
+                </span>
+               {/* <span className="small-images">
+                  {
+                    item.images.map((image)=>(
+                      <span className="small-img-container">
+                        <img src={image} className="small-image"/>
+                      </span>
+                    ))
+                  }
+               </span> */}
               </div>
               <div className="textContainer">
                 <span style={{ display: 'flex', justifyContent: 'space-between', height: '7px' }}>
@@ -159,7 +171,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     }
                   </span>
                 </span>
-                <h2 className="title">
+                <h2 className="flex title">
                   <Link to={`/${item.id}`}>"{item.title} "</Link>
                 </h2>
                 {/* <p className="price">	&#8377; {item.price}</p> */}
@@ -294,21 +306,16 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       </div>
                     }
                   </div>
-                  <div className="drop-down-container">
-                    <span>
-                      <FontAwesomeIcon icon={expandProperties ? faChevronCircleDown : faChevronCircleUp} className="drop-down-icon" onClick={() => setExpandProperties(!expandProperties)} />
-                    </span>
+                  <div className="drop-down-container ">
+                    <FontAwesomeIcon icon={expandProperties ? faChevronCircleUp : faChevronCircleDown } className="drop-down-icon padding-sm" onClick={() => setExpandProperties(!expandProperties)} />
                   </div>
-                 
                 </div>
                 </div>
-               
                 {
-                  !(item.postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                  (postDetail?.amenities) && (filteredAmenities) && <>
                     <span className="flex">
                     <p className="user-name">Amenities</p>
                     </span>
-                   
                       <span className="flex" >
                       <div className="amenities-details">
                         <span className="section">
@@ -326,9 +333,9 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                           }
                         </span>
                       </div>
-                      <div className="flex">
+                      <div className="flex padding-sm">
                         <span>
-                          <FontAwesomeIcon icon={amenitiesExpand ? faChevronCircleDown : faChevronCircleUp} className="drop-down-icon" onClick={() => setAmenitiesIsExpand(!amenitiesExpand)} />
+                          <FontAwesomeIcon icon={amenitiesExpand ? faChevronCircleUp:faChevronCircleDown } className="drop-down-icon" onClick={() => setAmenitiesIsExpand(!amenitiesExpand)} />
                         </span>
                       </div>
                       </span>
@@ -355,7 +362,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                           ))
                         }
                       </div>
-                      <div style={{ display: 'flex' }} onClick={() => setExpandFurnishings(!expandFurnishings)}>
+                      <div className="flex" onClick={() => setExpandFurnishings(!expandFurnishings)}>
                         {
                           expandFurnishings ? <FontAwesomeIcon icon={faChevronCircleUp} className="drop-down-icon" /> : <FontAwesomeIcon icon={faChevronCircleDown} className="drop-down-icon" />
                         }
@@ -364,8 +371,16 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                   </>
                 }
                 {
-                  !(item.postDetail?.amenities) &&  Object.keys(postDetail?.amenities).length < 5  && <div className="padding-sm">
-                   <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
+                  (postDetail.desc) && <div className="desc-card-container">
+                    <div  style={{ overflow: 'hidden', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
+                      <p  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></p>
+                    </div>
+                    <div className="padding-sm expand-btn-container ">
+                      {/* <FontAwesomeIcon icon={faChevronCircleDown} /> */}
+                      <label onClick={toggleExpand} className="hover-scaleUp ">
+                        {isExpanded ? 'Less...' : 'more...'}
+                      </label>
+                    </div>
                   </div>
                 }
                 <p className="address">
@@ -389,13 +404,13 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     <img src={userDetail.avatar} className="user-avatar" />
                     <label className="user-name">{userDetail.username}</label>
                   </span>
-                  <span className="flex">
-                    <FontAwesomeIcon icon={faClock} style={{ fontSize: '15px', padding: '5px' }} />
+                  <span className="flex font-semiBold padding-xs">
+                    <FontAwesomeIcon icon={faClock} className="padding-xs font-semiBold" />
                     <p>posted {format(item.postDetail?.createdAt)}</p>
                   </span>
-                  <span className="flex">
-                    <FontAwesomeIcon icon={faCheck} color="green" style={{ fontSize: '15px', padding: '5px' }} />
-                    <p>trusted owner</p>
+                  <span className="flex  font-semiBold ">
+                    <FontAwesomeIcon icon={faCheck} color="green"  />
+                    <p className="padding-xs">trusted owner</p>
                   </span>
                   </span>
                   <div className="flex padding-sm" >
@@ -510,7 +525,6 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 </span>
               </span>
           </div>
-         
         </div>
       }
       {

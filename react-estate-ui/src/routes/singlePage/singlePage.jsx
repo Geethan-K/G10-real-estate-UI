@@ -22,9 +22,12 @@ import NearbyFacilities from "../../components/nearby-facilities/nearbyFacilitie
 function SinglePage() {
 
   const singlePageLoader = useLoaderData();
-
+  const [wikimediaImages, setWikimediaImages] = useState([]);
+  const [openStreetCamImages, setOpenStreetCamImages] = useState([]);
+  const [wikidataInfo, setWikidataInfo] = useState([]);
   const post = singlePageLoader.postResponse
  
+
   let { comments, ratings,postDetail } = post
   if (postDetail?.amenities !== undefined) {
     var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
@@ -111,11 +114,9 @@ function SinglePage() {
         const res = await apiRequest.post('/users/save', { postId: post.id })
         if(res){
           setSaved((prev) => !prev)
-        
         }
          
     } catch (err) {
-    //  setSaved((prev) => !prev)
       console.log(err)
     }
   }
@@ -162,7 +163,6 @@ function SinglePage() {
       updateSent(false)
       console.log(err)
     }
-
   }
 
   return (
@@ -202,9 +202,9 @@ function SinglePage() {
               <div className="post">
                 <span className="post-title-container">
                 <div className="user">
-                      <img src={post.user.avatar} alt="" className="profile-img"/>
+                      <img src={post.user.avatar} alt="" className="profile-img hover-scaleUp box-shadow"/>
                       <span className="flex">
-                      <span className="address padding-xs" >{post.user.username}</span>
+                      <span className="address padding-xs hover-scaleUp" >{post.user.username}</span>
                       <span className="padding-sm">
                       <FontAwesomeIcon icon={faDiamond} style={{fontSize:'8px'}}/>
                       </span>
@@ -250,17 +250,17 @@ function SinglePage() {
                   </div>
                 </span>
                 <span>
-                  <div className="footer-container review-buttons">
-                  <button className="icon">
-                      <FontAwesomeIcon icon={faThumbsUp} className="icon"/>
+                  <div className=" review-buttons" >
+                  <button className=" box-shadow">
+                      <FontAwesomeIcon icon={faThumbsUp} />
                     </button>
-                    <button className="icon">
-                      <FontAwesomeIcon icon={faShareNodes} className="icon"/>
+                    <button className=" box-shadow">
+                      <FontAwesomeIcon icon={faShareNodes} />
                     </button>
-                    <button onClick={openChatBox}>
+                    <button onClick={openChatBox} className="box-shadow">
                       <img src="/chat.png" alt=""  />
                     </button>
-                    <button onClick={handleSave}   >
+                    <button onClick={handleSave} className="box-shadow"  >
                       <FontAwesomeIcon icon={faHeart} style={{ color: saved ? "orangered" : "gray",fontSize:'20px'}}/>
                     </button>
                   </div>
@@ -307,8 +307,8 @@ function SinglePage() {
               <span className="flex justify-space-around" >
                   {
                     Services_Offered.map((service,index)=>(
-                      <span key={index} className="flex-column padding-sm justify-space-between hover-scaleUp">
-                        <span className="services-img-container padding-sm round-border" >
+                      <span key={index} className="flex-column padding-sm justify-space-between hover-scaleUp ">
+                        <span className="services-img-container padding-sm round-border box-shadow" >
                           <img src={service.src} alt="" className="src" />
                         </span>
                         <span className="flex-column" style={{flexWrap:'wrap'}}>
@@ -328,7 +328,11 @@ function SinglePage() {
               </div>
             </div> */}
             <div className="desc-container">
-            <h3>Nearby Transport</h3>
+              <span className="flex">
+              <h3>Nearby Transport</h3>
+              <label className="padding-sm">(within 2 kms)</label>
+              </span>
+          
               <div style={{overflowY:'scroll',height:'55vh'}}>
                 <NearbyTransport latitude={post.latitude} longitude={post.longitude} />
               </div>
@@ -389,7 +393,7 @@ function SinglePage() {
               </div>
             )
           }
-          <div className="flex-column margin-sm ">
+          <div className="margin-sm ">
             <span className="listVertical">
               <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'50vh'} width={'auto'} controls={true}  />
             </span>
@@ -398,9 +402,9 @@ function SinglePage() {
           <div className="flex listVertical">
               <div className="property-details">
                 <div className="justify-space-between padding-sm ">
-                    <div className="property-detail-section">
+                    <div className="property-detail-section ">
                       <span className="icon-space">
-                        <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon" />
+                        <FontAwesomeIcon icon={faMoneyBill1Wave} className="property-icon " />
                       </span>
                       <span className="details-space">
                         <label>rent </label>
@@ -521,7 +525,7 @@ function SinglePage() {
                     Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key,index) => (
                       <div key={index} className="amenities-column">
                         <span>
-                          <img src={filteredAmenities[key]} alt="" className="src" />
+                          <img src={filteredAmenities[key]} alt="" className="src box-shadow" />
                         </span>
                         <span>
                           <p>{key}</p>
@@ -540,7 +544,7 @@ function SinglePage() {
                  postDetail.highlightDetails &&   Object.entries(postDetail.highlightDetails).map(([key, detail]) => (
                           <div key={key} className="amenities-column">
                             <span>
-                              <img src={'/highlights/' + key + '.png'} alt="" className="src" />
+                              <img src={'/highlights/' + key + '.png'} alt="" className="box-shadow" />
                             </span>
                             <span>
                               <p>{detail.name}</p>

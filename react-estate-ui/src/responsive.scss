@@ -77,6 +77,15 @@
 .padding-sm{
   padding: 10px;
 }
+.chiplet{
+  width: fit-content;
+  border: 1px solid gray;
+  border-radius: 5vh;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.box-shadow{
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
 .margin-sm{
   margin: 3vh;
 }

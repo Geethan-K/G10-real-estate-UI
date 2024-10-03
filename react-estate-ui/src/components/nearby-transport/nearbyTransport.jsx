@@ -13,6 +13,7 @@ const NearbyTransport = ({ latitude, longitude }) => {
   const [expandRailways, setExpandRailways] = useState(false)
   const [expandAirports, setExpandAirports] = useState(false)
 
+  
   const busStop = [];
   const railwayStation = [];
   const airport = []

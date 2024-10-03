@@ -11,10 +11,13 @@
   }
 
   .details {
-    flex: 3;
+   // flex: 3;
+   width: 100%;
+  // background-color: #fece51;
     overflow-y: scroll;
     padding-bottom: 50px;
-
+   // border: 1px solid gray;
+   // padding: 5vh;
     @include md{
       flex:none;
       height: max-content;
@@ -24,7 +27,7 @@
    //   padding-right: 50px;
       display: flex;
       flex-direction: column;
-      width: 100%;
+   //   width: 100%;
      // gap: 50px;
 
       .title{
@@ -42,32 +45,63 @@
           border: none;
         }
       }
-
-      .info{
+      .user-description{
+        width: 40vh;
         display: flex;
-        flex-direction: column;
-        gap: 20px;
-
+        flex-wrap: wrap;
+      }
+      .profile-img-container{
+        border: 1px solid gainsboro;
+        width: min-content;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;;
         span{
           display: flex;
           align-items: center;
-          gap: 20px;
+        //  gap: 20px;
         }
 
-        img{
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+        .profile-pic{
+          width: 40vh;
+          height: 30vh;
+       //   border-radius: 50%;
           object-fit: cover;
         }
+      }
+      .profile-info-container{
+       width: 100%;
+        height: 8vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5vh;
+       // flex:3;
+       // height:35vh;
+       .posts-container{
+          .count{
+            font-size: 15px;
+          }
+       }
+      }
+      .followers-lbl{
+        font-size: 20px;
+        font-weight: 500;
+       }
+      .right-container{
+        margin-top:2%;
       }
     }
   }
   .chatContainer {
    // flex: 1;
-    width: 30vh;
-    background-color: #fcf5f3;
-  //  height: 100vh;
+   float: right;
+   right: 0px;
+    width: 40vh;
+  //  background-color: #fcf5f3;
+   // border: 2px solid #999;
+    height: 50vh;
+    overflow-y: scroll;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;;
+     
    // max-height: 100%;
     @include md{
       flex:none;
@@ -81,11 +115,14 @@
   }
 }
 .btn{
-  width: 100px;
-  padding: 10px 20px;
+ // width: 100px;
+  padding: 10px 20px ;
+  gap: 10px;
   background-color: teal;
   border: none;
   color: white;
-  cursor: pointer;
   border-radius: 5px;
+}
+.list-container{
+  
 }

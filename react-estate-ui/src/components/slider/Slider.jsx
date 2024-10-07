@@ -34,14 +34,14 @@ function Slider({ images,wallpaper }) {
      
      {imageIndex !== null && (
        <div className="fullSlider">
-         <div className="arrow" onClick={() => changeSlide("left")}>
-           <img src="/arrow.png" alt="" />
+         <div className="arrows" onClick={() => changeSlide("left")}>
+           <img src="/arrow.png" className="arrow-img" alt="" />
          </div>
-         <div className="imgContainer">
-           <img src={images[imageIndex]} alt="" />
+         <div className="sliderImgContainer">
+           <img src={images[imageIndex]} alt="" className="slider-img"/>
          </div>
-         <div className="arrow" onClick={() => changeSlide("right")}>
-           <img src="/arrow.png" className="right" alt="" />
+         <div className="arrows" onClick={() => changeSlide("right")}>
+           <img src="/arrow.png" className="right arrow-img" alt="" />
          </div>
          <div className="close" onClick={() => setImageIndex(null)}>
            X

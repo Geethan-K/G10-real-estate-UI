@@ -104,8 +104,8 @@ const NearbyTransport = ({ latitude, longitude }) => {
         <h4>Bus Stops</h4>
         {busStops.length > 0 ? (
           <ul className='flex'>
-            {busStops.slice(0, expandBusstops ? busStops.length:6).map((place) => (
-              <li key={place.id} className='margin-xs padding-xs mark-highlight'  >
+            {busStops.slice(0, expandBusstops ? busStops.length:6).map((place,index) => (
+              <li key={index} className='margin-xs padding-xs mark-highlight'  >
                 {place.name}
               </li>
             ))}
@@ -121,8 +121,8 @@ const NearbyTransport = ({ latitude, longitude }) => {
         <h4>Railway Stations</h4>
         {railwayStations.length > 0 ? (
           <ul className='flex'>
-            {railwayStations.slice(0, expandRailways ? railwayStations.length : 6).map((place) => (
-              <li key={place.id} className='margin-xs padding-xs mark-highlight' >
+            {railwayStations.slice(0, expandRailways ? railwayStations.length : 6).map((place,index) => (
+              <li key={index} className='margin-xs padding-xs mark-highlight' >
                 {place.name}
               </li>
             ))}
@@ -138,8 +138,8 @@ const NearbyTransport = ({ latitude, longitude }) => {
         <h4>Airports</h4>
         {airports.length > 0 ? (
           <ul className='flex'>
-            {airports.slice(0, expandAirports ? airports.length : 6).map((place) => (
-              <li key={place.id} className='margin-xs padding-xs mark-highlight' >
+            {airports.slice(0, expandAirports ? airports.length : 6).map((place,index) => (
+              <li key={index} className='margin-xs padding-xs mark-highlight' >
                 {place.name}
               </li>
             ))}
@@ -158,8 +158,8 @@ const NearbyTransport = ({ latitude, longitude }) => {
           </span>
           {metroStation.length > 0 ? (
             <ul className='padding-sm'>
-              {metroStation.map((place) => (
-                <li key={place.id}>
+              {metroStation.map((place,index) => (
+                <li key={index}>
                   {place.name}
                 </li>
               ))}

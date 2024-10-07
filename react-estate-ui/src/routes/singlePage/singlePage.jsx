@@ -29,7 +29,7 @@ function SinglePage() {
  
 
   let { comments, ratings,postDetail } = post
-  if (postDetail?.amenities !== undefined) {
+  if (postDetail?.amenities) {
     var filteredAmenities = Object.keys(postDetail.amenities).reduce((result, key) => {
       if (postDetail.amenities[key]) {
         result[key] = Amenities[key]
@@ -73,7 +73,6 @@ function SinglePage() {
   const navigate = useNavigate();
   const [saved, setSaved] = useState(post.isSaved)
   const [chatData, setChatData] = useState(null)
-  const [isReceiverLive,setIsReceiverLive] = useState(false)
   const [alreadyCommented, setAlreadyCommented] = useState(post.alreadyCommented)
   const [alreadyRated, setAlreadyRated] = useState(post.alreadyRated)
   const [postedUserData, setPostedUserData] = useState(singlePageLoader.postResponse.user)
@@ -83,7 +82,7 @@ function SinglePage() {
   const [sent, updateSent] = useState(false)
   const [wallpaper, setWallpaper] = useState({ src: post.images[0], index: 0 })
   const { currentUser } = useContext(AuthContext);
-  const chatRef = useRef()
+  const chatRef = useRef(null)
   const textarea = "Write some of the best experience of yours from this place ...."
   useEffect(() => {
     async function fetchData() {
@@ -91,8 +90,8 @@ function SinglePage() {
         const postedUserId = postedUserData.id
         const res = await apiRequest.get('/chats/get/' + postedUserId)
         if (res !== null) {
-          setChatData(res.data.chatID)
-          setIsReceiverLive(res.data.isReceiverActive)
+          setChatData(res.data)
+        ////  setIsReceiverLive(res.data.isReceiverActive)
         }
       } catch (err) {
         console.log(err)
@@ -257,9 +256,12 @@ function SinglePage() {
                     <button className=" box-shadow">
                       <FontAwesomeIcon icon={faShareNodes} />
                     </button>
-                    <button onClick={openChatBox} className="box-shadow">
+                    {
+                      currentUser.id!==post.userId && <button onClick={openChatBox} className="box-shadow">
                       <img src="/chat.png" alt=""  />
                     </button>
+                    }
+                    
                     <button onClick={handleSave} className="box-shadow"  >
                       <FontAwesomeIcon icon={faHeart} style={{ color: saved ? "orangered" : "gray",fontSize:'20px'}}/>
                     </button>
@@ -355,7 +357,7 @@ function SinglePage() {
             !alreadyRated && (
               <div className="Ratings">
                 <p className="title">Rate this place :</p>
-                <span style={{ display: 'flex', marginRight: '10px' }}>
+                <span className="flex" >
                   <ReactStars
                     count={5}
                     isHalf={true}
@@ -365,7 +367,9 @@ function SinglePage() {
                     activeColor="#ffd700"
                     onChange={changeRating}
                   />
-                  <span className="title flex">{rating} out of 5</span>
+                  <span className="title padding-sm margin-sm" >
+                    <label>{rating} out of 5</label>
+                  </span>
                 </span>
               </div>
             )
@@ -520,7 +524,7 @@ function SinglePage() {
             <div className="property-details">
             <div className="flex ">
               {
-                !(postDetail?.amenities === undefined) && Object.keys(postDetail?.amenities).length > 0 && <>
+                (postDetail?.amenities) && Object.keys(postDetail?.amenities).length > 0 && <>
                   {
                     Object.keys(filteredAmenities).slice(0, Object.keys(filteredAmenities).length).map((key,index) => (
                       <div key={index} className="amenities-column">
@@ -606,7 +610,7 @@ function SinglePage() {
           <div className="chatContainer">
             <div className="wrapper">
               {
-                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} receiverData={isReceiverLive}/>
+                <Chat chats={chatData} ref={chatRef} showLastMsgs={false} />
               }
             </div>
           </div>

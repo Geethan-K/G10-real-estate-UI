@@ -1,3 +1,4 @@
+import React,{useState,useEffect} from 'react';
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
 import axios from "axios";
@@ -8,12 +9,13 @@ import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faDoorClosed, faHouse, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
 
 function ProfilePage() {
   const data = useLoaderData()
   const navigate = useNavigate()
-  const chatRef = useRef()
+  const chatRef = useRef(null);
+  const [isReceiverLive,setIsReceiverLive] = useState(false)
   const { currentUser, updateUser } = useContext(AuthContext)
   const handleLogout = async (e) => {
     e.preventDefault()
@@ -25,6 +27,10 @@ function ProfilePage() {
       console.log(err)
     }
   }
+  // useEffect(() => {
+  //   console.log('chatRef.current:', chatRef.current);  // Check if openChat exists
+  // }, []);
+  
   return (
     <div className="profilePage">
       <div className="details">
@@ -55,7 +61,7 @@ function ProfilePage() {
                   <span className="padding-sm">
                     <Link to="/profile/update">
                       <button className="pointer btn flex">
-                        <FontAwesomeIcon icon={faUser} />
+                        <FontAwesomeIcon icon={faUserEdit} />
                         <label>update Profile</label>
                       </button>
                     </Link>
@@ -68,7 +74,14 @@ function ProfilePage() {
                       </button>
                     </Link>
                   </span>
-
+                  <span className="padding-sm">
+                    <Link to="/ " >
+                      <button className="pointer btn flex" onClick={(e)=>handleLogout(e) }>
+                        <FontAwesomeIcon icon={faDoorClosed} className="" />
+                        <label>Log out</label>
+                      </button>
+                    </Link>
+                  </span>
                 </div>
               </span>
             </div>

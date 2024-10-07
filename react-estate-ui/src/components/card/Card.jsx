@@ -10,16 +10,17 @@ import { format } from 'timeago.js';
 import { Amenities } from '../../interfaces/icons-interface.ts'
 import {  motion, useAnimation } from 'framer-motion'
 import ReactPlayer from 'react-player'
+import ImageSlider from "../img-slider/imgSlider.jsx";
 
 
 const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) => {
   // console.log(item)
   // console.log(ratings)
   // console.log(comments)
-  // console.log(postDetail)
+  // console.log('postDetail',postDetail)
 //  console.log({'user-detail':userDetail})
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [expandProperties, setExpandProperties] = useState(postDetail.amenities.length>3 ?false:true);
+  const [expandProperties, setExpandProperties] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [amenitiesExpand, setAmenitiesIsExpand] = useState(false);
   const [expandFurnishings, setExpandFurnishings] = useState(false);
@@ -29,7 +30,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   const [showFullComments,setShowFullComments]=useState(false)
 
   const controlAnimation = useAnimation()
-  if (item.postDetail?.amenities !== undefined) {
+  if (item.postDetail?.amenities) {
     var filteredAmenities = Object.keys(item.postDetail.amenities).reduce((result, key) => {
       if (item.postDetail.amenities[key]) {
         result[key] = Amenities[key]
@@ -117,13 +118,14 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   return (
     <>
       { // to={`/${item.id}`}
-        !(item.type == 'booking') && <div style={{ display: 'flex' }}>
-          <Link >
+        !(item.type == 'booking') && <div className="flex">
+         
             <div className="card">
               <div className="imageContainer">
-                <span>
+              <ImageSlider images={item.images}/>
+                {/* <span>
                   <img src={item.images[currentImageIndex]} alt="" className="main-img" />
-                </span>
+                </span> */}
                {/* <span className="small-images">
                   {
                     item.images.map((image)=>(
@@ -312,7 +314,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 </div>
                 </div>
                 {
-                  (postDetail?.amenities) && (filteredAmenities) && <>
+                   (filteredAmenities) && <>
                     <span className="flex">
                     <p className="user-name">Amenities</p>
                     </span>
@@ -320,8 +322,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       <div className="amenities-details">
                         <span className="section">
                           {
-                            Object.keys(filteredAmenities).slice(0,amenitiesExpand?Object.keys(filteredAmenities).length:3).map((key) => (
-                              <div className="column amenity">
+                            Object.keys(filteredAmenities).slice(0,amenitiesExpand?Object.keys(filteredAmenities).length:3).map((key,index) => (
+                              <div key={index} className="column amenity">
                                 <span>
                                   <img src={filteredAmenities[key]} alt="" className="src" />
                                 </span>
@@ -350,8 +352,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     <div className="flex">
                       <div className="furnishings-container">
                         {
-                          Object.keys(postDetail.furnishings).slice(0, expandFurnishings ? Object.keys(postDetail?.furnishings).length : 3).map((key) => (
-                            <div className="column">
+                          Object.keys(postDetail.furnishings).slice(0, expandFurnishings ? Object.keys(postDetail?.furnishings).length : 3).map((key,index) => (
+                            <div className="column" key={index}>
                               <span>
                                 <img src={'/furnishings/' + key + '.png'} alt="" className="furnishing-icon" />
                               </span>
@@ -372,7 +374,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 }
                 {
                   (postDetail.desc) && <div className="desc-card-container">
-                    <div  style={{ overflow: 'hidden', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
+                    <div style={{ overflow: 'scroll',maxHeight:'18vh', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
                       <p  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></p>
                     </div>
                     <div className="padding-sm expand-btn-container ">
@@ -383,9 +385,9 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     </div>
                   </div>
                 }
-                <p className="address">
-                  <img src="/pin.png" alt="" />
-                  <span>{item.address}</span>
+                <p className="flex ">
+                  <img src="/pin.png" alxt="" />
+                  <span className="address padding-xs">{item.address}</span>
                 </p>
                 {/* <div style={{display:'flex',width:'20%'}}>
             <div  style={{ overflow: 'hidden', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} className="desc-container">
@@ -413,7 +415,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     <p className="padding-xs">trusted owner</p>
                   </span>
                   </span>
-                  <div className="flex padding-sm" >
+                  {/* <div className="flex padding-sm" >
                     <span className="flex-column" onClick={switchMode}>
                       <span>
                         <FontAwesomeIcon icon={faVideoCamera} style={{color:houseTour?'orange':'black'}} />
@@ -426,7 +428,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       </span>
                       <label className="user-name">Reviews</label>
                     </span>
-                  </div>
+                  </div> */}
                   {
                     !(item.postDetail?.highlightDetails === null || item.postDetail?.highlightDetails === undefined) && <motion.div
                       animate={controlAnimation} className="features highlights-scroll" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -445,7 +447,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 </div>
               </div>
             </div>
-            <div className="footer-icons-container">
+            {/* <div className="footer-icons-container">
               <span>
                 <div className="icon">
                   <FontAwesomeIcon icon={faThumbsUp} />
@@ -460,11 +462,11 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                   <FontAwesomeIcon icon={faBookmark} />
                 </div>
               </span>
-            </div>
-          </Link>
+            </div> */}
+          
           <div className="extra-detail-container">
               <span className="video-container">
-                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o'  height={'100%'} width={'100%'} controls={true} playIcon={true} />
+                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o'  height={'100%'} width={'100%'} controls={true}  />
               </span>
               <div>
             <div>
@@ -473,8 +475,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
               </span>
               <span className="reviews-container pointer" >
                 {
-                  comments.map((comment) => (
-                    <div className="user-comments" key={comment.id}>
+                  comments.map((comment,index) => (
+                    <div className="user-comments" key={index}>
                       <img className="avatar-img" src={comment.user.avatar} />
                       <div className="detail-container">
                         <p className="user-name">{comment.user.username}</p>

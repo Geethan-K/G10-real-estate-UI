@@ -17,6 +17,8 @@ function ProfilePage() {
   const chatRef = useRef(null);
   const [isReceiverLive,setIsReceiverLive] = useState(false)
   const { currentUser, updateUser } = useContext(AuthContext)
+  const [showMyList,setShowMyList] = useState(true)
+  const [showSaved,setShowSaved] = useState(false)
   const handleLogout = async (e) => {
     e.preventDefault()
     try {

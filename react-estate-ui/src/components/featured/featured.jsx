@@ -116,7 +116,7 @@ const Featured = () => {
                 }))
             })
         }
-        sequence();
+       // sequence();
     }, [controlAnimation])
     return (
         <animated.div className="section" ref={ref} >

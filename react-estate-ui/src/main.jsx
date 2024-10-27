@@ -1,16 +1,20 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import "./index.scss"
 import { SocketContextProvider } from './context/SocketContext.jsx'
 import { AuthContextProvider } from './context/AuthContext.jsx'
+import { Provider } from 'react-redux';
+import store from './store';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  
+  <Provider store={store}>
     <AuthContextProvider>
-      <SocketContextProvider>
-       <App />
-      </SocketContextProvider>
+        <App />
     </AuthContextProvider>
-  </React.StrictMode>,
+  </Provider>
+
+  // </React.StrictMode>,
 )

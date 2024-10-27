@@ -1,17 +1,18 @@
-import { createContext, useEffect, useState } from "react";
+import { faFileImage } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createContext, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import { useLongPress } from 'use-long-press';
 
-// Create a context to manage the script loading state
 const CloudinaryScriptContext = createContext();
 
-function CloudinaryUploadWidget({ uwConfig, setPublicId ,setState}) {
+const CloudinaryUploadWidget = forwardRef(({ uwConfig, setState }, ref) => {
   const [loaded, setLoaded] = useState(false);
-
+  const [selectedImages, setSelectedImages] = useState([]);
+  
   useEffect(() => {
-    // Check if the script is already loaded
     if (!loaded) {
       const uwScript = document.getElementById("uw");
       if (!uwScript) {
-        // If not loaded, create and load the script
         const script = document.createElement("script");
         script.setAttribute("async", "");
         script.setAttribute("id", "uw");
@@ -19,7 +20,6 @@ function CloudinaryUploadWidget({ uwConfig, setPublicId ,setState}) {
         script.addEventListener("load", () => setLoaded(true));
         document.body.appendChild(script);
       } else {
-        // If already loaded, update the state
         setLoaded(true);
       }
     }
@@ -27,13 +27,11 @@ function CloudinaryUploadWidget({ uwConfig, setPublicId ,setState}) {
 
   const initializeCloudinaryWidget = () => {
     if (loaded) {
-      var myWidget = window.cloudinary.createUploadWidget(
+      const myWidget = window.cloudinary.createUploadWidget(
         uwConfig,
         (error, result) => {
           if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
-            // setPublicId(result.info.public_id);
-            setState((prev)=>[...prev,result.info.secure_url])
+            setState((prev) => [...prev, result.info.secure_url]);
           }
         }
       );
@@ -48,18 +46,40 @@ function CloudinaryUploadWidget({ uwConfig, setPublicId ,setState}) {
     }
   };
 
+  // Expose the remove function to the parent component via the ref
+  useImperativeHandle(ref, () => ({
+    removeSelectedImages: () => {
+      setState((prev) =>
+        prev.filter((image) => !selectedImages.includes(image))
+      );
+      setSelectedImages([]); // Clear selected images after removal
+    }
+  }));
+
+  // Toggle image selection on long press
+  const handleImageSelect = (image) => {
+    setSelectedImages((prev) =>
+      prev.includes(image)
+        ? prev.filter((img) => img !== image)
+        : [...prev, image]
+    );
+  };
+
   return (
     <CloudinaryScriptContext.Provider value={{ loaded }}>
       <button
-        id="upload_widget"
+        id="upload_widget" 
         className="cloudinary-button"
         onClick={initializeCloudinaryWidget}
       >
-        Upload
+        <div className="flex-column">
+          <span><FontAwesomeIcon icon={faFileImage} /></span>
+          <label> Upload media</label>
+        </div>
       </button>
     </CloudinaryScriptContext.Provider>
   );
-}
+});
 
 export default CloudinaryUploadWidget;
 export { CloudinaryScriptContext };

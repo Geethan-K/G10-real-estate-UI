@@ -1,5 +1,5 @@
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from "react";
-import "./Chat.scss";
+import "./chat.scss";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { format } from 'timeago.js';
@@ -8,9 +8,10 @@ import { socketContext } from "../../context/SocketContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCheckDouble, faCircle, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { format as dateFormat, isSameDay, isToday, isYesterday } from 'date-fns';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Chat = forwardRef((props, ref) => {
-
+  const dispatch = useDispatch()
   const [chat, setChat] = useState(null);
   const [Today, setToday] = useState(moment(new Date()).format("DD/MM/YYYY"))
   const [receiverStatus, setReceiverStatus] = useState(null)
@@ -21,7 +22,8 @@ const Chat = forwardRef((props, ref) => {
   const [updatedProfiles, setUpdatedProfiles] = useState([]);
 
   const { currentUser } = useContext(AuthContext);
-  const { socket } = useContext(socketContext);
+ // const { socket } = useContext(socketContext);
+ const socket = useSelector((state) => state.socket.socket);
   const messageEndRef = useRef()
   const { chats, showLastMsgs, receiverData } = props
   // console.log('current user',currentUser)

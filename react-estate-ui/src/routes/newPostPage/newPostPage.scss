@@ -71,7 +71,8 @@
     gap: 20px;
     align-items: center;
     justify-content: center;
-
+    height: 100vh;
+    overflow: scroll;
     img {
       width: 50%;
       height: 180px;

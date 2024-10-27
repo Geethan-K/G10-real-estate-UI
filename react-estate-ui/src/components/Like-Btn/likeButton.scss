@@ -1,0 +1,34 @@
+/* LikeButton.css */
+.like-button-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 24px;
+    color: #aaa;
+    transition: color 0.3s ease;
+  }
+  
+  .like-button.liked {
+    color: #e0245e;
+  }
+  
+  .floating-hearts-container {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  
+  .floating-heart {
+    position: absolute;
+    color: #e0245e;
+    font-size: 16px;
+  }
+  

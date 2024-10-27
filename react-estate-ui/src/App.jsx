@@ -6,19 +6,14 @@ import {
 import ListPage from "./routes/listPage/listPage";
 import {Layout, RequireAuth } from "./routes/layout/layout";
 import SinglePage from "./routes/singlePage/singlePage";
-
+import React from 'react';
 import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import NewPostPage from "./routes/newPostPage/newPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
-
 import HotelDetailsPage from "./routes/hotelDetailsPage/hotelDetailsPage";
-
-import { store } from './redux-store/shared-store'
-import { Provider } from 'react-redux';
-
 function App() {
   const router = createBrowserRouter([
     {
@@ -77,11 +72,8 @@ function App() {
   ]);
 
   return (
-    <Provider store={store}>
       <RouterProvider router={router} />
-    </Provider>
-
   );
 }
 
-export default App;
+export default React.memo(App);

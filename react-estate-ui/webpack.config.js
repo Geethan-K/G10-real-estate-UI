@@ -4,6 +4,11 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 module.exports = {
   // other webpack config
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+          REACT_APP_API_BASE_URL: JSON.stringify(process.env.REACT_APP_API_BASE_URL),
+      },
+  }),
     new ModuleFederationPlugin({
       name: "host",
       remotes: {

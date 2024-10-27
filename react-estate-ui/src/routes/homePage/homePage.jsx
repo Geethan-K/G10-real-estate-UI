@@ -1,11 +1,9 @@
 import SearchBar from "../../components/searchBar/SearchBar";
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { motion, useAnimation } from 'framer-motion';
 import Featured from "../../components/featured/featured";
 import SmoothScroll from "../../components/smoothScroll/smoothScroll";
-import Section1 from "../../components/sections/section1/section";
-import Section from "../../components/scroll-components/section1/section1";
 import Section2 from "../../components/sections/section2/section";
 import Section3 from "../../components/sections/section3/section";
 import PropertyList from "../../components/property-list/propertyList";
@@ -13,7 +11,7 @@ import FeaturedProperties from "../../components/featured-properties/featuredPro
 import "./homePage.scss";
 
 
-function HomePage() {
+const HomePage = React.memo(() => {
   const { currentUser } = useContext(AuthContext);
   const [popupsVisibility, setPopupsVisibility] = useState(false)
   const images = ['/container1.png', '/container2.png', '/house.png', '/villa.webp']
@@ -29,12 +27,15 @@ function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
+  
   useEffect(() => {
-    controls.start({ opacity: 1, transition: { duration: 1 } }).then(() =>
-      controls.start({ opacity: 0, transition: { duration: 1, delay: 1 } })
-    );
-  }, [currentIndex, controls]);
+    const animate = async () => {
+      await controls.start({ opacity: 1, transition: { duration: 1 } });
+      controls.start({ opacity: 0, transition: { duration: 1, delay: 1 } });
+    };
 
+    animate();
+  }, [currentIndex, controls]);
 
   const handleVisibStatus = (status) => {
     setPopupsVisibility(status)
@@ -122,6 +123,6 @@ function HomePage() {
 
 
   );
-}
+})
 
 export default HomePage;

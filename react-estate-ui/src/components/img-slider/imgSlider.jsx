@@ -84,12 +84,12 @@ const ImageSlider = ({ images }) => {
                     onDragEnd={handleDragEnd}
                 />
             </AnimatePresence>
-            <button className="prev" onClick={prevImg}>
+            {/* <button className="prev" onClick={prevImg}>
                 <FontAwesomeIcon icon={faChevronLeft}/>
             </button>
             <button className="next" onClick={nextImg}>
             <FontAwesomeIcon icon={faChevronRight}/>
-            </button>
+            </button> */}
         </div>
     );
 };

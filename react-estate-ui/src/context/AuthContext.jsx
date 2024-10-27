@@ -1,36 +1,30 @@
-import { createContext,useEffect,useState } from "react";
+import React, { createContext,useEffect,useMemo,useState } from "react";
 import apiRequest from "../lib/apiRequest";
+import { useDispatch, useSelector } from 'react-redux';
+export const AuthContext = createContext();
 
-export const AuthContext = createContext()
-
-export const AuthContextProvider = ({children}) =>{
-    const[currentUser,setCurrentUser] = useState(
+export const AuthContextProvider = React.memo(({children}) => {
+    const [currentUser, setCurrentUser] = useState(
         JSON.parse(localStorage.getItem("user")) || null
-    )
-    const [chatsInfo,updateChatsInfo] = useState(null);
+    );
+    const [chatsInfo, updateChatsInfo] = useState(null);
+    const updateUser = (data) => {
+        setCurrentUser(data);
+    };
 
-    const updateUser = (data) =>{
-        setCurrentUser(data)
-    }
-    useEffect(()=>{
-        localStorage.setItem('user',JSON.stringify(currentUser))
-      // getChatInfo()
-    },[currentUser])
-    
-  
-    const getChatInfo = async () =>{
-        try{
-            const res = await apiRequest.get('/chats')
-            console.log('from auth context',res.data)
-            updateChatsInfo(res.data)
-        }catch(err){
-            console.log("could'nt get chat info",err)
+    useEffect(() => {
+         if(currentUser){
+            localStorage.setItem('user', JSON.stringify(currentUser));
         }
-       
-    }
+    }, [currentUser]);
+
+    const memoizedValue = useMemo(() => ({
+        currentUser, updateUser, chatsInfo, updateChatsInfo
+    }), [currentUser, chatsInfo]);
+
     return (
-        <AuthContext.Provider value={{currentUser,updateUser,chatsInfo,updateChatsInfo}}>
+        <AuthContext.Provider value={memoizedValue}>
             {children}
         </AuthContext.Provider>
-    )
-} 
+    );
+});

@@ -9,16 +9,27 @@ import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorClosed, faHouse, faUser, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import { faDoorClosed, faHouse, faNewspaper, faUserEdit } from "@fortawesome/free-solid-svg-icons";
+import CreatePostModal from '../../components/create-post/createPostModal';
+import Tabs from '../../components/tab/Tab';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchChatsRequest } from '../../store/Chat/chatSlice';
 
 function ProfilePage() {
-  const data = useLoaderData()
-  const navigate = useNavigate()
-  const chatRef = useRef(null);
+  
+ const data = useLoaderData()
+
   const [isReceiverLive,setIsReceiverLive] = useState(false)
   const { currentUser, updateUser } = useContext(AuthContext)
   const [showMyList,setShowMyList] = useState(true)
   const [showSaved,setShowSaved] = useState(false)
+  const [isModalOpen,setIsModalOpen] = useState(false)
+  const navigate = useNavigate()
+  const chatRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const {list,loading,error} = useSelector((state) => state.chat)
+  console.log(list)
   const handleLogout = async (e) => {
     e.preventDefault()
     try {
@@ -29,10 +40,19 @@ function ProfilePage() {
       console.log(err)
     }
   }
+  useEffect(()=>{
+    dispatch(fetchChatsRequest())
+  },[dispatch])
   // useEffect(() => {
   //   console.log('chatRef.current:', chatRef.current);  // Check if openChat exists
   // }, []);
   
+  const openModal = () =>{
+    setIsModalOpen(true)
+  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="profilePage">
       <div className="details">
@@ -77,13 +97,21 @@ function ProfilePage() {
                     </Link>
                   </span>
                   <span className="padding-sm">
+                    <Link>
+                      <button className="pointer btn flex" onClick={()=>openModal() }>
+                        <FontAwesomeIcon icon={faNewspaper} className="" />
+                        <label>Add Post</label>
+                      </button>
+                    </Link>
+                  </span>
+                  {/* <span className="padding-sm">
                     <Link to="/ " >
                       <button className="pointer btn flex" onClick={(e)=>handleLogout(e) }>
                         <FontAwesomeIcon icon={faDoorClosed} className="" />
                         <label>Log out</label>
                       </button>
                     </Link>
-                  </span>
+                  </span> */}
                 </div>
               </span>
             </div>
@@ -97,16 +125,35 @@ function ProfilePage() {
                     resolve={data.chatResponse}
                     errorElement={<p>Error loading chats !</p>}
                   >
-                    {(chatResponse) => <Chat chats={chatResponse.data} ref={chatRef} showLastMsgs={true} />}
+                    {(chatResponse) => <Chat chats={list} ref={chatRef} showLastMsgs={true} />}
                   </Await>
                 </Suspense>
               </div>
             </div>
           </div>
-          <div className="right-container">
+          <div className="container">
+            <div className="tabs-container">
+            <Tabs />
+            </div>
+          <div className="list-container padding-sm margin-sm">
+              <div className="title">
+                <h1>My Posts</h1>
+              </div>
+              <CreatePostModal isOpen={isModalOpen} onClose={closeModal} />
+     
+              <Suspense fallback={<p>Loading ...</p>}>
+                <Await
+                  resolve={data.postResponse}
+                  errorElement={<p>Error loading posts !</p>}
+                >
+                  {/* {(postResponse) => postResponse.data.userPosts && <List posts={postResponse.data.userPosts} />
+                  } */}
+                </Await>
+              </Suspense>
+            </div>
             <div className="list-container padding-sm margin-sm">
               <div className="title">
-                <h1>My Lists</h1>
+                <h1>My Ads</h1>
               </div>
               <Suspense fallback={<p>Loading ...</p>}>
                 <Await

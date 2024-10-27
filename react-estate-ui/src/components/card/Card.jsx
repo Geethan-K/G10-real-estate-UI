@@ -20,7 +20,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   // console.log('postDetail',postDetail)
 //  console.log({'user-detail':userDetail})
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [expandProperties, setExpandProperties] = useState(true);
+  const [expandProperties, setExpandProperties] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [amenitiesExpand, setAmenitiesIsExpand] = useState(false);
   const [expandFurnishings, setExpandFurnishings] = useState(false);
@@ -109,9 +109,9 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   }
 
   var averageRating = 0.0
-  if (ratings !== undefined) {
-    item.ratings = ratings
-  }
+  // if (ratings !== undefined) {
+  //   item.ratings = ratings
+  // }
   if (item.ratings !== undefined) {
     averageRating = item.ratings.reduce((acc, rating) => acc + rating.stars, 0) / item.ratings.length || 0;
   }
@@ -119,9 +119,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
     <>
       { // to={`/${item.id}`}
         !(item.type == 'booking') && <div className="flex">
-         
-            <div className="card">
-              <div className="imageContainer">
+            <div className="card margin-sm">
+            <div className="imageContainer">
               <ImageSlider images={item.images}/>
                 {/* <span>
                   <img src={item.images[currentImageIndex]} alt="" className="main-img" />
@@ -136,6 +135,8 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                   }
                </span> */}
               </div>
+            </div>
+            <div className="card">
               <div className="textContainer">
                 <span style={{ display: 'flex', justifyContent: 'space-between', height: '7px' }}>
                   <span>

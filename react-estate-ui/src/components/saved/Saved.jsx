@@ -10,17 +10,41 @@ import { faComment, faEye, faLocationPin, faMapLocationDot, faMapPin, faShare, f
 import { BHKType } from '../../interfaces/BHKType-interface';
 import { fetchLikesRequest, postLikeRequest } from '../../store/Like/likeSlice';
 import LikeButton from '../Like-Btn/likeButton';
+import LikePopup from '../Like-Popup/likePopup'
 const Saved = () => {
   const dispatch = useDispatch()
   const [usersProperties, setUsersProperties] = useState([])
   const { list, error, loading } = useSelector((state) => state.property)
-  // const {saved} = list
-
+  // const [showLikePopup,setShowLikePopup] = useState(false)
+  const [popupPosition,setPopupPosition] = useState({x:0,y:0})
+  const [hovered,setHovered] = useState(false)
+  const [likedUsers,setLikedUsers] = useState([])
   const [saved, setSaved] = useState(list.saved)
   const currentUser = useSelector((state) => state.auth.currentUser)
   const likeResponseMsg = useSelector((state) => state.like?.message)
   var likedResponseObj = useSelector((state) => state.like?.response)
   var averageRating = 0.0
+
+  const handleMouseEnter = (event,likes) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+   
+    setPopupPosition({
+      x:rect.left,
+      y:rect.top 
+    })
+    setLikedUsers(likes);
+    setHovered(true)
+  }
+  const handleMouseLeave = () => {
+    setHovered(false)
+  }
+  // const handleMouseEnter = () => {
+  //   setShowLikePopup(true)
+  // }
+  // const handleMouseLeave = () => {
+  //   setShowLikePopup(false)
+  // }
+
   // if (ratings !== undefined) {
   //   item.ratings = ratings
   // }
@@ -108,9 +132,10 @@ const Saved = () => {
                     <div className="imageContainer width-full">
                       <ImageSlider images={item.post.images} />
                       <div className="flex justify-space-between margin-xs gap-xs">
-                        <span>
+                        <span style={{position:'relative'}} className='like-container pointer' onMouseEnter={(e)=>handleMouseEnter(e,item.likes)} onMouseLeave={handleMouseLeave}>
                           <LikeButton onLike={() => likePost(item.post.id)} likedAlready={saved[index].likes.some((x) => x.userId == currentUser.id)} />
                           <label className='font-xs padding-xs'>{saved[index].likes?.length} Likes</label>
+                          {hovered && <LikePopup likes={likedUsers} position={popupPosition} onclose={handleMouseLeave}/>}
                         </span>
                         <span>
                           <FontAwesomeIcon icon={faComment} className='hover-scaleUp' />

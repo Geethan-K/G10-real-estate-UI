@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ReactStars from 'react-rating-stars-component';
 import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock,  faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from '../../interfaces/BHKType-interface.ts'
-import "./Card.scss";
+import "./card.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DOMPurify from "dompurify";
 import { format } from 'timeago.js';

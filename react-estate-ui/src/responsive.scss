@@ -348,3 +348,18 @@ align-items: center;
   color: #e0245e;
   font-size: 16px;
 }
+.avatar-img {
+  width: 30px !important;
+  height:30px !important;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user-avatar{
+  width: 45px !important;
+  height:45px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid orange;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+

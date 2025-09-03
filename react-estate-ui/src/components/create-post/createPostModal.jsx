@@ -6,16 +6,28 @@ import CloudinaryUploadWidget from "../upload widget/uploadwidget";
 import { useLongPress } from 'use-long-press';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewPostRequest } from "../../store/Posts/postsSlice";
+import tik from '../../assets/tik.gif';
+import cat from '../../assets/cat.gif';
+import Wrong from '../../assets/Wrong.gif';
+
 const CreatePostModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const [images, setImages] = useState([])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [postContent, setPostContent] = useState('');
+  const [caption, setcaption] = useState('');
   const [location, setLocation] = useState(null);
   const [locationName, setLocationName] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+  const [showAlert , setShowAlert] = useState(false);
+  // const [showSuccessAlert , setShowSuccessAlert] = useState(false);
+  // const [showFailureAlert , setShowFailureAlert] = useState(false);
   const widgetRef = useRef(null);
+  
+  const dispatch = useDispatch()
+  const {loading , error} = useSelector((state) => state.newsFeed)
 
 
     // Bind long-press event to each image for selection
@@ -33,9 +45,7 @@ const CreatePostModal = ({ isOpen, onClose }) => {
       );
     };
   
-  
     const handleRemoveSelected = () => {
-      console.log(widgetRef)
       if (widgetRef.current) {
         widgetRef.current.removeSelectedImages();
         setImages((prevImages) => 
@@ -46,8 +56,8 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     };
   
   const onEmojiClick = (emojiData) => {
-    setPostContent((prevContent) => prevContent + emojiData.emoji);
-    setShowEmojiPicker(false);
+    setcaption((prevContent) => prevContent + emojiData.emoji);
+   // setShowEmojiPicker(false);
   };
 
   const handleLocationClick = () => {
@@ -85,10 +95,44 @@ const CreatePostModal = ({ isOpen, onClose }) => {
     }
   };
   const handlePostChange = (e) => {
-    setPostContent(e.target.value);
+    setcaption(e.target.value);
   };
-  const handleSubmit = () =>{
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if ( !caption && images.length == 0){
+      alert("Please add a Caption or an image !")
+      return
+    }
+    // payload preperation for backend
+    const payload = {
+      newPost: {
+        caption,
+      },
+      media:images,
+     // media: selectedImages.map(img => img.url), // Cloudinary returns array of { url, ... }
+      tags: locationName, // e.g. ["travel", "food"]
+    };
+  
+    dispatch(addNewPostRequest(payload))
+    setShowAlert(true);
+    if(error){
+      onClose({alertMessage : "Something went wrong !" , type : "error" })
+    }else{
+      onClose({alertMessage : "Added new post!" , type : "success" })
+    }
+   
+    // Reset form
+    setCaption("");
+    setLocationName('');
+    setLocation(null)
+    setImages([]);
     
+  }
+
+   const handleAlert = () => {
+   
+    setShowAlert(false);
+   
   }
 
   return (
@@ -108,8 +152,10 @@ const CreatePostModal = ({ isOpen, onClose }) => {
           )}
           <textarea placeholder="What's on your mind?" rows="5" 
             className="flex post-description padding-sm" 
-            value={postContent}
-            onChange={handlePostChange}/>
+            value={caption}
+            onChange={handlePostChange}
+            onClick={()=>setShowEmojiPicker(false)}
+            />
             {showEmojiPicker && <div className="emoji-picker">
                   <EmojiPicker onEmojiClick={onEmojiClick} />
                 </div>
@@ -165,9 +211,35 @@ const CreatePostModal = ({ isOpen, onClose }) => {
       )}
         </div>
         <div className="modal-footer margin-xs pointer">
-          <button className="post-button" onClick={()=>handleSubmit}>Post</button>
+          <button className="post-button" onClick={(e)=>handleSubmit(e)}>Post</button>
         </div>
       </div>
+      { showAlert && 
+        <div className="model-content">
+          <div className="model-header">
+            <h1>Posted Successfully !!</h1>
+          </div>
+          <div className="model-body">
+            <img src={tik} />
+          </div>
+          <div className="model-footer margin-xs pointer">
+            <button className="post-button" onClick={handleAlert}>OK</button>
+          </div>
+        </div>
+      }
+      { error && 
+        <div className="model-content">
+          <div className="model-header">
+            <h1>Something went wrong !!</h1>
+          </div>
+          <div className="model-body">
+            <img src={Wrong} />
+          </div>
+          <div className="model-footer margin-xs pointer">
+            <button className="post-button" onClick={(e)=>handleAlert(e)}>OK</button>
+          </div>
+        </div>
+      }
     </div>
   );
 }

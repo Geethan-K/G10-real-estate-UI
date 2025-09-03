@@ -3,17 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './imgSlider.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-
+import loading from '../../assets/loading.gif';
+import cat from '../../assets/cat.gif';
 const ImageSlider = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [direction, setDirection] = useState(0);
-    
-    useEffect(()=>{
-        const intervalId = setInterval(()=>{
-            handleNext()
-        },5000)
-        return ()=> clearInterval(intervalId)
-    },[])
+    const [errorImage , setErrorImage] = useState(false)
+    // useEffect(()=>{
+    //     const intervalId = setInterval(()=>{
+    //         handleNext()
+    //     },5000)
+    //     return ()=> clearInterval(intervalId)
+    // },[])
 
     const nextImg = () => {
         setCurrIndex((prevIndex) => (prevIndex + 1) % images.length)
@@ -24,7 +25,7 @@ const ImageSlider = ({ images }) => {
     const handleDragEnd = (event, info) => {
         const offset = info.offset.x;
         const velocity = info.velocity.x;
-
+        setErrorImage(false)
         if (offset > 100 || velocity > 500) {
             handlePrev();
         } else if (offset < -100 || velocity < -500) {
@@ -63,8 +64,8 @@ const ImageSlider = ({ images }) => {
             <AnimatePresence initial={false} custom={direction}>
                 <motion.img
                     key={currentIndex}
-                    src={images[currentIndex]}
-                    alt={`Slide ${currentIndex}`}
+                    src={errorImage ?  cat : images[currentIndex] }
+                    alt={images[currentIndex]}
                     className="slider-image"
                     custom={direction}
                     variants={variants}
@@ -79,6 +80,7 @@ const ImageSlider = ({ images }) => {
                         x: { type: 'spring', stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                     }}
+                    onError={() => setErrorImage(true)}
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
                     onDragEnd={handleDragEnd}

@@ -50,5 +50,6 @@ const API_ENDPOINTS = {
         SEND: (chatId) => `/message/${chatId}`,
         SEARCH: (userId) => `/message/search/${userId}`
     }
+   
 }
 export default API_ENDPOINTS

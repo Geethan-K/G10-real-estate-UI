@@ -1,4 +1,4 @@
-import './Posts.scss'
+import '../posts/Posts.scss'
 import React, { useEffect, useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { fetchUsersPropertiesRequest } from '../../store/Property/propertySlice';

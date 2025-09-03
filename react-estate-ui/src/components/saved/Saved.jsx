@@ -11,6 +11,7 @@ import { BHKType } from '../../interfaces/BHKType-interface';
 import { fetchLikesRequest, postLikeRequest } from '../../store/Like/likeSlice';
 import LikeButton from '../Like-Btn/likeButton';
 import LikePopup from '../Like-Popup/likePopup'
+
 const Saved = () => {
   const dispatch = useDispatch()
   const [usersProperties, setUsersProperties] = useState([])
@@ -95,8 +96,7 @@ const Saved = () => {
 
     }
     return (
-      <div className='flex  full-width'>
-        <Suspense fallback={<p>Loading ...</p>}>
+        <Suspense fallback={<div><img src={loading}/></div>}>
           <Await
             resolve={saved}
             errorElement={<p>Error loading posts !</p>}
@@ -128,10 +128,11 @@ const Saved = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="card margin-sm " >
+                  <div className="card margin-sm ">
                     <div className="imageContainer width-full">
                       <ImageSlider images={item.post.images} />
-                      <div className="flex justify-space-between margin-xs gap-xs">
+                    </div>
+                    <div className="flex flex-column justify-space-between margin-xs gap-xs">
                         <span style={{position:'relative'}} className='like-container pointer' onMouseEnter={(e)=>handleMouseEnter(e,item.likes)} onMouseLeave={handleMouseLeave}>
                           <LikeButton onLike={() => likePost(item.post.id)} likedAlready={saved[index].likes.some((x) => x.userId == currentUser.id)} />
                           <label className='font-xs padding-xs'>{saved[index].likes?.length} Likes</label>
@@ -146,14 +147,20 @@ const Saved = () => {
                           <label className='font-xs padding-xs'>{item.shares.length} Shares</label>
                         </span>
                       </div>
-                    </div>
                   </div>
                 </div>
               ))
             }
+            {
+              saved.length == 0 && (
+                <div className='flex flex-column justify-space-between'>
+                  <h2>No Saved items</h2>
+                </div>
+              )
+            }
           </Await>
         </Suspense>
-      </div>
+      
     );
 };
 

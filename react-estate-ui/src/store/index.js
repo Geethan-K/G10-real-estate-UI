@@ -10,8 +10,8 @@ import chatReducer from './Chat/chatSlice';
 import messageReducer from './Message/messageSlice'
 import notificationReducer from './Notification/notificationSlice';
 import socketReducer from './Socket/socketSlice';
+import postsReducer from './Posts/postsSlice';
 import rootSaga from './rootSaga';
-import React from 'react';
 import { authReducer } from './Auth/authSlice';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -28,7 +28,8 @@ const store = configureStore({
       block: blockReducer,
       chat:chatReducer,
       message:messageReducer,
-      notification: notificationReducer
+      notification: notificationReducer,
+      newsFeed: postsReducer
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

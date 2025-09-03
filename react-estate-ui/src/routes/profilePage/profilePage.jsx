@@ -14,9 +14,11 @@ import CreatePostModal from '../../components/create-post/createPostModal';
 import Tabs from '../../components/tab/Tab';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchChatsRequest } from '../../store/Chat/chatSlice';
+import { useAlert } from '../../context/Alert/AlertContext';
+
 
 function ProfilePage() {
-  
+  const { showAlert } = useAlert();
  const data = useLoaderData()
 
   const [isReceiverLive,setIsReceiverLive] = useState(false)
@@ -50,9 +52,10 @@ function ProfilePage() {
   const openModal = () =>{
     setIsModalOpen(true)
   }
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const closeModal = ({alertMessage , type}) => {
+        setIsModalOpen(false);
+        showAlert(type , alertMessage);
+   };
   return (
     <div className="profilePage">
       <div className="details">
@@ -89,7 +92,7 @@ function ProfilePage() {
                     </Link>
                   </span>
                   <span className="padding-sm">
-                    <Link to="/add " >
+                    <Link to="/add" >
                       <button className="pointer btn flex" >
                         <FontAwesomeIcon icon={faHouse} className="" />
                         <label>Add Property</label>
@@ -135,23 +138,22 @@ function ProfilePage() {
             <div className="tabs-container">
             <Tabs />
             </div>
-          <div className="list-container padding-sm margin-sm">
+              <CreatePostModal isOpen={isModalOpen} onClose={closeModal} />
+          {/* <div className="list-container padding-sm margin-sm">
               <div className="title">
                 <h1>My Posts</h1>
               </div>
-              <CreatePostModal isOpen={isModalOpen} onClose={closeModal} />
-     
               <Suspense fallback={<p>Loading ...</p>}>
                 <Await
                   resolve={data.postResponse}
                   errorElement={<p>Error loading posts !</p>}
                 >
-                  {/* {(postResponse) => postResponse.data.userPosts && <List posts={postResponse.data.userPosts} />
-                  } */}
+                  {(postResponse) => postResponse.data.userPosts && <List posts={postResponse.data.userPosts} />
+                  }
                 </Await>
               </Suspense>
-            </div>
-            <div className="list-container padding-sm margin-sm">
+            </div> */}
+            {/* <div className="list-container padding-sm margin-sm">
               <div className="title">
                 <h1>My Ads</h1>
               </div>
@@ -164,8 +166,8 @@ function ProfilePage() {
                   }
                 </Await>
               </Suspense>
-            </div>
-            <div className="list-container padding-sm margin-sm">
+            </div> */}
+            {/* <div className="list-container padding-sm margin-sm">
               <div className="title">
                 <h1>Saved List</h1>
               </div>
@@ -181,7 +183,7 @@ function ProfilePage() {
                   }
                 </Await>
               </Suspense>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

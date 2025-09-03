@@ -3,7 +3,6 @@ import API_ENDPOINTS from '../config/apiConfig'
 //import { User } from '../lib/interfaces/interface.models'
 
 export const getPostDetail = (postId)  => {
-    alert('service call !!')
     return apiClient.get(API_ENDPOINTS.PROPERTY.GET_POST(postId))
 }
 export const getPosts = (query) => {

@@ -1,6 +1,10 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { fetchPropertiesRequest, fetchPropertiesFailure, fetchPropertiesSuccess,fetchUsersPropertiesRequest,fetchUsersPropertiesSuccess,fetchUsersPropertiesFailure, fetchPropertyDetailRequest, fetchPropertyDetailSuccess,fetchPropertyDetailFailure } from './propertySlice';
-import { getPosts,getPostDetail,getUsersProperties } from '../../api/services/propertyService';
+import {
+  fetchPropertiesRequest, fetchPropertiesFailure, fetchPropertiesSuccess,
+  fetchUsersPropertiesRequest, fetchUsersPropertiesSuccess, fetchUsersPropertiesFailure,
+  fetchPropertyDetailRequest, fetchPropertyDetailSuccess, fetchPropertyDetailFailure
+} from './propertySlice';
+import { getPosts, getPostDetail, getUsersProperties } from '../../api/services/propertyService';
 
 function* fetchProperties(action) {
   try {

@@ -9,6 +9,7 @@ import propertySaga from './Property/propertySaga';
 import socketSaga from './Socket/socketSaga';
 import chatSaga from './Chat/chatSaga';
 import messageSaga from './Message/messageSaga';
+import postsSaga from './Posts/postsSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -21,6 +22,7 @@ export default function* rootSaga() {
     followSaga(),
     notificationSaga(),
     chatSaga(),
-    messageSaga()
+    messageSaga(),
+    postsSaga()
   ]);
 }

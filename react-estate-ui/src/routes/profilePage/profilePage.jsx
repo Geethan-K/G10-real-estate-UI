@@ -31,7 +31,6 @@ function ProfilePage() {
   const dispatch = useDispatch();
 
   const {list,loading,error} = useSelector((state) => state.chat)
-  console.log(list)
   const handleLogout = async (e) => {
     e.preventDefault()
     try {

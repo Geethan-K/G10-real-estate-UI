@@ -8,9 +8,9 @@ const API_ENDPOINTS = {
         ADD:`/posts/`
     },
     NEWS_FEED:{
-        GET_FEED: (userId) => `/newsFeed/getFeed/${userId}`,
+        GET_FEED: ({cursor,limit}) => `/newsFeed/getFeed?cursor=${cursor || ""}&limit=${limit || 5}`,
         GET_USER_POSTS: (userId) => `/newsFeed/getUserPosts/${userId}`,
-        GET_POST_BY_ID: (postId) => `/newsFeed/getPostById/:${postId}`,
+        GET_POST_BY_ID: (postId) => `/newsFeed/getPostById/${postId}`,
         CREATE_POST:`/newsFeed/createPost`
     },
     FOLLOW:{

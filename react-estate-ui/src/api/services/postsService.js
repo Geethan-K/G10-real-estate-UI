@@ -6,8 +6,8 @@ export const getPostDetail = (postId)  => {
     alert('service call !!')
     return apiClient.get(API_ENDPOINTS.NEWS_FEED.GET_POST_BY_ID(postId))
 }
-export const getAllPosts = (query) => {
-    return apiClient.get(API_ENDPOINTS.NEWS_FEED.GET_FEED(query))
+export const getAllPosts = ({cursor,limit}) => {
+    return apiClient.get(API_ENDPOINTS.NEWS_FEED.GET_FEED({cursor,limit}))
 }
 export const getUsersPosts = (userId) => {
     return apiClient.get(API_ENDPOINTS.NEWS_FEED.GET_USER_POSTS(userId))

@@ -4,6 +4,10 @@ const postsSlice = createSlice({
   name: 'newsfeed_posts',
   initialState: {
     list: [],
+    posts:[],
+    page:1,
+    nextCursor:null,
+    hasMore:true,
     loading: false,
     error: null,
   },
@@ -13,11 +17,25 @@ const postsSlice = createSlice({
     },
     fetchAllPostsSuccess: (state, action) => {
       state.loading = false;
-      state.list = action.payload;
+      const newPosts = action.payload.posts.filter(
+        post => !state.posts.some(p => p.id === post.id)
+      );
+      state.posts = [...state.posts, ...newPosts];
+      // state.posts.push(...action.payload.posts);
+       state.nextCursor = action.payload.nextCursor;
+       state.hasMore = !!action.payload.nextCursor;
+      // state.posts = [...state.posts, ...newPosts];
+      // state.page = state.page + 1;
+     // state.hasMore = action.payload.hasMore;
     },
     fetchAllPostsFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    resetFeed: (state) => {
+      state.posts = [];
+      state.nextCursor = null;
+      state.hasMore = true;
     },
     fetchUserPostsRequest: (state) => {
       state.loading = true;
@@ -62,6 +80,7 @@ export const {
     fetchAllPostsRequest,
     fetchAllPostsSuccess,
     fetchAllPostsFailure,
+    resetFeed,
     fetchUserPostsRequest,
     fetchUserPostsSuccess,
     fetchUserPostsFailure,

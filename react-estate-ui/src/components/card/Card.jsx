@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import ReactStars from 'react-rating-stars-component';
-import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock,  faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
+import { faCoins, faMoneyBill1Wave, faChartArea, faCouch, faCarSide, faDoorOpen, faCheck, faClock, faChevronCircleDown, faChevronCircleUp, faThumbsUp, faBookmark, faComment, faShareNodes, faBathtub, faBed, faToriiGate, faFireBurner, faVideoCamera, faNewspaper, } from "@fortawesome/free-solid-svg-icons";
 import { BHKType } from '../../interfaces/BHKType-interface.ts'
 import "./card.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DOMPurify from "dompurify";
 import { format } from 'timeago.js';
 import { Amenities } from '../../interfaces/icons-interface.ts'
-import {  motion, useAnimation } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 import ReactPlayer from 'react-player'
 import ImageSlider from "../img-slider/imgSlider.jsx";
 
@@ -18,7 +18,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   // console.log(ratings)
   // console.log(comments)
   // console.log('postDetail',postDetail)
-//  console.log({'user-detail':userDetail})
+  //  console.log({'user-detail':userDetail})
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [expandProperties, setExpandProperties] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,7 +27,7 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
   const [isHovered, setIsHovered] = useState(false);
   const [houseTour, setHouseTour] = useState(true);
   const [readComments, setReadComments] = useState(false)
-  const [showFullComments,setShowFullComments]=useState(false)
+  const [showFullComments, setShowFullComments] = useState(false)
 
   const controlAnimation = useAnimation()
   if (item.postDetail?.amenities) {
@@ -84,19 +84,19 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
     return () => clearInterval(intervalId);
   }, [item.images.length]);
 
-  useEffect(() => {
-    controlAnimation.start({
-      x: ["100%", "-100%"],
-      transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: "loop",
-          duration: 20,
-          ease: "linear",
-        },
-      },
-    });
-  }, [controlAnimation])
+  // useEffect(() => {
+  //   controlAnimation.start({
+  //     x: ["100%", "-100%"],
+  //     transition: {
+  //       x: {
+  //         repeat: Infinity,
+  //         repeatType: "loop",
+  //         duration: 20,
+  //         ease: "linear",
+  //       },
+  //     },
+  //   });
+  // }, [controlAnimation])
   const toggleExpand = () => {
     setIsExpanded(!isExpanded)
   }
@@ -119,13 +119,29 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
     <>
       { // to={`/${item.id}`}
         !(item.type == 'booking') && <div className="flex">
-            <div className="card margin-sm">
+          <div className="card margin-sm">
             <div className="imageContainer">
-              <ImageSlider images={item.images}/>
-                {/* <span>
+              <ImageSlider images={item.images} />
+              <span className="justify-space-between font-semibold" >
+                <span className="flex-column hover-scaleUp">
+                  <img src={userDetail.avatar} className="user-avatar" />
+                  <label className="user-name">{userDetail.username}</label>
+                </span>
+                <span className="font-semiBold ">
+                  <span className="flex">
+                    <FontAwesomeIcon icon={faClock} className="font-semiBold padding-xs" />
+                    <p>posted {format(item.postDetail?.createdAt)}</p>
+                  </span>
+                  <span className="flex">
+                    <FontAwesomeIcon icon={faCheck} color="green" />
+                    <p className="padding-xs">trusted owner</p>
+                  </span>
+                </span>
+              </span>
+              {/* <span>
                   <img src={item.images[currentImageIndex]} alt="" className="main-img" />
                 </span> */}
-               {/* <span className="small-images">
+              {/* <span className="small-images">
                   {
                     item.images.map((image)=>(
                       <span className="small-img-container">
@@ -134,32 +150,31 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     ))
                   }
                </span> */}
-              </div>
             </div>
-            <div className="card">
-              <div className="textContainer">
-                <span style={{ display: 'flex', justifyContent: 'space-between', height: '7px' }}>
-                  <span>
-                    <h1 className="bhk-type">
-                      {
-                        !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {item.property} for {item.type} </span>
-                      }
-                    </h1>
-                  </span>
-                  <span>
+          </div>
+          <div className="card">
+            <div className="textContainer">
+              <span style={{ display: 'flex', justifyContent: 'space-between', height: '2px' }}>
+                
+                  <h1 className="bhk-type">
                     {
-                      !(averageRating.toFixed(1) == 0.0) &&
-                      <div id="rating">
-                        <button>
-                          {averageRating.toFixed(1)}
-                        </button>
-                        <span>
-                          Excellent
-                        </span>
-                      </div>
+                      !(postDetail?.BHKType === undefined) && <span>"{Object.entries(BHKType).find(([key, value]) => key == postDetail?.BHKType)[1]}" independent {item.property} for {item.type} </span>
                     }
+                  </h1>
+                <span>
+                  {
+                    !(averageRating.toFixed(1) == 0.0) &&
+                    <div id="rating">
+                      <button>
+                        {averageRating.toFixed(1)}
+                      </button>
+                      <span>
+                        Excellent
+                      </span>
+                    </div>
+                  }
 
-                    {/* <ReactStars
+                  {/* <ReactStars
                 count={5}
                 isHalf={true}
                 edit={false}
@@ -168,20 +183,20 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 value={averageRating.toFixed(1)}
                 activeColor="#ffd700"
               /> */}
-                    {
-                      averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
-                      ) : (<></>)
-                    }
-                  </span>
+                  {
+                    averageRating.toFixed(1) == 0.0 ? (<p>(No reviews yet)</p>
+                    ) : (<></>)
+                  }
                 </span>
-                <h2 className="flex title">
-                  <Link to={`/${item.id}`}>"{item.title} "</Link>
-                </h2>
-                {/* <p className="price">	&#8377; {item.price}</p> */}
-                <span className="flex">
-                  <p className=" user-name">Property details</p>
-                </span>
-                <div className="flex">
+              </span>
+              <h2 className="flex title">
+                <Link className="title" to={`/${item.id}`}>"{item.title} "</Link>
+              </h2>
+              {/* <p className="price">	&#8377; {item.price}</p> */}
+              {/* <span className="flex">
+                  <p className="user-name">Property details</p>
+                </span> */}
+              <div className="flex padding-sm">
                 <div className="property-details-container">
                   <div className="property-details">
                     <div className="flex">
@@ -310,87 +325,87 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                     }
                   </div>
                   <div className="drop-down-container ">
-                    <FontAwesomeIcon icon={expandProperties ? faChevronCircleUp : faChevronCircleDown } className="drop-down-icon padding-sm" onClick={() => setExpandProperties(!expandProperties)} />
+                    <FontAwesomeIcon icon={expandProperties ? faChevronCircleUp : faChevronCircleDown} className="drop-down-icon padding-sm" onClick={() => setExpandProperties(!expandProperties)} />
                   </div>
                 </div>
-                </div>
-                {
-                   (filteredAmenities) && <>
-                    <span className="flex">
+              </div>
+              {
+                (filteredAmenities) && <>
+                  <span className="flex">
                     <p className="user-name">Amenities</p>
-                    </span>
-                      <span className="flex" >
-                      <div className="amenities-details">
-                        <span className="section">
-                          {
-                            Object.keys(filteredAmenities).slice(0,amenitiesExpand?Object.keys(filteredAmenities).length:3).map((key,index) => (
-                              <div key={index} className="column amenity">
-                                <span>
-                                  <img src={filteredAmenities[key]} alt="" className="src" />
-                                </span>
-                                <span>
-                                  <p>{key}</p>
-                                </span>
-                              </div>
-                            ))
-                          }
-                        </span>
-                      </div>
-                      <div className="flex padding-sm">
-                        <span>
-                          <FontAwesomeIcon icon={amenitiesExpand ? faChevronCircleUp:faChevronCircleDown } className="drop-down-icon" onClick={() => setAmenitiesIsExpand(!amenitiesExpand)} />
-                        </span>
-                      </div>
-                      </span>
-                  </>
-                }
-                {
-                  !(item.postDetail?.furnishings === undefined || item.postDetail?.furnishings === null ) && Object.keys(postDetail?.furnishings).length > 0 &&
-                  <>
-                    <div className="flex user-name">
-                      Furnishing
-                    </div>
-                    <div className="flex">
-                      <div className="furnishings-container">
+                  </span>
+                  <span className="flex" >
+                    <div className="amenities-details">
+                      <span className="section">
                         {
-                          Object.keys(postDetail.furnishings).slice(0, expandFurnishings ? Object.keys(postDetail?.furnishings).length : 3).map((key,index) => (
-                            <div className="column" key={index}>
+                          Object.keys(filteredAmenities).slice(0, amenitiesExpand ? Object.keys(filteredAmenities).length : 3).map((key, index) => (
+                            <div key={index} className="column amenity">
                               <span>
-                                <img src={'/furnishings/' + key + '.png'} alt="" className="furnishing-icon" />
+                                <img src={filteredAmenities[key]} alt="" className="src" />
                               </span>
                               <span>
-                                <label className="user-name furnishing-lbl">{key}</label>
+                                <p>{key}</p>
                               </span>
                             </div>
                           ))
                         }
-                      </div>
-                      <div className="flex" onClick={() => setExpandFurnishings(!expandFurnishings)}>
-                        {
-                          expandFurnishings ? <FontAwesomeIcon icon={faChevronCircleUp} className="drop-down-icon" /> : <FontAwesomeIcon icon={faChevronCircleDown} className="drop-down-icon" />
-                        }
-                      </div>
+                      </span>
                     </div>
-                  </>
-                }
-                {
-                  (postDetail.desc) && <div className="desc-card-container">
-                    <div style={{ overflow: 'scroll',maxHeight:'18vh', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
-                      <p  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></p>
+                    <div className="flex padding-sm">
+                      <span>
+                        <FontAwesomeIcon icon={amenitiesExpand ? faChevronCircleUp : faChevronCircleDown} className="drop-down-icon" onClick={() => setAmenitiesIsExpand(!amenitiesExpand)} />
+                      </span>
                     </div>
-                    <div className="padding-sm expand-btn-container ">
-                      {/* <FontAwesomeIcon icon={faChevronCircleDown} /> */}
-                      <label onClick={toggleExpand} className="hover-scaleUp ">
-                        {isExpanded ? 'Less...' : 'more...'}
-                      </label>
+                  </span>
+                </>
+              }
+              {
+                !(item.postDetail?.furnishings === undefined || item.postDetail?.furnishings === null) && Object.keys(postDetail?.furnishings).length > 0 &&
+                <>
+                  <div className="flex user-name">
+                    Furnishing
+                  </div>
+                  <div className="flex">
+                    <div className="furnishings-container">
+                      {
+                        Object.keys(postDetail.furnishings).slice(0, expandFurnishings ? Object.keys(postDetail?.furnishings).length : 3).map((key, index) => (
+                          <div className="column" key={index}>
+                            <span>
+                              <img src={'/furnishings/' + key + '.png'} alt="" className="furnishing-icon" />
+                            </span>
+                            <span>
+                              <label className="user-name font-mute">{key}</label>
+                            </span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                    <div className="flex" onClick={() => setExpandFurnishings(!expandFurnishings)}>
+                      {
+                        expandFurnishings ? <FontAwesomeIcon icon={faChevronCircleUp} className="drop-down-icon" /> : <FontAwesomeIcon icon={faChevronCircleDown} className="drop-down-icon" />
+                      }
                     </div>
                   </div>
-                }
-                <p className="flex ">
-                  <img src="/pin.png" alxt="" />
-                  <span className="address padding-xs">{item.address}</span>
-                </p>
-                {/* <div style={{display:'flex',width:'20%'}}>
+                </>
+              }
+              {
+                (postDetail.desc) && <div className="user-name desc-card-container">
+                  <div style={{ overflow: 'scroll', maxHeight: '18vh', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
+                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></p>
+                  </div>
+                  <div className="padding-sm expand-btn-container ">
+                    {/* <FontAwesomeIcon icon={faChevronCircleDown} /> */}
+                    <label onClick={toggleExpand} className="hover-scaleUp ">
+                      {isExpanded ? 'Less' : 'more'}
+                    </label>
+                  </div>
+                </div>
+              }
+              <p className="flex ">
+                <img src="/pin.png" alxt="" />
+                <span className="address font-mute padding-xs">{item.address}</span>
+              </p>
+              {/* <div style={{display:'flex',width:'20%'}}>
             <div  style={{ overflow: 'hidden', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} className="desc-container">
                 <p className="address" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.postDetail.desc) }}></p>
               </div>
@@ -401,22 +416,10 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
               </div>
               
             </div> */}
-                <div className="uploaded-time flex">
-                  <span className="address">
-                  <span className="flex-column hover-scaleUp">
-                    <img src={userDetail.avatar} className="user-avatar" />
-                    <label className="user-name">{userDetail.username}</label>
-                  </span>
-                  <span className="flex font-semiBold padding-xs">
-                    <FontAwesomeIcon icon={faClock} className="padding-xs font-semiBold" />
-                    <p>posted {format(item.postDetail?.createdAt)}</p>
-                  </span>
-                  <span className="flex  font-semiBold ">
-                    <FontAwesomeIcon icon={faCheck} color="green"  />
-                    <p className="padding-xs">trusted owner</p>
-                  </span>
-                  </span>
-                  {/* <div className="flex padding-sm" >
+
+            
+              
+              {/* <div className="flex padding-sm" >
                     <span className="flex-column" onClick={switchMode}>
                       <span>
                         <FontAwesomeIcon icon={faVideoCamera} style={{color:houseTour?'orange':'black'}} />
@@ -430,25 +433,25 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                       <label className="user-name">Reviews</label>
                     </span>
                   </div> */}
-                  {
-                    !(item.postDetail?.highlightDetails === null || item.postDetail?.highlightDetails === undefined) && <motion.div
-                      animate={controlAnimation} className="features highlights-scroll" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                      {
-                        Object.entries(item.postDetail.highlightDetails).map(([key, detail]) => (
-                          <div key={key} className="feature">
-                            <span className="img-container">
-                              <img src={'/highlights/' + key + '.png'} alt="" className="highlight-img" />
-                            </span>
-                            <span className="highlight-details">{detail.name} - {detail.km}</span>
-                          </div>
-                        ))
-                      }
-                    </motion.div>
-                  }
-                </div>
-              </div>
             </div>
-            {/* <div className="footer-icons-container">
+          </div>
+          {
+                !(item.postDetail?.highlightDetails === null || item.postDetail?.highlightDetails === undefined) &&
+                <motion.div
+                  animate={controlAnimation} className="features highlights-scroll" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  {
+                    Object.entries(item.postDetail.highlightDetails).map(([key, detail]) => (
+                      <div key={key} className="feature">
+                        <span className="img-container">
+                          <img src={'/highlights/' + key + '.png'} alt="" className="highlight-img" />
+                        </span>
+                        <span className="highlight-details">{detail.name} - {detail.km}</span>
+                      </div>
+                    ))
+                  }
+                </motion.div>
+              }
+          {/* <div className="footer-icons-container">
               <span>
                 <div className="icon">
                   <FontAwesomeIcon icon={faThumbsUp} />
@@ -464,74 +467,85 @@ const Card = React.memo(({ item, postDetail, userDetail, ratings, comments }) =>
                 </div>
               </span>
             </div> */}
-          
+
           <div className="extra-detail-container">
-              <span className="video-container">
-                <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o'  height={'100%'} width={'100%'} controls={true}  />
-              </span>
-              <div>
+            <span className="video-container">
+              <ReactPlayer url='https://www.youtube.com/watch?v=YAeAdNmWc2o' height={'100%'} width={'100%'} controls={true} />
+            </span>
             <div>
-              <span className="flex padding-sm" style={{ position: 'static' }}>
-                <label>Top Comments</label>
-              </span>
-              <span className="reviews-container pointer" >
-                {
-                  comments.map((comment,index) => (
-                    <div className="user-comments" key={index}>
-                      <img className="avatar-img" src={comment.user.avatar} />
-                      <div className="detail-container">
-                        <p className="user-name">{comment.user.username}</p>
-                        <span className="rating-container">
-                          <div className="flex " >
-                            <ReactStars
-                              count={5}
-                              isHalf={true}
-                              size={20}
-                              edit={false}
-                              value={comment.stars}
-                              activeColor="#ffd700"
-                            />
-                            <div>
-                              <label className="user-name">{comment.stars}/5</label>
+              <div>
+                <span className="flex padding-sm" style={{ position: 'static' }}>
+                  <label>Top Comments</label>
+                </span>
+                <span className="reviews-container pointer" >
+                  {
+                    comments.map((comment, index) => (
+                      <div className="user-comments" key={index}>
+                        <img className="avatar-img" src={comment.user.avatar} />
+                        <div className="detail-container">
+                          <p className="user-name">{comment.user.username}</p>
+                          <span className="rating-container">
+                            <div className="flex " >
+                              <ReactStars
+                                count={5}
+                                isHalf={true}
+                                size={20}
+                                edit={false}
+                                value={comment.stars}
+                                activeColor="#ffd700"
+                              />
+                              <div>
+                                <label className="user-name">{comment.stars}/5</label>
+                              </div>
                             </div>
-                          </div>
-                          <div className="created-date">
-                            {format(comment.createdAt)}
-                          </div>
-                        </span>
-                        <div className="comment">
-                          <p className="comment-txt">
-                            {comment.content}
-                          </p>
-                        </div>
-                        <div className="like-comment-section">
-                          <span>
-                            <FontAwesomeIcon icon={faThumbsUp} className="icon" />
+                            <div className="created-date">
+                              {format(comment.createdAt)}
+                            </div>
                           </span>
-                          <span><p className="address">17 Likes</p></span>
-                          <span><FontAwesomeIcon icon={faComment} className="icon" /></span>
-                          <span><p className="address">23 Comments</p></span>
+                          <div className="comment">
+                            {
+                (comment.content) && <div className="comment-txt">
+                  <div style={{ overflow: 'scroll', maxHeight: '18vh', whiteSpace: isExpanded ? 'normal' : 'nowrap', textOverflow: 'ellipsis' }} >
+                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment.content) }}></p>
+                  </div>
+                  <div className="padding-sm expand-btn-container ">
+                    {/* <FontAwesomeIcon icon={faChevronCircleDown} /> */}
+                    <label onClick={toggleExpand} className="hover-scaleUp ">
+                      {isExpanded ? 'Less' : 'more'}
+                    </label>
+                  </div>
+                </div>
+              }
+                          </div>
+                          <div className="like-comment-section">
+                            <span>
+                              <FontAwesomeIcon icon={faThumbsUp} className="icon" />
+                            </span>
+                            <span><p className="address">17 Likes</p></span>
+                            <span><FontAwesomeIcon icon={faComment} className="icon" /></span>
+                            <span><p className="address">23 Comments</p></span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                }
-              </span>
+                    ))
+                  }
+                </span>
+              </div>
             </div>
-          </div>
-          <span className="flex show-more-container pointer" onClick={() => setShowFullComments(!showFullComments)}>
-                <span>
-                  <p className="user-name">Show full comments</p>
-                </span>
-                <span>
-                  <FontAwesomeIcon icon={faChevronCircleDown} />
-                </span>
+            <span className="flex show-more-container pointer" onClick={() => setShowFullComments(!showFullComments)}>
+              <span>
+                <p className="user-name">Show full comments</p>
               </span>
+              <span>
+                <FontAwesomeIcon icon={faChevronCircleDown} />
+              </span>
+            </span>
           </div>
+
         </div>
       }
       {
-     (item.type == 'booking') && <Link to={`/hotelDetail?hotel_id=${item.id}`}>
+        (item.type == 'booking') && <Link to={`/hotelDetail?hotel_id=${item.id}`}>
           <div className="hotel_card">
             <img src="https://res.cloudinary.com/dynvtl13s/image/upload/v1718504194/posts/x44dge9twe4nl7lxyrvj.jpg" alt="" className="hotel_img" />
             <div className="hotel_desc">

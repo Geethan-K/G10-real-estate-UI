@@ -11,7 +11,7 @@ import { BHKType } from '../../interfaces/BHKType-interface';
 import { fetchLikesRequest, postLikeRequest } from '../../store/Like/likeSlice';
 import LikeButton from '../Like-Btn/likeButton';
 import LikePopup from '../Like-Popup/likePopup'
-
+import 'animate.css/animate.min.css';
 const Saved = () => {
   const dispatch = useDispatch()
   const [usersProperties, setUsersProperties] = useState([])
@@ -103,14 +103,14 @@ const Saved = () => {
           >
             {
               saved.length > 0 && saved.map((item, index) => (
-                <div className='flex-column justify-space-between margin-sm' key={index}>
-                  <div className="card">
-                    <div className="flex justify-space-between">
+                <div key={index} className='flex-center'>
+                  <div className="card justify-space-betwen ">
+                    <div className="flex animate__animated animate__backInLeft">
                       <span>
                         <FontAwesomeIcon icon={faMapPin} color='red' />
-                        <label className='font-bold padding-sm'>{item.post.city}</label>
+                        <label className='font-bold padding-sm' style={{fontSize:'12px'}}>{item.post.city}</label>
                       </span>
-                      <span className="font-bold hover-scaleUp padding-sm">
+                      <span className="font-bold hover-scaleUp padding-sm" style={{fontSize:'12px'}}>
                         {item.post.title}
                       </span>
                       <span className='padding-sm'>
@@ -128,26 +128,26 @@ const Saved = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="card margin-sm ">
-                    <div className="imageContainer width-full">
+                  <div className="card flex-column " >
+                    <div className="imageContainer">
                       <ImageSlider images={item.post.images} />
                     </div>
-                    <div className="flex flex-column justify-space-between margin-xs gap-xs">
-                        <span style={{position:'relative'}} className='like-container pointer' onMouseEnter={(e)=>handleMouseEnter(e,item.likes)} onMouseLeave={handleMouseLeave}>
-                          <LikeButton onLike={() => likePost(item.post.id)} likedAlready={saved[index].likes.some((x) => x.userId == currentUser.id)} />
+                  </div>
+                  <div className="flex flex-center  margin-sm justify-space-between gap-xs">
+                        <span style={{position:'relative'}} className='card like-container pointer hover-scaleUp' onMouseEnter={(e)=>handleMouseEnter(e,item.likes)} onMouseLeave={handleMouseLeave}>
+                          <LikeButton  onLike={() => likePost(item.post.id)} likedAlready={saved[index].likes.some((x) => x.userId == currentUser.id)} />
                           <label className='font-xs padding-xs'>{saved[index].likes?.length} Likes</label>
                           {hovered && <LikePopup likes={likedUsers} position={popupPosition} onclose={handleMouseLeave}/>}
                         </span>
-                        <span>
-                          <FontAwesomeIcon icon={faComment} className='hover-scaleUp' />
+                        <span className='hover-scaleUp pointer'>
+                          <FontAwesomeIcon icon={faComment}  />
                           <label className='font-xs padding-xs'>{item.comments.length} Comments</label>
                         </span>
-                        <span>
-                          <FontAwesomeIcon icon={faShare} className='hover-scaleUp' onClick={() => sharePost(item.postId)} />
-                          <label className='font-xs padding-xs'>{item.shares.length} Shares</label>
+                        <span className='card pointer hover-scaleUp'>
+                          <FontAwesomeIcon icon={faShare} onClick={() => sharePost(item.postId)} />
+                          <label className='font-xs padding-xs'>{item.shares.length} Share</label>
                         </span>
                       </div>
-                  </div>
                 </div>
               ))
             }

@@ -12,7 +12,7 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "host",
       remotes: {
-        chatbox: "chatbox@http://localhost:3001/remoteEntry.js",
+        newsfeed: "newsfeed@http://localhost:3001/remoteEntry.js",
       },
       exposes: {
         './SharedStore': './src/redux-store/shared-store.js', // Expose the shared store

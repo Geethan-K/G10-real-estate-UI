@@ -241,7 +241,7 @@ const NearbyFacilities = ({ lat, lon }) => {
             ))} */}
             { showPlaces.show_hospitals && hospitals.length > 0 &&  hospitals.map((hospital) => (
                 <Marker key={hospital.id} position={[hospital.lat, hospital.lon]} icon={hospitalIcon}>
-                    <Popup>{hospital.name}</Popup>
+                    <Popup className='mark-highlight'>{hospital.name}</Popup>
                 </Marker>
             ))}
              {showPlaces.show_pharmacies && pharmacies.length > 0 && pharmacies.map((medicalShop) => (

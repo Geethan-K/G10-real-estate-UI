@@ -206,7 +206,7 @@ const Chat = forwardRef((props, ref) => {
                     />
                   </span>
                   <span className="flex-column" style={{ width: '90%' }}>
-                    <p className="receiver-name">{c.sender.username}</p>
+                    <p className="receiver-name title">{c.sender.username}</p>
                     <p className="message-txt" style={{ whiteSpace: 'wrap', textOverflow: 'hidden',width:'80%' }}>{c.lastMessage}</p>
                   </span>
                   <span style={{ backgroundColor: 'gainsboro'}}>

@@ -13,6 +13,8 @@ import postsSaga from './Posts/postsSaga';
 
 export default function* rootSaga() {
   yield all([
+    // watchApiErrors(),
+    // watchLogout(),
     socketSaga(),
     propertySaga(),
     likeSaga(),

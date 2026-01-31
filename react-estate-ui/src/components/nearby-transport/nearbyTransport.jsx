@@ -139,7 +139,7 @@ const NearbyTransport = ({ latitude, longitude }) => {
         {airports.length > 0 ? (
           <ul className='flex'>
             {airports.slice(0, expandAirports ? airports.length : 6).map((place,index) => (
-              <li key={index} className='margin-xs padding-xs mark-highlight' >
+              <li key={index} className='margin-xs padding-xs mark-highlight ' >
                 {place.name}
               </li>
             ))}

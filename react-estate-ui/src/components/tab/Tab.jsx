@@ -52,7 +52,7 @@ const Tabs = () => {
                     Archived
                 </button>
             </div>
-            <div className="flex flex-center tab-content">
+            <div className=" flex justify-space-between flex-center tab-content">
                 <Suspense  fallback={<div>Loading...</div>}>
                     {renderTabContent()}
                 </Suspense>

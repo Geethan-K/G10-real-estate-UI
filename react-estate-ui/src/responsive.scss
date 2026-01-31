@@ -123,10 +123,16 @@ align-items: center;
 .pointer{
   cursor: pointer;
 }
+.currency-color{
+  color: darkgreen;
+}
 .mark-highlight{
   margin:'8px';
-  background-color: orange;
+  background-color: #fece51;
   border-radius: 5px;
+  font-size: 12px;
+  padding:5px;
+  color: gray;
 }
 .search-bar{
   width: 100%;
@@ -170,7 +176,7 @@ align-items: center;
    // min-width: 30vh;
   // min-width: 30%; 
    max-width: 32vh;
-   height: 38vh ;
+ //  height: 38vh ;
     @include md {
       display: none;
     }

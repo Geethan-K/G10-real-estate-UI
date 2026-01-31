@@ -232,7 +232,6 @@ const SinglePage = React.memo(({})=>{
                      <img src="/pin.png" alt="" />
                      <span>{post.address}</span>
                    </div>
-                  
                    <div className="property-detail-container flex">
                      <div className=" flex-column padding-sm">
                      <span>
@@ -263,8 +262,8 @@ const SinglePage = React.memo(({})=>{
                    </div>
                  </span>
                  <span>
-                   <div className=" review-buttons" >
-                   <button className=" box-shadow">
+                   <div className="review-buttons" >
+                   <button className="box-shadow">
                        <FontAwesomeIcon icon={faThumbsUp} />
                      </button>
                      <button className=" box-shadow">
@@ -298,11 +297,11 @@ const SinglePage = React.memo(({})=>{
                      <div className="flex padding-sm">
                      <div className="padding-sm">
                        <label>Deposit</label>
-                       <div className="font-size-md font-semiBold">$ {post.deposit}</div>
+                       <div className="font-size-md font-semiBold currency-color" >$ {post.deposit}</div>
                      </div>
                      <div  className="padding-sm">
                        <label>Rent</label>
-                       <div className="font-size-md font-semiBold">$ {post.rent}</div>
+                       <div className="font-size-md font-semiBold currency-color">$ {post.rent}</div>
                      </div>
                      </div>
                  </span>
@@ -312,23 +311,23 @@ const SinglePage = React.memo(({})=>{
                  <span>{post.user.username}</span>
                </div> */}
              </div>
-             <div className="desc-container">
+             <div className="card desc-container">
                <span className="title">Description</span>
              <div className="desc-txt" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetail.desc) }}></div>
              </div>
-             <div className=" desc-container">
-               <span className="flex title flex-start">
+             <div className="card flex-column desc-container" style={{width:'100%'}}>
+               <span className="title flex-start" >
                  Services Offered
                </span>
                <span className="flex justify-space-around" >
                    {
                      Services_Offered.map((service,index)=>(
-                       <span key={index} className="flex-column padding-sm justify-space-between hover-scaleUp ">
+                       <span key={index}  className="flex-column padding-sm justify-space-between hover-scaleUp ">
                          <span className="services-img-container padding-sm round-border box-shadow" >
                            <img src={service.src} alt="" className="src" />
                          </span>
-                         <span className="flex-column" style={{flexWrap:'wrap'}}>
-                           <label className="font-semiBold">{service.name}</label>
+                         <span style={{flexWrap:'wrap',width:'10vh'}} className="flex-column" >
+                           <label className="font-semiBold" >{service.name}</label>
                          </span>
                        </span>
                      ))

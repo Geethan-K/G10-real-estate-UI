@@ -13,6 +13,7 @@ import socketReducer from './Socket/socketSlice';
 import postsReducer from './Posts/postsSlice';
 import rootSaga from './rootSaga';
 import { authReducer } from './Auth/authSlice';
+import 'animate.css/animate.min.css';
 
 const sagaMiddleware = createSagaMiddleware();
 

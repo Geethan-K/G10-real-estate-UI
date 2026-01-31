@@ -1,6 +1,6 @@
 import { useState,useContext } from "react";
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
@@ -17,6 +17,7 @@ function Navbar() {
         </a>
         <a href="/">Home</a>
         <a href="/">About</a>
+        <Link to="/Stories">Stories</Link>
         <a href="/">Contact</a>
         <a href="/">Agents</a>
       </div>
@@ -50,6 +51,7 @@ function Navbar() {
         <div className={open ? "menu active" : "menu"}>
           <a href="/">Home</a>
           <a href="/">About</a>
+          <a href="/">Stories</a>
           <a href="/">Contact</a>
           <a href="/">Agents</a>
           <a href="/">Sign in</a>

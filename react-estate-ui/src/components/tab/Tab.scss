@@ -1,6 +1,7 @@
 @import "../../responsive.scss";
 .tabs-container{
     width: 100%;
+    justify-content: center;
  //   background-color: #007bff;
 }
 
@@ -32,7 +33,8 @@
   
   .tab-content {
     border-top: 1px solid #ddd;
-    padding: 20px;
+    padding: 8px;
     border: 1px solid black;
+    justify-content: center;
   }
   

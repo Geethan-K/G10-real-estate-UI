@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  backend:
+  build: ./backend
+  container_name: backend
+  ports:
+    - "5000:5000"
+  environment:
+    - DATABASE_URL=${mongodb+srv://mohan:wp6oz9vlZt3v6Mnt@real-estate-cluster-01.mszf6o3.mongodb.net/users?retryWrites=true&w=majority}   # use Atlas connection string
+    - REDIS_URL=redis://redis:6379
+  depends_on:
+    - redis
+
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "5000:80"
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"

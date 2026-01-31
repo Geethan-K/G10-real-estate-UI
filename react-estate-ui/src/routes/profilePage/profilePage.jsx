@@ -64,9 +64,9 @@ function ProfilePage() {
               <span>
                 <img src={currentUser.avatar || './noavatar.png'} alt="" className="profile-pic" />
               </span>
-              <span className="flex-column profile-name">
-                <h1 className="margin-sm" style={{ height: '2vh' }}>{currentUser.username}</h1>
-                <h3 className="font-mute ">{currentUser.email}</h3>
+              <span className="flex-column">
+                <h3 className="profile-name" >{currentUser.username}</h3>
+                <h3 className="font-mute count">{currentUser.email}</h3>
                 <div className="profile-info-container" >
                   <span className="flex-column posts-container">
                     <label className="count">200</label>
@@ -81,8 +81,8 @@ function ProfilePage() {
                     <label className="followers-lbl">Followings</label>
                   </span>
                 </div>
-                <div className="flex ">
-                  <span className="padding-sm">
+                <div className="flex " >
+                  <span className="count">
                     <Link to="/profile/update">
                       <button className="pointer btn flex">
                         <FontAwesomeIcon icon={faUserEdit} />
@@ -90,7 +90,7 @@ function ProfilePage() {
                       </button>
                     </Link>
                   </span>
-                  <span className="padding-sm">
+                  <span className="count padding-sm">
                     <Link to="/add" >
                       <button className="pointer btn flex" >
                         <FontAwesomeIcon icon={faHouse} className="" />
@@ -98,7 +98,7 @@ function ProfilePage() {
                       </button>
                     </Link>
                   </span>
-                  <span className="padding-sm">
+                  <span className="count ">
                     <Link>
                       <button className="pointer btn flex" onClick={()=>openModal() }>
                         <FontAwesomeIcon icon={faNewspaper} className="" />
